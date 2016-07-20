@@ -20,6 +20,31 @@
     <a href="https://standards.usa.gov/">U.S. Web Design Standards (USWDS)</a>.
   </p>
 
+  {% guide_section "Tooltips" %}
+
+  <p>
+    We use <a href="http://iamceege.github.io/tooltipster/">Tooltipster</a>
+    for tooltips. For tooltips that need to be keyboard-focusable, just add
+    the <code>data-focusable-tooltip</code> attribute.
+  </p>
+
+  {% example %}
+  <a href="javascript:void(0)" data-focusable-tooltip aria-label="I am a tooltip!">
+    What's this?
+  </a>
+  {% endexample %}
+
+  <p>
+    When the page is first loaded, all <code>[data-focusable-tooltip]</code>
+    elements are automatically activated. However, if you dynamically inject
+    content into the page via Ajax, you'll want to manually activate them via
+    code like this:
+  </p>
+
+  <div class="styleguide-example">
+    <pre><code class="language-js">$('.my-new-content [data-focusable-tooltip]').focusableTooltipify();</code></pre>
+  </div>
+
   {% guide_section "Upload Widget" %}
 
   <p>
