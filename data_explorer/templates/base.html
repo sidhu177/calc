@@ -40,25 +40,26 @@
 
     <header>
       <div class="container">
-        <div class="base-header">
+        <div class="base-header clearfix">
           <a class="logo-container" href="{% url 'index' %}"><img class="logo" src="{% static 'frontend/images/calc_logo.png' %}" alt="CALC: Contract Awarded Labor Category Tool"></a>
           <nav>
+            {% if user.is_authenticated %}
             <ul>
-              {% if user.is_authenticated %}
-
-                <li class="logged-in">Hello, {{ user.email }} <span class="logout"><a href="{% url 'uaa_client:logout' %}">Log out</a></span>
-                  <ul>
-                    {% if user.is_staff %}
-                    <li><a href="{% url 'admin:index' %}">Site admin</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'data_capture:step_1' %}">Add price data</a></li>
-                    <li><a href="{% url 'about' %}">About this tool</a></li>
-                  </ul>
-                </li>
-              {% else %}
-                <li><a href="{% url 'about' %}">About this tool</a></li>
-              {% endif %}
+              <li class="logged-in">Hello, {{ user.email }} <span class="logout"><a href="{% url 'uaa_client:logout' %}">Log out</a></span>
+                <ul class="utility-nav">
+                  {% if user.is_staff %}
+                  <li><a href="{% url 'admin:index' %}">Site admin</a></li>
+                  {% endif %}
+                  <li><a href="{% url 'data_capture:step_1' %}">Add price data</a></li>
+                  <li><a href="{% url 'about' %}">About CALC</a></li>
+                </ul>
+              </li>
             </ul>
+            {% else %}
+            <ul class="utility-nav">
+              <li><a href="{% url 'about' %}">About CALC</a></li>
+            </ul>
+            {% endif %}
           </nav>
         </div>
 
