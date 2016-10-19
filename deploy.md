@@ -67,8 +67,6 @@ for `<APP_INSTANCE>`) to create the user-provided service:
 
 ```sh
 cf cups calc-env -p credentials-staging.json
-cf bind-service <APP_INSTANCE> calc-env
-cf restage <APP_INSTANCE>
 ```
 
 You can update the user-provided service with the following commands:
@@ -84,8 +82,9 @@ CALC uses PostgreSQL for its database.
 
 ```sh
 cf create-service aws-rds <SERVICE_PLAN> calc-db
-cf bind-service <APP_INSTANCE> calc-db
 ```
+
+(Don't know what `<SERVICE_PLAN>` to use? Try `cf marketplace`.)
 
 ### Redis Service
 
@@ -94,7 +93,6 @@ asynchronous tasks.
 
 ```sh
 cf create-service redis28-swarm standard calc-redis
-cf bind-service <APP_INSTANCE> calc-redis
 ```
 
 ## New Relic Environment Variables
