@@ -4,7 +4,7 @@ API="https://api.cloud.gov"
 ORG="oasis"
 SPACE="calc-dev"
 APP_NAME="calc-dev"
-MANIFEST="manifests/manifest-staging.yml"
+MANIFEST="manifests/manifest-dev.yml"
 
 # CF_USER and CF_PASSWORD are defined as private Environment Variables
 # in the Travis web UI: https://travis-ci.org/18F/calc/settings
