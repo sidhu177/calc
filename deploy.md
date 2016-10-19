@@ -134,6 +134,13 @@ To deploy, first make sure you are targeting the prod space:
 cf target -o oasis -s calc-prod
 ```
 
+Now, if you don't already have the autopilot plugin, you can install it
+by running:
+
+```sh
+cf install-plugin autopilot -f -r CF-Community
+```
+
 Then use the autopilot plugin's `zero-downtime-push` command to deploy:
 
 ```sh
