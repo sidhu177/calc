@@ -62,7 +62,7 @@ if os.environ.get('TRAVIS') == 'true':
 
 if WD_TESTING_URL and WD_HUB_URL is None and \
    'SAUCE_USERNAME' in os.environ and 'SAUCE_ACCESS_KEY' in os.environ:
-    WD_HUB_URL = 'http://{}:{}@ondemand.saucelabs.com/wd/hub'.format(
+    WD_HUB_URL = 'http://{}:{}@saucelabs.com:4445/wd/hub'.format(
         os.environ['SAUCE_USERNAME'],
         os.environ['SAUCE_ACCESS_KEY']
     )
