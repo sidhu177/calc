@@ -52,6 +52,14 @@ class ModelTestCase(BaseLoginTestCase):
 
 @override_settings(DATA_CAPTURE_SCHEDULES=[FAKE_SCHEDULE])
 class ModelsTests(ModelTestCase):
+    def test_get_absolute_url_works(self):
+        p = self.create_price_list()
+        p.save()
+        self.assertEqual(
+            p.get_absolute_url(),
+            '/data-capture/price-lists/{}'.format(p.id)
+        )
+
     def test_add_row_works(self):
         p = self.create_price_list()
         p.save()
