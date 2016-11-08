@@ -1,4 +1,4 @@
-
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -148,6 +148,11 @@ class SubmittedPriceList(models.Model):
     def reject(self, user):
         self._change_status(self.STATUS_REJECTED, user)
         self.save()
+
+    def get_absolute_url(self):
+        return reverse('data_capture:price_list_details', kwargs={
+            'id': str(self.id)
+        })
 
     def __str__(self):
         return "Price List for {}".format(self.contract_number)
