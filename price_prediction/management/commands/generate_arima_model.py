@@ -224,9 +224,5 @@ class Command(BaseCommand):
                     fitted_values_by_category.save()
                 except:
                     code.interact(local=locals())
-        #code.interact(local=locals())
-# results = sm.tsa.ARIMA(dta, (3,1,0)).fit()
-# results.save
-# sm.load()
 
 
