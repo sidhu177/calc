@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^robots.txt$', robots_txt),
     url(r'^auth/', include('uaa_client.urls', namespace='uaa_client')),
     url(r'^account/', include('user_account.urls', namespace='user_account')),
+    url(r'^price_prediction/',include('price_prediction.urls',namespace='price_prediction'))
 ]
 
 tests_url = url(r'^tests/$', TemplateView.as_view(template_name='tests.html'),

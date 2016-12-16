@@ -3,17 +3,22 @@ from price_prediction.models import FittedValuesByCategory
 from price_prediction.models import LaborCategoryLookUp
 from price_prediction.models import PriceModels
 from contracts.models import Contract
+import json
 
 def prepare_data_for_plotting(data,fitted_values):
     #When x = Contract.objects.all()[0]; is x.contract_start the same as Being Date in the spreadsheet?
     dicter = {}
-    dicter["x_data"] = [datum.contract_start for datum in data]
-    dicter["y_data"] = [datum.hourly_rate_year1 for datum in data]
-    dicter["x_fitted"] = [fitted_value.start_date for fitted_value in fitted_values]
-    dicter["y_fitted"] = [fitted_value.fittedvalue for fitted_value in fitted_values]
+    timestamps = [str(datum.contract_start) for datum in data]
+    timestamps = [timestamp.split(" ")[0] for timestamp in timestamps]
+    dicter["x_data"] = ["x"] + timestamps
+    dicter["x_data"] = json.dumps(dicter["x_data"])
+    dicter["y_data"] = ["observed prices"] + [float(datum.hourly_rate_year1) for datum in data]
+    dicter["y_data"] = json.dumps(dicter["y_data"])
+    dicter["y_fitted"] = ["fitted prices"] + [float(fitted_value.fittedvalue) for fitted_value in fitted_values]
+    dicter["y_fitted"] = json.dumps(dicter["y_fitted"])
     return dicter
 
-# Create your views here.
+
 def timeseries_analysis(request):
     """
     This method takes in a labor category and returns a timeseries visualization of the labor category.
@@ -25,9 +30,9 @@ def timeseries_analysis(request):
         results = Contract.objects.filter(labor_category=labor_category)
         fitted_values = FittedValuesByCategory.objects.filter(labor_key=labor_category)
         context = prepare_data_for_plotting(results,fitted_values)
-        return render(request, "calc_kpi/timeseries_visual.html",context)
+        return render(request, "price_prediction/timeseries_visual.html",context)
     elif request.method == "GET":
-        return render(request, "calc_kpi/timeseries_visual.html",{"result":False})
+        return render(request, "price_prediction/timeseries_visual.html",{"result":False})
 
 #Work flow:
 
