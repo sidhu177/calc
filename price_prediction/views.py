@@ -2,6 +2,7 @@ from django.shortcuts import render
 from price_prediction.models import FittedValuesByCategory
 from price_prediction.models import LaborCategoryLookUp
 from price_prediction.models import PriceModels
+from price_prediction.models import DecompressLaborCategory
 from contracts.models import Contract
 import json
 
@@ -28,7 +29,8 @@ def timeseries_analysis(request):
         post_data_dict = request.POST.dict()
         labor_category = post_data_dict["labor_category"]
         results = Contract.objects.filter(labor_category=labor_category)
-        fitted_values = FittedValuesByCategory.objects.filter(labor_key=labor_category)
+        compress = DecompressLaborCategory.objects.filter(labor_category=labor_category)
+        fitted_values = FittedValuesByCategory.objects.filter(labor_key=compress[0].labor_key)
         context = prepare_data_for_plotting(results,fitted_values)
         return render(request, "price_prediction/timeseries_visual.html",context)
     elif request.method == "GET":

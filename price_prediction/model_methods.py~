@@ -222,11 +222,8 @@ class Command(BaseCommand):
                 df["Date"] = pd.to_datetime(df["Date"])
                 df = df.set_index("Date")
                 df.sort_index(inplace=True)
-                result = trend_predict(df)
-                if result:
-                    model, new_data, order = result
-                else:
-                    continue
+                model, new_data, order = trend_predict(df)
+
                 order_terms.append(order)
                 predicted_data = pd.DataFrame()
                 for ind in range(len(model.fittedvalues)):

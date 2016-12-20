@@ -10,7 +10,7 @@ from django.core.management import BaseCommand
 from optparse import make_option
 from django.core.management import call_command
 
-from price_prediction.models import LaborCategoryLookUp
+from price_prediction.models import LaborCategoryLookUp,DecompressLaborCategory
 
 def date_to_datetime(time_string):
     return datetime.datetime.strptime(time_string, '%m/%d/%Y')
@@ -294,8 +294,10 @@ class Command(BaseCommand):
         compressed_df = df["Labor Category"]
         
         for ind in df.index:
-            labor_cat = labor_category[df.ix[ind]["Labor Category"]]
-            labor_lookup = LaborCategoryLookUp(labor_key=labor_cat,labor_value=df.ix[ind]["Year 1/base"],start_date=date_to_datetime(df.ix[ind]["Begin Date"]))
+            labor_cat_lookup = labor_category[df.ix[ind]["Labor Category"]]
+            decompress = DecompressLaborCategory(labor_category=df.ix[ind]["Labor Category"],labor_key=labor_cat_lookup)
+            decompress.save()
+            labor_lookup = LaborCategoryLookUp(labor_key=labor_cat_lookup,labor_value=df.ix[ind]["Year 1/base"],start_date=date_to_datetime(df.ix[ind]["Begin Date"]),labor_category=df.ix[ind]["Labor Category"])
             labor_lookup.save()
        
 
