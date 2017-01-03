@@ -121,13 +121,13 @@ def make_prediction(model):
         stdev_delta_days = statistics.stdev(time_difference_in_days)
         median_delta_days = statistics.median(time_difference_in_days)
         total_days_in_5_years = 1825
-        if stdev_delta_days < average_delta_days:
+        if stdev_delta_days < average_delta_days or median_delta_days <= 0.5:
             end = number_observations + int(total_days_in_5_years/average_delta_days)
         else:
             end = number_observations + int(total_days_in_5_years/median_delta_days)
     else:
         start = 1
-        end = number_observations * 2
+        end = number_observations + 100
     return model.predict(start=start, end=end, dynamic=True)
 
 
@@ -195,9 +195,9 @@ def trend_predict(data):
     # clearing out NaNs
     new_data = s.trend.fillna(0)
     new_data = new_data.iloc[new_data.nonzero()[0]]
-    #model_order = list(model_search(new_data))
-    #model_order = tuple([int(elem) for elem in model_order])
-    model_order = (1,0,0)
+    model_order = list(model_search(new_data))
+    model_order = tuple([int(elem) for elem in model_order])
+    #model_order = (1,0,0)
     model = sm.tsa.ARIMA(new_data, model_order).fit()
     model.fittedvalues = setting_y_axis_intercept(new_data, model)
     return model, new_data, model_order
@@ -220,4 +220,3 @@ def money_to_float(string):
         return float(string)
     else:
         return string
-
