@@ -1,5 +1,5 @@
-from price_prediction.models import FittedValuesByCategory
-from price_prediction.models import LaborCategoryLookUp
+from price_prediction.models import FittedValuesByCategory as Fitted
+from price_prediction.models import LaborCategoryLookUp as LookUp
 import pandas as pd
 import math
 import datetime
@@ -13,6 +13,7 @@ from optparse import make_option
 
 # this comes from here:
 # http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
+
 
 def objective_function(data, order):
     return sm.tsa.ARIMA(data, order).fit().aic
@@ -87,37 +88,25 @@ def model_search(data):
             best_order = result[0]
     return best_order
 
+
 def date_to_datetime(time_string):
-    
     return datetime.datetime.strptime(time_string, '%m/%d/%Y')
 
-def ave_error(values, fitted_values):
-    
-    if (len(values) == len(fitted_values)) or (len(values) < len(fitted_values)):
-        ave_errors = [abs(values[ind] - fitted_values[ind]) for ind in range(len(values))]
-        return sum(ave_errors)/len(values) 
+
+def ave_error(vals, f_vals):
+    """
+    parameters:
+    @vals - the values observed
+    @f_vals - the fitted values from the model
+    """
+    if (len(vals) == len(f_vals)) or (len(vals) < len(f_vals)):
+        ave_errors = [abs(vals[ind] - f_vals[ind]) for ind in range(len(vals))]
+        return sum(ave_errors)/len(vals)
     else:
-        ave_errors = [abs(values[ind] - fitted_values[ind]) for ind in range(len(fitted_values))] 
-        return sum(ave_errors)/len(values)
-    
-def check_for_extreme_values(sequence, sequence_to_check=None):
-    mean = statistics.mean(sequence)
-    stdev = statistics.stdev(sequence)
-    if sequence_to_check != None:
-        for val in sequence_to_check:
-            if val >= mean + (stdev*2):
-                sequence_to_check.remove(val)
-            elif val <= mean - (stdev*2):
-                sequence_to_check.remove(val)
-        return sequence_to_check
-    else:
-        for val in sequence:
-            if val >= mean + (stdev*2):
-                sequence.remove(val)
-            elif val <= mean - (stdev*2):
-                sequence.remove(val)
-        return sequence
-        
+        ave_errors = [abs(vals[i] - f_vals[i]) for i in range(len(f_vals))]
+        return sum(ave_errors)/len(vals)
+
+
 def setting_y_axis_intercept(data, model):
     try:
         # if we are using the original data
@@ -139,15 +128,16 @@ def setting_y_axis_intercept(data, model):
     for ind, f_values in enumerate(possible_fitted_values):
         avg_error = ave_error(data, f_values)
         if avg_error < min_error:
-            min_error = avg_error 
+            min_error = avg_error
             best_fitted_values = ind
     print("minimum error:", min_error)
     return possible_fitted_values[best_fitted_values]
 
+
 def check_for_extreme_values(sequence, sequence_to_check=None):
     mean = statistics.mean(sequence)
     stdev = statistics.stdev(sequence)
-    if sequence_to_check != None:
+    if sequence_to_check is not None:
         for val in sequence_to_check:
             if val >= mean + (stdev*2):
                 sequence_to_check.remove(val)
@@ -161,9 +151,10 @@ def check_for_extreme_values(sequence, sequence_to_check=None):
             elif val <= mean - (stdev*2):
                 sequence.remove(val)
         return sequence
-        
+
+
 def trend_predict(data):
-    # seasonal decompose 
+    # seasonal decompose
     if len(data) > 52:
         s = sm.tsa.seasonal_decompose(data["Price"], freq=52)
     elif len(data) > 12:
@@ -179,22 +170,25 @@ def trend_predict(data):
     model.fittedvalues = setting_y_axis_intercept(new_data, model)
     return model, new_data, model_order
 
+
 def is_nan(obj):
-    if type(obj) == type(float()):
+    if isinstance(obj, float):
         return math.isnan(obj)
     else:
         return False
-    
+
+
 def money_to_float(string):
     """
-    hourly wages have dollar signs and use commas, 
+    hourly wages have dollar signs and use commas,
     this method removes those things, so we can treat stuff as floats
     """
-    if type(string) == type(str()):
+    if isinstance(string, str):
         string = string.replace("$", "").replace(",", "")
         return float(string)
     else:
         return string
+
 
 class Command(BaseCommand):
 
@@ -209,15 +203,19 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        FittedValuesByCategory.objects.all().delete()
-        labor_categories = [elem.labor_key for elem in LaborCategoryLookUp.objects.all() if elem.labor_key]
+        Fitted.objects.all().delete()
+        labor_categories = [i for i in LookUp.objects.all() if i.labor_key]
+        labor_categories = [i.labor_key for i in labor_categories]
         order_terms = []
         try:
             for labor_category in labor_categories:
-                labor_objects = LaborCategoryLookUp.objects.filter(labor_key=labor_category)
+                labor_objects = LookUp.objects.filter(labor_key=labor_category)
                 df = pd.DataFrame()
                 for labor_object in labor_objects:
-                    df = df.append({"Date":labor_object.start_date, "Price":float(labor_object.labor_value)}, ignore_index=True)
+                    df = df.append({
+                        "Date": labor_object.start_date,
+                        "Price": float(labor_object.labor_value)
+                    }, ignore_index=True)
                 # sanity checking this is a datetime
                 df["Date"] = pd.to_datetime(df["Date"])
                 df = df.set_index("Date")
@@ -230,7 +228,10 @@ class Command(BaseCommand):
                 order_terms.append(order)
                 predicted_data = pd.DataFrame()
                 for ind in range(len(model.fittedvalues)):
-                    predicted_data = predicted_data.append({"date":model.data.dates[ind],"price":model.fittedvalues[ind]},ignore_index=True)
+                    predicted_data = predicted_data.append({
+                        "date": model.data.dates[ind],
+                        "price": model.fittedvalues[ind]
+                    }, ignore_index=True)
                 predicted_data["date"] = pd.to_datetime(predicted_data["date"])
                 predicted_data = predicted_data.set_index("date")
                 predicted_data.sort_index(inplace=True)
@@ -238,14 +239,15 @@ class Command(BaseCommand):
                 # plt.plot(df)
                 # plt.plot(predicted_data)
                 # plt.show()
-
+                p_data = predicted_data
                 # We are using timestamps for the index
                 for ind in range(len(predicted_data.index)):
                     try:
-                        fitted_values_by_category = FittedValuesByCategory(labor_key=labor_category, fittedvalue=predicted_data["price"][ind], start_date=predicted_data.index[ind])
-                        fitted_values_by_category.save()
+                        fitted = Fitted(labor_key=labor_category,
+                                        fittedvalue=p_data["price"][ind],
+                                        start_date=p_data.index[ind])
+                        fitted.save()
                     except:
                         code.interact(local=locals())
         except:
             code.interact(local=locals())
-
