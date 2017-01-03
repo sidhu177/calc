@@ -112,7 +112,7 @@ def make_prediction(model):
     number_observations = len(model.fittedvalues)
     if number_observations >= 100:
         start = int(number_observations / 2)
-        date_list = [i.to_datetime for i in list(model.fittedvalues.index)]
+        date_list = [i.to_datetime() for i in list(model.fittedvalues.index)]
         deltas = []
         for index in range(len(date_list)-1):
             deltas.append(date_list[index+1] - date_list[index])
@@ -122,18 +122,16 @@ def make_prediction(model):
         median_delta_days = statistics.median(time_difference_in_days)
         total_days_in_5_years = 1825
         if stdev_delta_days < average_delta_days:
-            end = number_of_observations + int(total_days_in_5_years/average_delta_days)
+            end = number_observations + int(total_days_in_5_years/average_delta_days)
         else:
-            end = number_of_observations + int(total_days_in_5_years/median_delta_days)
+            end = number_observations + int(total_days_in_5_years/median_delta_days)
     else:
         start = 1
-        end = number_of_observations * 2
+        end = number_observations * 2
     return model.predict(start=start, end=end, dynamic=True)
 
 
 def setting_y_axis_intercept(data, model):
-    import code
-    code.interact(local=locals())
     try:
         # if we are using the original data
         data = list(data["Price"])

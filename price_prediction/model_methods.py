@@ -1,5 +1,5 @@
-from price_prediction.models import FittedValuesByCategory
-from price_prediction.models import LaborCategoryLookUp
+from price_prediction.models import FittedValuesByCategory as Fitted
+from price_prediction.models import LaborCategoryLookUp as LookUp
 import pandas as pd
 import math
 import datetime
@@ -11,8 +11,10 @@ from scipy.optimize import brute
 from django.core.management import BaseCommand
 from optparse import make_option
 
+
 # this comes from here:
 # http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
+
 
 def objective_function(data, order):
     return sm.tsa.ARIMA(data, order).fit().aic
@@ -87,37 +89,48 @@ def model_search(data):
             best_order = result[0]
     return best_order
 
+
 def date_to_datetime(time_string):
-    
     return datetime.datetime.strptime(time_string, '%m/%d/%Y')
 
-def ave_error(values, fitted_values):
-    
-    if (len(values) == len(fitted_values)) or (len(values) < len(fitted_values)):
-        ave_errors = [abs(values[ind] - fitted_values[ind]) for ind in range(len(values))]
-        return sum(ave_errors)/len(values) 
+
+def ave_error(vals, f_vals):
+    """
+    parameters:
+    @vals - the values observed
+    @f_vals - the fitted values from the model
+    """
+    if (len(vals) == len(f_vals)) or (len(vals) < len(f_vals)):
+        ave_errors = [abs(vals[ind] - f_vals[ind]) for ind in range(len(vals))]
+        return sum(ave_errors)/len(vals)
     else:
-        ave_errors = [abs(values[ind] - fitted_values[ind]) for ind in range(len(fitted_values))] 
-        return sum(ave_errors)/len(values)
-    
-def check_for_extreme_values(sequence, sequence_to_check=None):
-    mean = statistics.mean(sequence)
-    stdev = statistics.stdev(sequence)
-    if sequence_to_check != None:
-        for val in sequence_to_check:
-            if val >= mean + (stdev*2):
-                sequence_to_check.remove(val)
-            elif val <= mean - (stdev*2):
-                sequence_to_check.remove(val)
-        return sequence_to_check
+        ave_errors = [abs(vals[i] - f_vals[i]) for i in range(len(f_vals))]
+        return sum(ave_errors)/len(vals)
+
+
+def make_prediction(model):
+    number_observations = len(model.fittedvalues)
+    if number_observations >= 100:
+        start = int(number_observations / 2)
+        date_list = [i.to_datetime() for i in list(model.fittedvalues.index)]
+        deltas = []
+        for index in range(len(date_list)-1):
+            deltas.append(date_list[index+1] - date_list[index])
+        time_difference_in_days = [delta.days for delta in deltas]
+        average_delta_days = statistics.mean(time_difference_in_days)
+        stdev_delta_days = statistics.stdev(time_difference_in_days)
+        median_delta_days = statistics.median(time_difference_in_days)
+        total_days_in_5_years = 1825
+        if stdev_delta_days < average_delta_days:
+            end = number_observations + int(total_days_in_5_years/average_delta_days)
+        else:
+            end = number_observations + int(total_days_in_5_years/median_delta_days)
     else:
-        for val in sequence:
-            if val >= mean + (stdev*2):
-                sequence.remove(val)
-            elif val <= mean - (stdev*2):
-                sequence.remove(val)
-        return sequence
-        
+        start = 1
+        end = number_observations * 2
+    return model.predict(start=start, end=end, dynamic=True)
+
+
 def setting_y_axis_intercept(data, model):
     try:
         # if we are using the original data
@@ -125,29 +138,37 @@ def setting_y_axis_intercept(data, model):
     except:
         # if we are using the deseasonalized data
         data = list(data)
-    fittedvalues = list(model.fittedvalues)
+    fittedvalues_with_prediction = make_prediction(model)
+    fittedvalues = model.fittedvalues
     avg = statistics.mean(data)
     median = statistics.median(data)
     possible_fitted_values = []
-
+    possible_predicted_values = []
+    
     possible_fitted_values.append([elem + avg for elem in fittedvalues])
     possible_fitted_values.append([elem + data[0] for elem in fittedvalues])
     possible_fitted_values.append([elem + median for elem in fittedvalues])
     possible_fitted_values.append(fittedvalues)
+    possible_predicted_values.append([elem + avg for elem in fittedvalues])
+    possible_predicted_values.append([elem + data[0] for elem in fittedvalues])
+    possible_predicted_values.append([elem + median for elem in fittedvalues])
+    possible_predicted_values.append(fittedvalues)
+
     min_error = 1000000
     best_fitted_values = 0
     for ind, f_values in enumerate(possible_fitted_values):
         avg_error = ave_error(data, f_values)
         if avg_error < min_error:
-            min_error = avg_error 
+            min_error = avg_error
             best_fitted_values = ind
     print("minimum error:", min_error)
-    return possible_fitted_values[best_fitted_values]
+    return possible_predicted_values[best_fitted_values]
+
 
 def check_for_extreme_values(sequence, sequence_to_check=None):
     mean = statistics.mean(sequence)
     stdev = statistics.stdev(sequence)
-    if sequence_to_check != None:
+    if sequence_to_check is not None:
         for val in sequence_to_check:
             if val >= mean + (stdev*2):
                 sequence_to_check.remove(val)
@@ -161,9 +182,10 @@ def check_for_extreme_values(sequence, sequence_to_check=None):
             elif val <= mean - (stdev*2):
                 sequence.remove(val)
         return sequence
-        
+
+
 def trend_predict(data):
-    # seasonal decompose 
+    # seasonal decompose
     if len(data) > 52:
         s = sm.tsa.seasonal_decompose(data["Price"], freq=52)
     elif len(data) > 12:
@@ -173,24 +195,27 @@ def trend_predict(data):
     # clearing out NaNs
     new_data = s.trend.fillna(0)
     new_data = new_data.iloc[new_data.nonzero()[0]]
-    model_order = list(model_search(new_data))
-    model_order = tuple([int(elem) for elem in model_order])
+    #model_order = list(model_search(new_data))
+    #model_order = tuple([int(elem) for elem in model_order])
+    model_order = (1,0,0)
     model = sm.tsa.ARIMA(new_data, model_order).fit()
     model.fittedvalues = setting_y_axis_intercept(new_data, model)
     return model, new_data, model_order
 
+
 def is_nan(obj):
-    if type(obj) == type(float()):
+    if isinstance(obj, float):
         return math.isnan(obj)
     else:
         return False
-    
+
+
 def money_to_float(string):
     """
-    hourly wages have dollar signs and use commas, 
+    hourly wages have dollar signs and use commas,
     this method removes those things, so we can treat stuff as floats
     """
-    if type(string) == type(str()):
+    if isinstance(string, str):
         string = string.replace("$", "").replace(",", "")
         return float(string)
     else:
