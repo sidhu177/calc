@@ -1,0 +1,2 @@
+labor_categories = [i for i in LookUp.objects.all() if i.labor_key]
+        labor_categories = [i.labor_key for i in labor_categories]
