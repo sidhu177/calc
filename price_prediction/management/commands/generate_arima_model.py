@@ -109,10 +109,14 @@ def ave_error(vals, f_vals):
 
 
 def make_prediction(model):
+    import code
+    code.interact(local=locals())
+    df = pd.DataFrame()
     number_observations = len(model.fittedvalues)
+    date_list = [i.to_datetime() for i in list(model.fittedvalues.index)]
+    
     if number_observations >= 100:
         start = int(number_observations / 2)
-        date_list = [i.to_datetime() for i in list(model.fittedvalues.index)]
         deltas = []
         for index in range(len(date_list)-1):
             deltas.append(date_list[index+1] - date_list[index])
@@ -128,6 +132,7 @@ def make_prediction(model):
     else:
         start = 1
         end = number_observations + 100
+    #this is the method I need - model.forecast
     return model.predict(start=start, end=end, dynamic=True)
 
 
@@ -254,16 +259,10 @@ class Command(BaseCommand):
                 df.sort_index(inplace=True)
                 result = trend_predict(df)
                 if result:
-                    model, new_data, order = result
+                    predicted_data, new_data, order = result
                 else:
                     continue
                 order_terms.append(order)
-                predicted_data = pd.DataFrame()
-                for ind in range(len(model.fittedvalues)):
-                    predicted_data = predicted_data.append({
-                        "date": model.fittedvalues.index[ind],
-                        "price": model.fittedvalues[ind]
-                    }, ignore_index=True)
                 predicted_data["date"] = pd.to_datetime(predicted_data["date"])
                 predicted_data = predicted_data.set_index("date")
                 predicted_data.sort_index(inplace=True)

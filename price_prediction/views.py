@@ -8,16 +8,28 @@ import json
 
 def prepare_data_for_plotting(data,fitted_values):
     #When x = Contract.objects.all()[0]; is x.contract_start the same as Being Date in the spreadsheet?
-    dicter = {}
-    timestamps = [str(datum.contract_start) for datum in data]
-    timestamps = [timestamp.split(" ")[0] for timestamp in timestamps]
-    dicter["x_data"] = ["x"] + timestamps
-    dicter["x_data"] = json.dumps(dicter["x_data"])
-    dicter["y_data"] = ["observed prices"] + [float(datum.hourly_rate_year1) for datum in data]
-    dicter["y_data"] = json.dumps(dicter["y_data"])
-    dicter["y_fitted"] = ["fitted prices"] + [float(fitted_value.fittedvalue) for fitted_value in fitted_values]
-    dicter["y_fitted"] = json.dumps(dicter["y_fitted"])
-    return dicter
+    data_object = []
+    date_lookup = {}
+    for ind,datum in enumerate(data):
+        tmp = {}
+        timestamp = str(datum.contract_start)
+        timestamp = timestamp.split(" ")[0]
+        tmp["date"] = timestamp
+        date_lookup[timestamp] = ind
+        tmp["observed"] = float(datum.hourly_rate_year1)
+        data_object.append(tmp)
+    for ind,value in enumerate(fitted_values):
+        tmp = {}
+        timestamp = str(value.start_date)
+        timestamp = timestamp.split(" ")[0]
+        if timestamp in date_lookup.keys():
+            data_object[date_lookup[timestamp]]["fitted"] = float(value.fittedvalue)
+        else:
+            tmp["date"] = timestamp
+            tmp["fitted"] = float(value.fittedvalue)
+            data_object.append(tmp)
+
+    return {"data_object": json.dumps(data_object)}
 
 
 def timeseries_analysis(request):
