@@ -10,7 +10,7 @@ import code
 from scipy.optimize import brute
 from django.core.management import BaseCommand
 from optparse import make_option
-
+import matplotlib.pyplot as plt
 
 # this comes from here:
 # http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
@@ -109,8 +109,6 @@ def ave_error(vals, f_vals):
 
 
 def make_prediction(model):
-    import code
-    code.interact(local=locals())
     df = pd.DataFrame()
     number_observations = len(model.fittedvalues)
     date_list = [i.to_datetime() for i in list(model.fittedvalues.index)]
@@ -133,8 +131,16 @@ def make_prediction(model):
         start = 1
         end = number_observations + 100
     #this is the method I need - model.forecast
-    return model.predict(start=start, end=end, dynamic=True)
-
+    #result = model.forecast(start = start, end = end, dynamic = True)
+    model.plot_predict(start, end, dynamic = True)
+    plt.show()
+    prediction = model.predict(start=start, end=end, dynamic=True)
+    import code
+    code.interact(local=locals())
+    
+# create a monthly continuous time series to pull from
+# interpolate values from trend
+# set prediction from new values from artificially generated time series.
 
 def setting_y_axis_intercept(data, model):
     try:
@@ -187,9 +193,26 @@ def check_for_extreme_values(sequence, sequence_to_check=None):
             elif val <= mean - (stdev*2):
                 sequence.remove(val)
         return sequence
+    
+    
+def clean_data(data):
+    new_data = pd.DataFrame()
+    for timestamp in set(data.index):
+        if len(data.ix[timestamp]) > 1:
+            tmp_df = data.ix[timestamp].copy()
+            new_price = statistics.median([tmp_df.iloc[index]["Price"] for index in range(len(tmp_df))])
+            series = tmp_df.iloc[0]
+            series["Price"] = new_price
+            new_data = new_data.append(series)
+        else:
+            new_data = new_data.append(data.ix[timestamp])
+    return new_data
 
 
 def trend_predict(data):
+    new_data = clean_data(data)
+    import code
+    code.interact(local=locals())
     # seasonal decompose
     if len(data) > 52:
         s = sm.tsa.seasonal_decompose(data["Price"], freq=52)
@@ -282,3 +305,4 @@ class Command(BaseCommand):
                         code.interact(local=locals())
         except:
             code.interact(local=locals())
+
