@@ -11,6 +11,7 @@ from scipy.optimize import brute
 from django.core.management import BaseCommand
 from optparse import make_option
 import matplotlib.pyplot as plt
+import numpy as np
 
 # this comes from here:
 # http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
@@ -132,9 +133,10 @@ def make_prediction(model):
         end = number_observations + 100
     #this is the method I need - model.forecast
     #result = model.forecast(start = start, end = end, dynamic = True)
-    model.plot_predict(start, end, dynamic = True)
-    plt.show()
+    #model.plot_predict(start, end, dynamic = True)
+    #plt.show()
     prediction = model.predict(start=start, end=end, dynamic=True)
+    forecasted = model.forecast(steps=60)
     import code
     code.interact(local=locals())
     
@@ -142,7 +144,7 @@ def make_prediction(model):
 # interpolate values from trend
 # set prediction from new values from artificially generated time series.
 
-def setting_y_axis_intercept(data, model):
+def setting_y_axis_intercept(data, interpolated_data, model):
     try:
         # if we are using the original data
         data = list(data["Price"])
@@ -209,25 +211,58 @@ def clean_data(data):
     return new_data
 
 
+def date_range_generate(start,end):
+    start_year = int(start.year)
+    start_month = int(start.month)
+    end_year = int(end.year)
+    end_month = int(end.month)
+    
+    print("start year",start_year)
+    print("end year",end_year)
+    if end.month == 12:
+        end_year += 1
+        end_month = 1
+    dates = [datetime.datetime(year=start_year,month=month,day=1) for month in range(start_month,13)]
+    for year in range(start_year+1,end_year+1):
+        dates += [datetime.datetime(year=year,month=month,day=1) for month in range(1,13)]
+    return dates
+
+
+def interpolate(series):
+    date_list = list(series.index)
+    date_list.sort()
+    dates = date_range_generate(date_list[0], date_list[-1])
+    for date in dates:
+        if date not in list(series.index):
+            series = series.set_value(date, np.nan)
+    return series.interpolate()
+
+
 def trend_predict(data):
-    new_data = clean_data(data)
-    import code
-    code.interact(local=locals())
+    cleaned_data = clean_data(data)
+    print("cleaned data")
     # seasonal decompose
-    if len(data) > 52:
-        s = sm.tsa.seasonal_decompose(data["Price"], freq=52)
-    elif len(data) > 12:
-        s = sm.tsa.seasonal_decompose(data["Price"], freq=12)
-    else:
-        return None
+    # if len(data) > 52:
+    #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=52)
+    # elif len(data) > 12:
+    #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=12)
+    # else:
+    #     return None
+
+    s = cleaned_data.T.squeeze()
+    s.sort_index(inplace=True)
+    print("converted series")
     # clearing out NaNs
-    new_data = s.trend.fillna(0)
+    new_data = s.fillna(0)
     new_data = new_data.iloc[new_data.nonzero()[0]]
+    interpolated_data = interpolate(new_data.copy())
+    print("interpolated data")
     model_order = list(model_search(new_data))
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
-    model = sm.tsa.ARIMA(new_data, model_order).fit()
-    model.fittedvalues = setting_y_axis_intercept(new_data, model)
+    model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
+    print("trained the model")
+    model.fittedvalues = setting_y_axis_intercept(new_data, interpolated_data, model)
     return model, new_data, model_order
 
 
@@ -280,6 +315,7 @@ class Command(BaseCommand):
                 df["Date"] = pd.to_datetime(df["Date"])
                 df = df.set_index("Date")
                 df.sort_index(inplace=True)
+                print("got here")
                 result = trend_predict(df)
                 if result:
                     predicted_data, new_data, order = result
