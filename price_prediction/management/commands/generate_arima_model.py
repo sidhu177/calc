@@ -235,8 +235,9 @@ def interpolate(series):
 
 
 def trend_predict(data):
+    print("inside of trend predict")
     cleaned_data = clean_data(data)
-
+    print("finished cleaning data")
     # seasonal decompose
     # if len(data) > 52:
     #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=52)
@@ -247,23 +248,26 @@ def trend_predict(data):
 
     s = cleaned_data.T.squeeze()
     s.sort_index(inplace=True)
-
+    print("sorted index by date")
     # clearing out NaNs
     new_data = s.fillna(0)
     new_data = new_data.iloc[new_data.nonzero()[0]]
     interpolated_data = interpolate(new_data.copy())
-
+    print("interpolated data")
     model_order = list(model_search(interpolated_data))
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
     model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
-
+    code.interact(local=locals())
+    print("fit model")
     #prediction, forecast = make_prediction(model)
     forecast = model.forecast(steps=60)
+    print("forecasted future")
     #model.fittedvalues = setting_y_axis_intercept(new_data, interpolated_data, model)
     tmp_date = interpolated_data.index[-1]
     end_date = datetime.datetime(year=tmp_date.year+5, month=tmp_date.month, day= tmp_date.day)
     date_range = date_range_generate(interpolated_data.index[-1], end_date)
+    print("leaving trend predict")
     return date_range, forecast
 
 
@@ -295,6 +299,8 @@ class Command(BaseCommand):
         try:
             for index, labor_category in enumerate(labor_categories):
                 labor_objects = LookUp.objects.filter(labor_key=labor_category)
+                if len(labor_objects) < 20: #there isn't enough data for a prediction in this case
+                    continue
                 print("completed lookup")
                 df = pd.DataFrame()
                 for labor_object in labor_objects:
@@ -315,7 +321,7 @@ class Command(BaseCommand):
                 else:
                     continue
 
-                for ind in range(len(date_range)):
+                for ind in range(len(forecast[0])):
                     try:
                         fitted = Fitted(labor_key=labor_category,
                                         fittedvalue=forecast[0][ind],

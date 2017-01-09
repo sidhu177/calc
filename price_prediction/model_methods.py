@@ -12,6 +12,7 @@ from django.core.management import BaseCommand
 from optparse import make_option
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 # this comes from here:
 # http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
@@ -26,9 +27,9 @@ def brute_search(data):
     obj_func = partial(objective_function, data)
     # Back in graduate school professor Lecun said in class that ARIMA models
     # typically only need a max parameter of 5, so I doubled it just in case.
-    upper_bound_AR = 10
-    upper_bound_I = 10
-    upper_bound_MA = 10
+    upper_bound_AR = 4
+    upper_bound_I = 4
+    upper_bound_MA = 4
     grid_not_found = True
     while grid_not_found:
         try:
@@ -137,8 +138,7 @@ def make_prediction(model):
     #plt.show()
     prediction = model.predict(start=start, end=end, dynamic=True)
     forecasted = model.forecast(steps=60)
-    import code
-    code.interact(local=locals())
+    return prediction, forecasted
     
 # create a monthly continuous time series to pull from
 # interpolate values from trend
@@ -147,10 +147,10 @@ def make_prediction(model):
 def setting_y_axis_intercept(data, interpolated_data, model):
     try:
         # if we are using the original data
-        data = list(data["Price"])
+        data = list(interpolated_data["Price"])
     except:
         # if we are using the deseasonalized data
-        data = list(data)
+        data = list(interpolated_data)
     fittedvalues_with_prediction = make_prediction(model)
     fittedvalues = model.fittedvalues
     avg = statistics.mean(data)
@@ -176,6 +176,32 @@ def setting_y_axis_intercept(data, interpolated_data, model):
             best_fitted_values = ind
     print("minimum error:", min_error)
     return possible_predicted_values[best_fitted_values]
+
+
+def calculate_error(data, model):
+    try:
+        # if we are using the original data
+        data = list(data["Price"])
+    except:
+        # if we are using the deseasonalized data
+        data = list(data)
+    fittedvalues = model.fittedvalues
+    avg = statistics.mean(data)
+    median = statistics.median(data)
+    possible_fitted_values = []
+    possible_fitted_values.append([elem + avg for elem in fittedvalues])
+    possible_fitted_values.append([elem + data[0] for elem in fittedvalues])
+    possible_fitted_values.append([elem + median for elem in fittedvalues])
+    possible_fitted_values.append(fittedvalues)
+
+    min_error = 1000000
+    best_fitted_values = 0
+    for ind, f_values in enumerate(possible_fitted_values):
+        avg_error = ave_error(data, f_values)
+        if avg_error < min_error:
+            min_error = avg_error
+            best_fitted_values = ind
+    return min_error/len(data)
 
 
 def check_for_extreme_values(sequence, sequence_to_check=None):
@@ -216,15 +242,9 @@ def date_range_generate(start,end):
     start_month = int(start.month)
     end_year = int(end.year)
     end_month = int(end.month)
-    
-    print("start year",start_year)
-    print("end year",end_year)
-    if end.month == 12:
-        end_year += 1
-        end_month = 1
-    dates = [datetime.datetime(year=start_year,month=month,day=1) for month in range(start_month,13)]
-    for year in range(start_year+1,end_year+1):
-        dates += [datetime.datetime(year=year,month=month,day=1) for month in range(1,13)]
+    dates = [datetime.datetime(year=start_year, month=month, day=1) for month in range(start_month, 13)]
+    for year in range(start_year+1, end_year+1):
+        dates += [datetime.datetime(year=year, month=month, day=1) for month in range(1,13)]
     return dates
 
 
@@ -235,12 +255,23 @@ def interpolate(series):
     for date in dates:
         if date not in list(series.index):
             series = series.set_value(date, np.nan)
-    return series.interpolate()
+    series = series.interpolate(method="values")
+    to_remove = [elem for elem in list(series.index) if elem.day != 1]
+    series.drop(to_remove, inplace=True)
+    return series
+
+def generate_test_data(data, num_sets=20):
+    sets = []
+    set_size = int(len(data)/5)
+    for i in range(num_sets):
+        sets.append([random.choice(data) for _ in range(set_size)])
+    return sets
 
 
-def trend_predict(data):
+def trend_errors(data):
+    print("inside of trend predict")
     cleaned_data = clean_data(data)
-    print("cleaned data")
+    print("finished cleaning data")
     # seasonal decompose
     # if len(data) > 52:
     #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=52)
@@ -251,19 +282,33 @@ def trend_predict(data):
 
     s = cleaned_data.T.squeeze()
     s.sort_index(inplace=True)
-    print("converted series")
+    print("sorted index by date")
     # clearing out NaNs
     new_data = s.fillna(0)
     new_data = new_data.iloc[new_data.nonzero()[0]]
     interpolated_data = interpolate(new_data.copy())
+    
     print("interpolated data")
-    model_order = list(model_search(new_data))
-    model_order = tuple([int(elem) for elem in model_order])
-    #model_order = (1,0,0)
-    model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
-    print("trained the model")
-    model.fittedvalues = setting_y_axis_intercept(new_data, interpolated_data, model)
-    return model, new_data, model_order
+    test_sets = generate_test_data(interpolated_data)
+    interpolated_errors = []
+    for test_set in test_sets:
+        model_order = list(model_search(test_set))
+        model_order = tuple([int(elem) for elem in model_order])
+        #model_order = (1,0,0)
+        model = sm.tsa.ARIMA(test_set, model_order).fit()
+        interpolated_errors.append(calculate_error(test_set, model))
+
+    test_sets = generate_test_data(new_data)
+    new_errors = []
+    for test_set in test_sets:
+        model_order = list(model_search(test_set))
+        model_order = tuple([int(elem) for elem in model_order])
+        #model_order = (1,0,0)
+        model = sm.tsa.ARIMA(test_set, model_order).fit()
+        new_errors.append(calculate_error(test_set, model))
+        
+    
+    return interpolated_errors, new_errors
 
 
 def is_nan(obj):
@@ -284,4 +329,22 @@ def money_to_float(string):
     else:
         return string
 
-
+def main():
+    labor_key = LookUp.objects.filter(labor_category="Analyst 1").first().labor_key
+    labor_objects = LookUp.objects.filter(labor_key=labor_key)
+    df = pd.DataFrame()
+    for labor_object in labor_objects:
+        df = df.append({
+            "Date": labor_object.start_date,
+            "Price": float(labor_object.labor_value)
+        }, ignore_index=True)
+        # sanity checking this is a datetime
+    print("created dataframe")
+    df["Date"] = pd.to_datetime(df["Date"])
+    df = df.set_index("Date")
+    df.sort_index(inplace=True)
+    print("completed dataframe sorting")
+    result = trend_errors(df)
+    import code
+    code.interact(local=locals())
+            
