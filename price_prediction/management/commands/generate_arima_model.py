@@ -26,9 +26,9 @@ def brute_search(data):
     obj_func = partial(objective_function, data)
     # Back in graduate school professor Lecun said in class that ARIMA models
     # typically only need a max parameter of 5, so I doubled it just in case.
-    upper_bound_AR = 10
-    upper_bound_I = 10
-    upper_bound_MA = 10
+    upper_bound_AR = 4
+    upper_bound_I = 4
+    upper_bound_MA = 4
     grid_not_found = True
     while grid_not_found:
         try:
@@ -137,8 +137,7 @@ def make_prediction(model):
     #plt.show()
     prediction = model.predict(start=start, end=end, dynamic=True)
     forecasted = model.forecast(steps=60)
-    import code
-    code.interact(local=locals())
+    return prediction, forecasted
     
 # create a monthly continuous time series to pull from
 # interpolate values from trend
@@ -147,10 +146,10 @@ def make_prediction(model):
 def setting_y_axis_intercept(data, interpolated_data, model):
     try:
         # if we are using the original data
-        data = list(data["Price"])
+        data = list(interpolated_data["Price"])
     except:
         # if we are using the deseasonalized data
-        data = list(data)
+        data = list(interpolated_data)
     fittedvalues_with_prediction = make_prediction(model)
     fittedvalues = model.fittedvalues
     avg = statistics.mean(data)
@@ -216,15 +215,9 @@ def date_range_generate(start,end):
     start_month = int(start.month)
     end_year = int(end.year)
     end_month = int(end.month)
-    
-    print("start year",start_year)
-    print("end year",end_year)
-    if end.month == 12:
-        end_year += 1
-        end_month = 1
-    dates = [datetime.datetime(year=start_year,month=month,day=1) for month in range(start_month,13)]
-    for year in range(start_year+1,end_year+1):
-        dates += [datetime.datetime(year=year,month=month,day=1) for month in range(1,13)]
+    dates = [datetime.datetime(year=start_year, month=month, day=1) for month in range(start_month, 13)]
+    for year in range(start_year+1, end_year+1):
+        dates += [datetime.datetime(year=year, month=month, day=1) for month in range(1,13)]
     return dates
 
 
@@ -235,12 +228,15 @@ def interpolate(series):
     for date in dates:
         if date not in list(series.index):
             series = series.set_value(date, np.nan)
-    return series.interpolate()
+    series = series.interpolate(method="values")
+    to_remove = [elem for elem in list(series.index) if elem.day != 1]
+    series.drop(to_remove, inplace=True)
+    return series
 
 
 def trend_predict(data):
     cleaned_data = clean_data(data)
-    print("cleaned data")
+
     # seasonal decompose
     # if len(data) > 52:
     #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=52)
@@ -251,19 +247,24 @@ def trend_predict(data):
 
     s = cleaned_data.T.squeeze()
     s.sort_index(inplace=True)
-    print("converted series")
+
     # clearing out NaNs
     new_data = s.fillna(0)
     new_data = new_data.iloc[new_data.nonzero()[0]]
     interpolated_data = interpolate(new_data.copy())
-    print("interpolated data")
-    model_order = list(model_search(new_data))
+
+    model_order = list(model_search(interpolated_data))
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
     model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
-    print("trained the model")
-    model.fittedvalues = setting_y_axis_intercept(new_data, interpolated_data, model)
-    return model, new_data, model_order
+
+    #prediction, forecast = make_prediction(model)
+    forecast = model.forecast(steps=60)
+    #model.fittedvalues = setting_y_axis_intercept(new_data, interpolated_data, model)
+    tmp_date = interpolated_data.index[-1]
+    end_date = datetime.datetime(year=tmp_date.year+5, month=tmp_date.month, day= tmp_date.day)
+    date_range = date_range_generate(interpolated_data.index[-1], end_date)
+    return date_range, forecast
 
 
 def is_nan(obj):
@@ -287,24 +288,14 @@ def money_to_float(string):
 
 class Command(BaseCommand):
 
-    default_filename = 'contracts/docs/hourly_prices.csv'
-
-    option_list = BaseCommand.option_list + (
-        make_option(
-            '-f', '--filename',
-            default=default_filename,
-            help='input filename (.csv, default {})'.format(default_filename)
-        ),
-    )
-
     def handle(self, *args, **options):
         Fitted.objects.all().delete()
         labor_categories = [i for i in LookUp.objects.all() if i.labor_key]
         labor_categories = set([i.labor_key for i in labor_categories])
-        order_terms = []
         try:
-            for labor_category in labor_categories:
+            for index, labor_category in enumerate(labor_categories):
                 labor_objects = LookUp.objects.filter(labor_key=labor_category)
+                print("completed lookup")
                 df = pd.DataFrame()
                 for labor_object in labor_objects:
                     df = df.append({
@@ -312,30 +303,23 @@ class Command(BaseCommand):
                         "Price": float(labor_object.labor_value)
                     }, ignore_index=True)
                 # sanity checking this is a datetime
+                print("created dataframe")
                 df["Date"] = pd.to_datetime(df["Date"])
                 df = df.set_index("Date")
                 df.sort_index(inplace=True)
-                print("got here")
+                print("completed dataframe sorting")
                 result = trend_predict(df)
+                print("finished prediction")
                 if result:
-                    predicted_data, new_data, order = result
+                    date_range, forecast = result
                 else:
                     continue
-                order_terms.append(order)
-                predicted_data["date"] = pd.to_datetime(predicted_data["date"])
-                predicted_data = predicted_data.set_index("date")
-                predicted_data.sort_index(inplace=True)
-                # debugging visually
-                # plt.plot(df)
-                # plt.plot(predicted_data)
-                # plt.show()
-                p_data = predicted_data
-                # We are using timestamps for the index
-                for ind in range(len(predicted_data.index)):
+
+                for ind in range(len(date_range)):
                     try:
                         fitted = Fitted(labor_key=labor_category,
-                                        fittedvalue=p_data["price"][ind],
-                                        start_date=p_data.index[ind])
+                                        fittedvalue=forecast[0][ind],
+                                        start_date=date_range[ind])
                         fitted.save()
                     except:
                         code.interact(local=locals())
