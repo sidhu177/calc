@@ -1,6 +1,45 @@
 #Price Prediction
 
-##Intro
+##Requirements
+
+The following python packages are required to get things to work:
+
+```
+scipy==0.18.1
+pandas==0.18.0
+numpy==1.11.2
+statsmodels==0.6.1
+```
+
+The following python packages are optional, but recommended, so that you can debug your models:
+
+`matplotlib==1.5.1`
+
+These optional dependencies can be found in requirements-dev.txt
+
+##Justification of requirements
+
+`statsmodels==0.6.1` - This is the heart of the application.  It has the time series model, which is used for price prediction.  
+
+`scipy==0.18.1, pandas==0.18.0, numpy==1.11.2` - these three packages are dependencies for statsmodels.  
+
+##How the requirements are used
+
+In this section, we'll walk through specifically what parts of the packages that get used.  This way, if these dependencies become stale, either because compliance reasons or other issues, you'll know what you can update.  And what cannot be updated.
+
+```python
+from scipy import stats
+import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from scipy.optimize import brute
+```
+
+The above gives some insight into how the code is used.  Specifically, `scipy.optimize`'s `brute` method.  This method runs a brute force algorithm against a function passed in.  [Here are the docs for `brute`](https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.brute.html). 
+
+Other than the brute method, which might be subject to change.  The rest of the code takes advantage of the basic utility of each of the above packages and is therefore unlikely to change.
+
+##Explanation of codebase
 
 This code is currently defined in the [data_analysis branch in the price_prediction subapp](https://github.com/18F/calc/tree/data_analysis/price_prediction). The additions to the code base represents a complete prototype - a data visualization, mathematical model with parameter tuning, and a set of data cleaning routines.  The data visualization comes from the [c3.js](http://c3js.org/) library, a high level, minimal data visualization library, built ontop of [d3.js](https://d3js.org/).  The mathematical model is called the AutoRegressive Integrated Moving Average model, or ARIMA for short.  Typically the ARIMA model is tuned manually via inspection of the partical autocorrelation function and autocorrelation functions associated with a given timeseries.  However by making use of the Akaike Information Criterion, shorted to AIC, and a simple hill climb algorithm, we are able to find hyper parameters to fit the curve.  Therefore no manual tunning is required.  The data cleaning techniques are typical and therefore will not be discussed in detail at this point.
 
@@ -187,42 +226,4 @@ def clean_data(data):
 
 
 
-##Requirements
-
-The following python packages are required to get things to work:
-
-```
-scipy==0.18.1
-pandas==0.18.0
-numpy==1.11.2
-statsmodels==0.6.1
-```
-
-The following python packages are optional, but recommended, so that you can debug your models:
-
-`matplotlib==1.5.1`
-
-These optional dependencies can be found in requirements-dev.txt
-
-##Justification of requirements
-
-`statsmodels==0.6.1` - This is the heart of the application.  It has the time series model, which is used for price prediction.  
-
-`scipy==0.18.1, pandas==0.18.0, numpy==1.11.2` - these three packages are dependencies for statsmodels.  
-
-##How the requirements are used
-
-In this section, we'll walk through specifically what parts of the packages that get used.  This way, if these dependencies become stale, either because compliance reasons or other issues, you'll know what you can update.  And what cannot be updated.
-
-```
-from scipy import stats
-import pandas as pd
-import matplotlib.pyplot as plt
-import statsmodels.api as sm
-from scipy.optimize import brute
-```
-
-The above gives some insight into how the code is used.  Specifically, `scipy.optimize`'s `brute` method.  This method runs a brute force algorithm against a function passed in.  [Here are the docs for `brute`](https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.brute.html). 
-
-Other than the brute method, which might be subject to change.  The rest of the code takes advantage of the basic utility of each of the above packages and is therefore unlikely to change.
 
