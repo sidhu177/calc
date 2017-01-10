@@ -154,7 +154,7 @@ Once we have our prediction, we are free to save the results to a database and t
 ###Problems with the data sets
 
 1. **The timestamps may not be completely meaningful.**  The timestamps associated with the data sets are the first year prices of the contract.  These negoiated hourly rates aren't the dates these contracts are negoiated, but instead, are the start dates of the contracts.  It's unclear if start date of the contract, is an acceptable time stamp for the contracts.  The data _seems_ to be fine, based on the fact that the start date, and the negoiated starting hourly rate are negoiated at the same time.  However, this may not actually make for a good starting time stamp.  In future datasets, we may want to consider adding a different timestamp for the start date - the date the contract was negoiated.  
-2.  **The timestamps are not evening distributed.**  This makes predicting into the future with the current interface, using the actual timestamps, impossible.  To compensate for this I've added an interpolation method that adds intermediate values, every month.  Then the original values are removed and the prediction takes place over the interpolated values.  Here's the code that does that:
+2. **The timestamps are not evening distributed.**  This makes predicting into the future with the current interface, using the actual timestamps, impossible.  To compensate for this I've added an interpolation method that adds intermediate values, every month.  Then the original values are removed and the prediction takes place over the interpolated values.  Here's the code that does that:
 
 ```python
 import datetime
