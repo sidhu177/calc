@@ -306,8 +306,6 @@ def trend_errors(data):
         #model_order = (1,0,0)
         model = sm.tsa.ARIMA(test_set, model_order).fit()
         new_errors.append(calculate_error(test_set, model))
-        
-    
     return interpolated_errors, new_errors
 
 

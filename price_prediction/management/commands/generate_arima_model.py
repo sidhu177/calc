@@ -258,7 +258,6 @@ def trend_predict(data):
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
     model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
-    code.interact(local=locals())
     print("fit model")
     #prediction, forecast = make_prediction(model)
     forecast = model.forecast(steps=60)
@@ -269,25 +268,6 @@ def trend_predict(data):
     date_range = date_range_generate(interpolated_data.index[-1], end_date)
     print("leaving trend predict")
     return date_range, forecast
-
-
-def is_nan(obj):
-    if isinstance(obj, float):
-        return math.isnan(obj)
-    else:
-        return False
-
-
-def money_to_float(string):
-    """
-    hourly wages have dollar signs and use commas,
-    this method removes those things, so we can treat stuff as floats
-    """
-    if isinstance(string, str):
-        string = string.replace("$", "").replace(",", "")
-        return float(string)
-    else:
-        return string
 
 
 class Command(BaseCommand):

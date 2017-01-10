@@ -2,7 +2,190 @@
 
 ##Intro
 
-Description of the tool, what it does, why, and how
+This code is currently defined in the [data_analysis branch in the price_prediction subapp](https://github.com/18F/calc/tree/data_analysis/price_prediction). The additions to the code base represents a complete prototype - a data visualization, mathematical model with parameter tuning, and a set of data cleaning routines.  The data visualization comes from the [c3.js](http://c3js.org/) library, a high level, minimal data visualization library, built ontop of [d3.js](https://d3js.org/).  The mathematical model is called the AutoRegressive Integrated Moving Average model, or ARIMA for short.  Typically the ARIMA model is tuned manually via inspection of the partical autocorrelation function and autocorrelation functions associated with a given timeseries.  However by making use of the Akaike Information Criterion, shorted to AIC, and a simple hill climb algorithm, we are able to find hyper parameters to fit the curve.  Therefore no manual tunning is required.  The data cleaning techniques are typical and therefore will not be discussed in detail at this point.
+
+The ARIMA model is the main value add of the prototype.  In fact, the ARIMA model is made of up two simpler models, the AutoRegressive model and the Moving Average model.  The the Moving Average is the easier of the two models to explain, so we'll begin with it.  
+
+Implementing the MA model from scratch:
+
+```python
+import statistics as stat
+
+def moving_average(data, sliding_window=2):
+    averages = []
+    terminal_condition = False
+    start = 0
+    end = sliding_window
+    while end != len(data):
+        averages.append(stat.mean(data[start:end]))
+        start += 1
+        end += 1
+    return averages
+```
+
+As you can see above, we simply define a sliding window, and then take the average of the data incrementing over the index as we go.  Unfortunately the AutoRegressive piece is slightly harder to define.  For this, we'll need to bring in the statsmodels library and it's main work horse - linear regression.
+
+```python
+import statsmodels.api as sm
+
+def autoregressive(data):
+    Y = data[1:]
+    X = data[:-1]
+    model = sm.OLS(X,Y)
+    result = model.fit()
+    return [result.predict(x) for x in X]
+```
+
+The autoregressive model treats y_hat, the predicted value for the next data point, as it is correlated to the previous value.  Thus the AutoRegressive model assumes that each value is correlated, with the value in the previous time.
+
+Both of the models we described above, are MA(1) and AR(1) processes - probabilistic mathematical equations, that occur over time.  The hyper parameters are more generally referred to as p and q, respectively.  The hyper parameter, p, refers to the size of the sliding window in the moving average process.  Where as the hyper parameter, q, refers to the number of terms to depend the next element in the series on, in the autoregressive process.  So if we are looking at an AR(2) process - we'd do the following:
+
+```python
+def autoregressive(data):
+    Y = data[2:]
+    X = [[elem, data[ind+1]] for ind,elem enumerate(data) if elem != data[-1]]
+
+    model = sm.OLS(X,Y)
+    result = model.fit()
+    return [result.predict(x) for x in X]
+```
+
+Notice, now we predict the next result on the previous 2.  
+
+The Integrated part of the ARIMA model, simply differences away individual observations, increasing the search space of the model, but allowing the model an increased sense of flexibility.
+
+If you are interested in learning more about the ARIMA model or statistical modeling more generally, from scratch, check out this great resource:
+
+[Statistics class at penn state](https://onlinecourses.science.psu.edu/stat501/node/358)
+
+##Making use of the ARIMA model  
+
+Now that we understand what the ARIMA model is, let's see how to put the interface into practice.
+
+```python
+from datetime import datetime
+import pandas as pd
+from functools import partial
+
+def objective_function(data, order):
+    return sm.tsa.ARIMA(data, order).fit().aic
+
+def brute_search(data):
+    obj_func = partial(objective_function, data)
+    upper_bound_AR = 4
+    upper_bound_I = 4
+    upper_bound_MA = 4
+    grid = (
+        slice(1, upper_bound_AR, 1),
+        slice(1, upper_bound_I, 1),
+        slice(1, upper_bound_MA, 1)
+    )
+    order = brute(obj_func, grid, finish=None)
+    return order, obj_func(order)
+
+
+df = pd.DataFrame()
+
+for _ in range(200):
+    df = df.append({
+        "Date": datetime(year=random.randint(2002, 2012), month=random.randint(1,13), day=1),
+        "Value": random.randint(0,100000)
+        }, ignore_index=True)
+    print("created dataframe")
+    df["Date"] = pd.to_datetime(df["Date"])
+    df = df.set_index("Date")
+    df.sort_index(inplace=True)
+
+model_order = brute_search(df)
+model = sm.tsa.ARIMA(df, model_order).fit()
+prediction = model.predict(0, len(df))
+forecast = model.forecast(steps=10)
+print(prediction)
+print(forecast)
+```
+
+In order to tune the hyper parameters, p - AR, d - Integrated, and q - MA; we apply a hill climb algorithm.  This algorithm checks the resulting ARIMA model's [AIC](https://en.wikipedia.org/wiki/Akaike_information_criterion).  The set of hyper parameters that return the most minimal AIC are the hyper parameters chosen. 
+
+Once the hyper parameters are chosen we simply run the model and then get our forecast.  The forecast method, predicts n equally spaced time steps into the future.  Where as the predict method fits the model to the same time intervals as the data.  Therefore exact spacing is not needed for predict, only for forecast.
+
+Once we have our prediction, we are free to save the results to a database and then call them, as needed for our views.  
+
+##Understanding the details
+
+###Problems with the data sets
+
+1. **The timestamps may not be completely meaningful.**  The timestamps associated with the data sets are the first year prices of the contract.  These negoiated hourly rates aren't the dates these contracts are negoiated, but instead, are the start dates of the contracts.  It's unclear if start date of the contract, is an acceptable time stamp for the contracts.  The data _seems_ to be fine, based on the fact that the start date, and the negoiated starting hourly rate are negoiated at the same time.  However, this may not actually make for a good starting time stamp.  In future datasets, we may want to consider adding a different timestamp for the start date - the date the contract was negoiated.  
+2.  **The timestamps are not evening distributed.**  This makes predicting into the future with the current interface, using the actual timestamps, impossible.  To compensate for this I've added an interpolation method that adds intermediate values, every month.  Then the original values are removed and the prediction takes place over the interpolated values.  Here's the code that does that:
+
+```python
+import datetime
+
+def date_range_generate(start,end):
+    start_year = int(start.year)
+    start_month = int(start.month)
+    end_year = int(end.year)
+    end_month = int(end.month)
+    dates = [datetime.datetime(year=start_year, month=month, day=1) for month in range(start_month, 13)]
+    for year in range(start_year+1, end_year+1):
+        dates += [datetime.datetime(year=year, month=month, day=1) for month in range(1,13)]
+    return dates
+
+def interpolate(series):
+    date_list = list(series.index)
+    date_list.sort()
+    dates = date_range_generate(date_list[0], date_list[-1])
+    for date in dates:
+        if date not in list(series.index):
+            series = series.set_value(date, np.nan)
+    series = series.interpolate(method="values")
+    to_remove = [elem for elem in list(series.index) if elem.day != 1]
+    series.drop(to_remove, inplace=True)
+    return series
+```
+
+Note that the series in this case is a pandas series.
+
+3. **Some of the data is wrong**.  Some of the values in the dataset were input wrong and therefore make any predictions less useful.  To deal with this a short term fix has been developed:
+
+```python
+def check_for_extreme_values(sequence, sequence_to_check=None):
+    mean = statistics.mean(sequence)
+    stdev = statistics.stdev(sequence)
+    if sequence_to_check is not None:
+        for val in sequence_to_check:
+            if val >= mean + (stdev*2):
+                sequence_to_check.remove(val)
+            elif val <= mean - (stdev*2):
+                sequence_to_check.remove(val)
+        return sequence_to_check
+    else:
+        for val in sequence:
+            if val >= mean + (stdev*2):
+                sequence.remove(val)
+            elif val <= mean - (stdev*2):
+                sequence.remove(val)
+        return sequence
+```
+
+4. **Some timestamps are repeated.**  Some of the timestamps are repeated in the timeseries.  This means the model tries to predict multiple outputs for a single input.  And it's unclear how the model handles this.  To deal with that, I wrote a method that cleans the dataset:
+
+```python
+def clean_data(data):
+    new_data = pd.DataFrame()
+    for timestamp in set(data.index):
+        if len(data.ix[timestamp]) > 1:
+            tmp_df = data.ix[timestamp].copy()
+            new_price = statistics.median([tmp_df.iloc[index]["Price"] for index in range(len(tmp_df))])
+            series = tmp_df.iloc[0]
+            series["Price"] = new_price
+            new_data = new_data.append(series)
+        else:
+            new_data = new_data.append(data.ix[timestamp])
+    return new_data
+```
+
+
+
 
 ##Requirements
 
@@ -43,369 +226,3 @@ The above gives some insight into how the code is used.  Specifically, `scipy.op
 
 Other than the brute method, which might be subject to change.  The rest of the code takes advantage of the basic utility of each of the above packages and is therefore unlikely to change.
 
-##Making things async
-
-Example async function: found in data_capture/jobs.py:
-
-```
-@job
-def process_bulk_upload_and_send_email(upload_source_id):
-    contracts_logger.info(
-        "Starting bulk upload processing (pk=%d)." % upload_source_id
-    )
-    upload_source = BulkUploadContractSource.objects.get(
-        pk=upload_source_id
-    )
-
-    try:
-        num_contracts, num_bad_rows = _process_bulk_upload(upload_source)
-        email.bulk_upload_succeeded(upload_source, num_contracts, num_bad_rows)
-    except:
-        contracts_logger.exception(
-            'An exception occurred during bulk upload processing '
-            '(pk=%d).' % upload_source_id
-        )
-        tb = traceback.format_exc()
-        email.bulk_upload_failed(upload_source, tb)
-
-    contracts_logger.info(
-        "Ending bulk upload processing (pk=%d)." % upload_source_id
-    )
-```
-
-Method is called here: data_capture/views/bulk_upload.py
-
-`jobs.process_bulk_upload_and_send_email.delay(upload_source_id)`
-
-##Setting up your model
-
-Step 1) Create your lookup table based on the most recent data.
-
-`python manage.py load_lookup_data.py`
-
-Step 2) Train model
-
-`python manage.py generate_arima_model`
-
-##References
-
-* [Rules of thumb for ARIMA models](https://people.duke.edu/~rnau/411arim.htm)
-
-##Data dictionary
-
-Here we will describe the model for the database.  This will include information about each column and each table.
-
-Lookup table
-
-
-
-    categories = {
-        "None":{
-            "0-5":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "6-10":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "11-15":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            }
-        },
-        "High School":{
-            "0-5":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "6-10":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "11-15":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            }
-        },
-        "Associates":{
-            "0-5":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "6-10":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "11-15":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            }
-        },
-        "Bachelors":{
-            "0-5":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "6-10":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "11-15":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            }
-        },
-        "Masters":{
-            "0-5":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "6-10":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "11-15":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            }
-        },
-        "Ph.D.":{
-            "0-5":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "6-10":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            },
-            "11-15":{
-                "PES":{"freq":0,"labor categories":[]},
-                "MOBIS":{"freq":0,"labor categories":[]},
-                "Environmental":{"freq":0,"labor categories":[]},
-                "Logistics":{"freq":0,"labor categories":[]},
-                "Consolidated":{"freq":0,"labor categories":[]},
-                "AIMS":{"freq":0,"labor categories":[]},
-                "Language Services":{"freq":0,"labor categories":[]}
-            }
-        }
-    }
-    seen_labor_categories = []
-    years_exp = ""
-    for df in dfs:
-        for index in df.index:
-            #this handles double counting, because about 1 out of every 100- every 1000 are double counted
-            if df.ix[index]["Labor Category"] in seen_labor_categories: continue
-            else:
-                seen_labor_categories.append(df.ix[index]["Labor Category"])
-            #This part of the code classifies the data into buckets based on some simple rules.
-            if df.ix[index]["MinExpAct"] <6 or is_nan(df.ix[index]):
-                years_exp = "0-5"
-            elif df.ix[index]["MinExpAct"] >=6 and df.ix[index]["MinExpAct"] < 11:
-                years_exp = "6-10"
-            elif df.ix[index]["MinExpAct"] >= 11 and df.ix[index]["MinExpAct"] < 16:
-                years_exp = "11-15"
-            
-            education_level = df.ix[index]["Education"] if not is_nan(df.ix[index]["Education"]) else "None" 
-            categories[ education_level ][ years_exp ][ df.ix[index]["Schedule"] ]["freq"] += 1
-            categories[ education_level ][ years_exp ][ df.ix[index]["Schedule"] ]["labor categories"].append(df.ix[index]["Labor Category"])
-            
-    json.dump(categories,open("categories.json","w"))
-
-def making_labor_category_to_high_level():
-    """
-    This function assumes making_categories has been called.  
-    It creates a mapping from individual labor categories to a higher level mapping which will be used in the time series analysis.
-    Using this function we will create broad labor categories with enough data for a meaningful timeseries
-    """
-    list_of_categories = []
-    categories = json.load(open("categories.json","r"))
-    labor_category_to_high_level_category = {}
-    for education_level in categories.keys():
-        for years_of_experience in categories[education_level].keys():
-            for schedule in categories[education_level][years_of_experience].keys():
-                for labor_category in categories[education_level][years_of_experience][schedule]["labor categories"]:
-                    labor_category_to_high_level_category[labor_category] = education_level +"_"+ years_of_experience +"_"+ schedule
-                    if education_level +"_"+ years_of_experience +"_"+ schedule not in list_of_categories:
-                        list_of_categories.append(education_level +"_"+ years_of_experience +"_"+ schedule)
-    json.dump(labor_category_to_high_level_category,open("labor_category_to_high_level_category.json","w"))
-    return list_of_categories
-
-#this comes from here: http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
-def objective_function(order,endogenous,exogenous=None):
-    if exogenous:
-        fit = sm.tsa.ARIMA(endogenous,order,exogenous).fit()
-    else:
-        fit = sm.tsa.ARIMA(endogenous,order).fit()
-    return fit.aic()
-
-def model_search(data,exogenous_data=None):
-    grid = (slice(1,3,1),slice(1,3,1),slice(1,3,1))
-    if exogenous_data:
-        return brute(objective_function, args=(data,exogenous_data), finish=None)
-    else:
-        return brute(objective_function, args=(data), finish=None)
-
-if not os.path.exists("categories.json"):
-    making_categories()
-
-if __name__ == '__main__':
-    start = time.time()
-    dfs = load_data()
-    print("loaded_data, took:",time.time() - start)
-    start = time.time()
-    labor_category = json.load(open("labor_category_to_high_level_category.json","r"))
-    list_of_categories = making_labor_category_to_high_level()
-    set_of_time_series = {}.fromkeys(list_of_categories,pd.DataFrame())
-    print("loaded json, ran making_labor_category_to_high_level, took:",time.time() - start)
-
-    compressed_dfs = [pd.DataFrame() for _ in range(len(dfs))]
-    start = time.time()
-    for ind,df in enumerate(dfs):
-        compressed_dfs[ind]["Year 1/base"] = df["Year 1/base"]
-        compressed_dfs[ind]["Begin Date"] = df["Begin Date"]
-        compressed_dfs[ind]["Labor Category"] = df["Labor Category"]
-    print("compressed dataframes, took", time.time() - start)
-
-    #todo: http://pandas.pydata.org/pandas-docs/stable/io.html#hdf5-pytables storing pandas df to disk
-    start = time.time()
-    for df in compressed_dfs:
-        for ind in df.index:
-            labor_cat = labor_category[df.ix[ind]["Labor Category"]]
-            set_of_time_series[labor_cat] = set_of_time_series[labor_cat].append(df.ix[ind])
-    print("categorizing dataframes, took:", time.time() - start)
-
-    start = time.time()
-    for category in set_of_time_series.keys():
-        set_of_time_series[category].index = [date_to_datetime(elem) for elem in set_of_time_series[category]["Begin Date"]]
-        del set_of_time_series[category]["Begin Date"]
-        del set_of_time_series[category]["Labor Category"]
-    print("organizing categorized dataframes took:", time.time() - start)
-
-    print("starting model search")
-    start = time.time()
-    keys = list(set_of_time_series.keys())
-    keys.sort()
-    
-    set_of_time_series = {key:set_of_time_series[key].sort_index(axis=0) for key in keys}
-    models = []
-    for key in keys:
-        dta = set_of_time_series[key]
-        models.append({"category":key,"model":model_search(dta)})
-    print("finished model search, in:",time.time() - start)
-    # models = []
-    
-    # keys = list(set_of_time_series.keys())
-    # keys.sort()
-    # dta = set_of_time_series[keys[0]]
-    # dta = dta.sort_index(axis=0)
-    # dta["Year 1/base"] = dta["Year 1/base"].apply(lambda x:math.log(x))
-    
-    # model = sm.tsa.ARIMA(dta,(1,1,0)).fit()
-    # model.fittedvalues = model.fittedvalues.apply(lambda x:x+4)
-    # dicter = {"category":keys[0],"model":model}
-    # models.append(dicter)
-
-    # dta = set_of_time_series[keys[1]]
-    # dta = dta.sort_index(axis=0)
-    # model = sm.tsa.ARIMA(dta,(0,1,2)).fit()
-    # model.fittedvalues = model.fittedvalues.apply(lambda x:x+62)
-    # dicter = {"category":keys[1],"model":model}
-    # models.append(dicter)
-
-    # dta = set_of_time_series[keys[2]]
-    # dta = dta.sort_index(axis=0)
-    # model = sm.tsa.ARIMA(dta,(0,1,2)).fit()
-    # model.fittedvalues = model.fittedvalues.apply(lambda x:x+50)
-    # dicter = {"category":keys[1],"model":model}
-    # models.append(dicter)
-    
-    # import IPython
-    # IPython.embed()
-    
-    #serialize model if possible
