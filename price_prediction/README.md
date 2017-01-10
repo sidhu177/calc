@@ -321,10 +321,15 @@ Let's start with the observed data:
 
 The observed data shows us that Analyst 1's contracts were created sparsely at first and starting at around february 4th 2015, started increasing in volume.  This data also shows that the price started to vary wildly over that small term.  This gives us a sense about not all the data, but about the organization - as we moved to better understand semantically what the term Analyst 1 even means, there were wide variances in price.  Perhaps some people interpretted Analyst 1 to mean the strongest or best Analyst.  Whereas others took it to mean the lowest grade, or most junior analyst.  However, such analysis is merely conjecture.  Another possible conjecture, is that the agency, type of work, and location factors account for the wild swing in price.  Since we don't have data concerning these other qualities, we can't include them in the analysis or say anything for certain at this point.  However, by looking at this time series view can say far more about the price then we could before.
 
+Note:  The observed data refers to the labor category.  The prediction refers to the higher level categorization.  
+
 Let's look at the trend data:
 
-The trend data gives us another view of how prices are changing over time.  It's interesting to see that prices for Analyst 1's have been falling over time, with a fair amount of distinction.  At least, until the wide variance in prices started up in 2015.  As you can see from the data
+The trend data gives us another view of how prices are changing over time.  It's interesting to see that prices for Analyst 1's have been falling over time, with a fair amount of distinction.  At least, until the wide variance in prices started up in 2015.  
 
+Let's look at the prediction:
+
+As you can see this point prediction, shows a forecasted value.  This forecast doesn't capture specific features of about the time series, however gives a prediction of where the trend of the data is likely headed.  Based on the passed data, I'd say this is a fairly accurate prediction of the trend.  Assuming that price variability remains high, the trend of the variability is likely to be towards the center of the variability, which the prediction dictates.
 
 ###Interpretation for Managers
 
