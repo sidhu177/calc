@@ -105,7 +105,6 @@ Now that we understand what the ARIMA model is, let's see how to put the interfa
 from datetime import datetime
 import pandas as pd
 from functools import partial
-from scipy import stats
 import statsmodels.api as sm
 from scipy.optimize import brute
 
