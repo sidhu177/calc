@@ -362,4 +362,13 @@ _Inclusion of Bureau of Labor Statistics Data:_
 
 It appears as though this [org - data at work](http://dataatwork.org/) has put together an api for BLS data. They have  a [general purpose fetcher](https://github.com/frictionlessdata/datapackage-py) that we could use to grab BLS employment data from [here - a datapackage website](http://data.okfn.org/data) that data at work, put together.  
 
-If we could include BLS data then we could show the rate at which contracting officers prices specific labor needs, against what the market rates for that labor is.  Using this, we could define a metric which measures the difference between the rate a contracting officer negotiated for and the current labor rate for the labor category.  We could use this metric to tune training for current employees about specific markets.  So for instance, say contracting officers do not accurately price database administrators, compared to BLS data.  Then we could train the contracting officers to 
+If we could include BLS data then we could show the rate at which contracting officers prices specific labor needs, against what the market rates for that labor is.  Using this, we could define a metric which measures the difference between the rate a contracting officer negotiated for and the current labor rate for the labor category.  We could use this metric to tune training for current employees about specific markets.  So for instance, say contracting officers do not accurately price database administrators, compared to BLS data.  Then we could train the contracting officers in the fields they don't know well.  Either by bringing in recruiters, having the more skilled COs work with the less skilled COs, who understand those labor categories better, or some third mechanism.
+
+_Only Installing Data Science Packages Locally_:
+
+Technically, all that needs to live on the server is the prediction data.  We could do all the modeling stuff locally and then push the results up to the server for visualization.  This however would mean, the modeling command would need to be run every time new data is added.  Long term we could also have a seperate environment for running the modeling that passes the data back to the calc server space and saves data via some sort of web hook.  This would allow us the ability to run the modeling piece from a cluster environment.  People seem to be asking for cloud.gov to support cluster computing.  Over the long term, I could see this happening.  And calc could be the first to make use of a cluster environment effectively.
+
+
+
+
+
