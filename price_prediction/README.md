@@ -311,3 +311,9 @@ The parameter `connectNull: true`, gives the objects the appearance of being con
 
 ##Intepretting the model's results
 
+![trend prediction](https://github.com/18F/calc/blob/data_analysis/price_prediction/trend_prediction.png)
+
+As you can see from the above picture there are a number of useful pieces to this graph.
+
+Let's start with the observed data:
+
