@@ -282,7 +282,7 @@ chart = c3.generate({
         json: {{data_object|safe}},
         keys: {
             x: 'date',
-            value: [ "observed", "fitted" ]
+            value: [ "observed", "fitted", "trend" ]
         }
     },
     axis: {
@@ -301,7 +301,7 @@ chart = c3.generate({
 
 There are two things to note here that are atypical -
 
-`keys` in the `data` object - This has two values: `observed` and `fitted` - `observed` refers to the observed data found in the dataset.  Whereas, `fitted` refers to the data generated via our modeling routine.  
+`keys` in the `data` object - This has three values: `observed`, `fitted`, `trend` - `observed` refers to the observed data found in the dataset.  Whereas, `fitted` refers to the data generated via our modeling routine.  And the `trend` refers to the general trend of the data.  If the `trend` is increasing over time, we can say prices are likely to rise, over the long term, rather than be variable via some seasonal or short term market forces.  If the `trend` is decreasing over time, we should expect long term prices to fall.  The trend line may be the most important, as it gives an eyeball view of whether we should expect prices to increase or decrease over the long term.  Which will inform how aggressively contracting officers should negotiate for future contracts.  And where savings can be expected.
 
 The second thing to note is the `line` subobject - this connects the lines.  Because there isn't one time scale used in the dataset, we must add datapoints, piecemeal, one at a time, as seperate objects.  
 
