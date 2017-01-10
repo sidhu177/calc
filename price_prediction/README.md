@@ -307,7 +307,7 @@ The second thing to note is the `line` subobject - this connects the lines.  Bec
 
 The `data_object` which is passed in from the backend, is in fact a list of smaller javascript objects.  
 
-The parameter `connectNull: true`, gives the objects the appearance of being connected, although from c3.js's perspective they are disjoint objects.  The reason the c3 library knows which objects to connect, is by the keys passed in.  This is denoted in the `value: ["observed", "fitted"]`.  The key associated with the data indicates which line a given element should be joined to.
+The parameter `connectNull: true`, gives the objects the appearance of being connected, although from c3.js's perspective they are disjoint objects.  The reason the c3 library knows which objects to connect, is by the keys passed in.  This is denoted in the `value: ["observed", "fitted", "trend"]`.  The key associated with the data indicates which line a given element should be joined to.
 
 ##Intepretting the model's results
 
