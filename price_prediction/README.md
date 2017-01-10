@@ -311,9 +311,55 @@ The parameter `connectNull: true`, gives the objects the appearance of being con
 
 ##Intepretting the model's results
 
+###Interpretation for Contracting Officers
+
 ![trend prediction](https://github.com/18F/calc/blob/data_analysis/price_prediction/trend_prediction.png)
 
 As you can see from the above picture there are a number of useful pieces to this graph.
 
 Let's start with the observed data:
 
+The observed data shows us that Analyst 1's contracts were created sparsely at first and starting at around february 4th 2015, started increasing in volume.  This data also shows that the price started to vary wildly over that small term.  This gives us a sense about not all the data, but about the organization - as we moved to better understand semantically what the term Analyst 1 even means, there were wide variances in price.  Perhaps some people interpretted Analyst 1 to mean the strongest or best Analyst.  Whereas others took it to mean the lowest grade, or most junior analyst.  However, such analysis is merely conjecture.  Another possible conjecture, is that the agency, type of work, and location factors account for the wild swing in price.  Since we don't have data concerning these other qualities, we can't include them in the analysis or say anything for certain at this point.  However, by looking at this time series view can say far more about the price then we could before.
+
+Let's look at the trend data:
+
+The trend data gives us another view of how prices are changing over time.  It's interesting to see that prices for Analyst 1's have been falling over time, with a fair amount of distinction.  At least, until the wide variance in prices started up in 2015.  As you can see from the data
+
+
+###Interpretation for Managers
+
+As of right now there isn't a set of visualizations for managers, however one could easily be created using the existing framework.  
+
+The idea would be a views of the data over time.  The visualization would give the manager the ability to view all the time series on a single graph, filter down to comparing two time series visualizations side by side, and filtering time series visualization by contracting officer who worked on contracts.  
+
+Analysis this would provide:
+
+1. a sense of how price negotiations are going in aggregate, over time
+2. a sense of how well a given contracting officer negotiates prices, for a specific contract type
+3. a sense of how well a given contracting officer negoiates prices, across multiple contract types
+
+The second and third type of analysis would include trend lines, showing whether or not the price grew or fell over time for that contract type and if the contracting officer was able to continue to push down price over time.
+
+###Definite Future Features
+
+1. **Dealing with Lack Of Data**.  As of right now, I don't have anything visual when there is a lack of data.  I feel like this should probably decided by design / a word smith.  So I didn't design it on purpose, but it should be in the final product.
+
+2. **95% confidence interval for prediction**.  At present a point statistic for the prediction is shown.  We should A/B test whether or not showing the lower and upper bound for the prediction is useful or confusing.  This already exists more or less in the code base.  
+
+
+###Possible Future Features
+
+_Geographic Time Series Analysis:_
+
+If geographic information about where the contract is included, a more thorough analysis can be completed, including cost of living adjustment, analysis of how prices vary geographically over time, further segmentation of labor categories based on location.
+
+Specifics about the geographic information, of interest:
+
+* Location(s) where the contractor is living
+* Location(s) of any other contractors who will be working with this contractor
+
+_Inclusion of Bureau of Labor Statistics Data:_
+
+It appears as though this [org - data at work](http://dataatwork.org/) has put together an api for BLS data. They have  a [general purpose fetcher](https://github.com/frictionlessdata/datapackage-py) that we could use to grab BLS employment data from [here - a datapackage website](http://data.okfn.org/data) that data at work, put together.  
+
+If we could include BLS data then we could show the rate at which contracting officers prices specific labor needs, against what the market rates for that labor is.  Using this, we could define a metric which measures the difference between the rate a contracting officer negotiated for and the current labor rate for the labor category.  We could use this metric to tune training for current employees about specific markets.  So for instance, say contracting officers do not accurately price database administrators, compared to BLS data.  Then we could train the contracting officers to 
