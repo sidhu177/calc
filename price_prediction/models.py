@@ -33,3 +33,12 @@ class FittedValuesByCategory(models.Model):
 
     def __str__(self):
         return self.labor_key
+
+class TrendByCategory(models.Model):
+    labor_category = models.CharField(max_length=400)
+    labor_key = models.CharField(max_length=400)
+    trend = models.DecimalField(decimal_places=2, max_digits=200)
+    start_date = models.DateField()
+
+    def __str__(self):
+        return self.labor_key

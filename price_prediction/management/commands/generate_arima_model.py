@@ -1,5 +1,6 @@
 from price_prediction.models import FittedValuesByCategory as Fitted
 from price_prediction.models import LaborCategoryLookUp as LookUp
+from price_prediction.models import TrendByCategory as Trend
 import pandas as pd
 import math
 import datetime
@@ -239,13 +240,16 @@ def trend_predict(data):
     cleaned_data = clean_data(data)
     print("finished cleaning data")
     # seasonal decompose
-    # if len(data) > 52:
-    #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=52)
-    # elif len(data) > 12:
-    #     s = sm.tsa.seasonal_decompose(cleaned_data["Price"], freq=12)
-    # else:
-    #     return None
 
+    if len(data) > 52:
+        trend = sm.tsa.seasonal_decompose(data["Price"], freq=52).trend
+    elif len(data) > 12:
+        trend = sm.tsa.seasonal_decompose(data["Price"], freq=12).trend
+    else:
+        return None
+        
+    trend = trend.fillna(0)
+    trend = trend.iloc[trend.nonzero()[0]]
     s = cleaned_data.T.squeeze()
     s.sort_index(inplace=True)
     print("sorted index by date")
@@ -267,19 +271,27 @@ def trend_predict(data):
     end_date = datetime.datetime(year=tmp_date.year+5, month=tmp_date.month, day= tmp_date.day)
     date_range = date_range_generate(interpolated_data.index[-1], end_date)
     print("leaving trend predict")
-    return date_range, forecast
+
+    return date_range, forecast, trend
+
+def is_nan(obj):
+    if type(obj) == type(float()):
+        return math.isnan(obj)
+    else:
+        return False
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Fitted.objects.all().delete()
+        Trend.objects.all().delete()
         labor_categories = [i for i in LookUp.objects.all() if i.labor_key]
         labor_categories = set([i.labor_key for i in labor_categories])
         try:
             for index, labor_category in enumerate(labor_categories):
                 labor_objects = LookUp.objects.filter(labor_key=labor_category)
-                if len(labor_objects) < 20: #there isn't enough data for a prediction in this case
+                if len(labor_objects) < 12: #there isn't enough data for a prediction in this case
                     continue
                 print("completed lookup")
                 df = pd.DataFrame()
@@ -297,7 +309,7 @@ class Command(BaseCommand):
                 result = trend_predict(df)
                 print("finished prediction")
                 if result:
-                    date_range, forecast = result
+                    date_range, forecast, trend = result
                 else:
                     continue
 
@@ -307,6 +319,15 @@ class Command(BaseCommand):
                                         fittedvalue=forecast[0][ind],
                                         start_date=date_range[ind])
                         fitted.save()
+                    except:
+                        code.interact(local=locals())
+                print("finished Fitted values")
+                for ind in range(len(trend)):
+                    try:
+                        trend_elem = Trend(labor_key=labor_category,
+                                           trend=trend[ind],
+                                           start_date=trend.index[ind])
+                        trend_elem.save()
                     except:
                         code.interact(local=locals())
         except:
