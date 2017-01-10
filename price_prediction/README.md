@@ -223,6 +223,28 @@ def clean_data(data):
     return new_data
 ```
 
+##Operationalizing The Code
+
+The above gives you a good sense of my motivation for the code base.  Unfortunately it is far from complete.  Without understanding the database tables or how the commands are run, this code is next to useless.  For one, each model takes a while to run.  If this code was run dynamically, with predictions updated on the fly, the application would be terribly slow.  For this reason, new data is read from a database, modeled, and then the newly modeled predictions are added back to the database.  
+
+In order to generate a new prediction, from the top level directory run the following command:
+
+`python manage.py generate_arima_model`
+
+This allows us to make use of the arima model, as needed, when new data is added.  But also, it allows us the space to experiment with different prediction models.  By working with the framework, set up in this modeling code, but making use of a different timeseries model.  
+
+Other models worthy of consideration:
+
+* [Bayesian Simulation](https://en.wikipedia.org/wiki/Bayesian_probability)
+    * [bayespy](https://github.com/bayespy/bayespy) - specifically [examples](https://github.com/bayespy/bayespy/tree/develop/bayespy/demos)
+    * [PyMC](https://pymc-devs.github.io/pymc/tutorial.html)
+* [BUGS (Bayesian Inference Using Gibbs Sampling)](https://en.wikipedia.org/wiki/Bayesian_inference_using_Gibbs_sampling)
+    * [Some code from stackoverflow](http://stackoverflow.com/questions/27783670/how-to-implement-custom-gibbs-sampling-scheme-in-pymc)
+* [Monte Carlo Simulation](https://en.wikipedia.org/wiki/Monte_Carlo_method)
+    * [implement Monte Carlo Simulation on your own](https://pythonprogramming.net/monte-carlo-simulator-python/)
+    * [A second tutorial](https://people.duke.edu/~ccc14/sta-663/MonteCarlo.html)
+* [Recurrent Neural Networks](https://en.wikipedia.org/wiki/Recurrent_neural_network)
+    * [Example with Keras](http://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/)
 
 
 
