@@ -246,6 +246,66 @@ Other models worthy of consideration:
 * [Recurrent Neural Networks](https://en.wikipedia.org/wiki/Recurrent_neural_network)
     * [Example with Keras](http://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/)
 
+##Preparing The Data To Be Modeled
 
+Right now, the data comes to us first as CSVs.  The first thing we want to do is save that data to a database for further processing.  Trying to work directly on the pandas dataframes, is very slow.  It's much faster to store the data in a database and read it into memory on an as needed basis as a dataframe.  
 
+The data is organized by labor category - however there isn't enough data in most labor categories to form a suitable timeseries prediction.  Therefore higher level buckets based on semantic information was used, to create a robust set of predictions.  
+
+The data was bucketed across three strata:
+
+* Education Level
+* Years of Experience
+* Schedule
+
+It is worth noting at this point, that eventually the schedule will be phased out and replaced by SIN numbers, denoting a more fine grained schedule.  At this point, the code will need to be updated, to account for a clustering scheme.  Perhaps instead of via some semantic metric, by first partitioning data by years of experience and then education level.  From there the third partition could be via some clustering scheme.  I'd recommend [DBSCAN](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html).  
+
+After the data was bucketed, it was saved to the database, with the original labor category, it's higher level categorization, it's contract start year, and the hourly starting price for the contractor.  
+
+All of that takes place via the `load_lookup_data` command.  It is called like so:
+
+`python manage.py load_lookup_data -f [path to file]`
+
+##Models && Views
+
+The models and views appear in the price_prediction module and correspond to the modeling routines defined above.
+
+##The Data Visualization
+
+As stated above, the data visualization is done via c3.js.  As you can see the code is fairly minimal, mostly relying on json formatting.
+
+```javascript
+chart = c3.generate({
+    data: {
+        x: 'date',
+        xFormat: '%Y-%m-%d',
+        json: {{data_object|safe}},
+        keys: {
+            x: 'date',
+            value: [ "observed", "fitted" ]
+        }
+    },
+    axis: {
+        x: {
+            type: "timeseries",
+            tick: {
+                format: '%Y-%m-%d'
+            }
+        }
+    },
+    line: {
+        connectNull: true
+    }
+});
+```
+
+There are two things to note here that are atypical -
+
+`keys` in the `data` object - This has two values: `observed` and `fitted` - `observed` refers to the observed data found in the dataset.  Whereas, `fitted` refers to the data generated via our modeling routine.  
+
+The second thing to note is the `line` subobject - this connects the lines.  Because there isn't one time scale used in the dataset, we must add datapoints, piecemeal, one at a time, as seperate objects.  
+
+The `data_object` which is passed in from the backend, is in fact a list of smaller javascript objects.  
+
+The parameter `connectNull: true`, gives the objects the appearance of being connected, although from c3.js's perspective they are disjoint objects.  The reason the c3 library knows which objects to connect, is by the keys passed in.  This is denoted in the `value: ["observed", "fitted"]`.  The key associated with the data indicates which line a given element should be joined to.
 
