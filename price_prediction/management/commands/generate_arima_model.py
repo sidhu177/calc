@@ -312,11 +312,14 @@ class Command(BaseCommand):
                     date_range, forecast, trend = result
                 else:
                     continue
-
+                import code
+                
                 for ind in range(len(forecast[0])):
                     try:
                         fitted = Fitted(labor_key=labor_category,
+                                        lower_bound=forecast[2][ind][0],
                                         fittedvalue=forecast[0][ind],
+                                        upper_bound=forecast[2][ind][1],
                                         start_date=date_range[ind])
                         fitted.save()
                     except:

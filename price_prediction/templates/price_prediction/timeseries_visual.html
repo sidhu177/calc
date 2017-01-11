@@ -28,7 +28,7 @@ chart = c3.generate({
         json: {{data_object|safe}},
         keys: {
             x: 'date',
-            value: [ "observed", "fitted", "trend" ]
+            value: [ "observed", "fitted", "trend", "lower_bound", "upper_bound" ]
         }
     },
     axis: {

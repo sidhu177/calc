@@ -25,9 +25,13 @@ def prepare_data_for_plotting(data, fitted_values, trended_values):
         timestamp = timestamp.split(" ")[0]
         if timestamp in date_lookup.keys():
             data_object[date_lookup[timestamp]]["fitted"] = float(value.fittedvalue)
+            data_object[date_lookup[timestamp]]["lower_bound"] = float(value.lower_bound)
+            data_object[date_lookup[timestamp]]["upper_bound"] = float(value.upper_bound)
         else:
             tmp["date"] = timestamp
             tmp["fitted"] = float(value.fittedvalue)
+            tmp["lower_bound"] = float(value.lower_bound)
+            tmp["upper_bound"] = float(value.upper_bound)
             data_object.append(tmp)
     for ind,value in enumerate(trended_values):
         tmp = {}
