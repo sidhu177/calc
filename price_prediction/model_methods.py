@@ -27,9 +27,9 @@ def brute_search(data):
     obj_func = partial(objective_function, data)
     # Back in graduate school professor Lecun said in class that ARIMA models
     # typically only need a max parameter of 5, so I doubled it just in case.
-    upper_bound_AR = 4
-    upper_bound_I = 4
-    upper_bound_MA = 4
+    upper_bound_AR = 10
+    upper_bound_I = 10
+    upper_bound_MA = 10
     grid_not_found = True
     while grid_not_found:
         try:

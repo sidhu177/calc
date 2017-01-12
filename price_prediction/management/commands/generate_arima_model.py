@@ -27,9 +27,9 @@ def brute_search(data):
     obj_func = partial(objective_function, data)
     # Back in graduate school professor Lecun said in class that ARIMA models
     # typically only need a max parameter of 5, so I doubled it just in case.
-    upper_bound_AR = 4
-    upper_bound_I = 4
-    upper_bound_MA = 4
+    upper_bound_AR = 10
+    upper_bound_I = 10
+    upper_bound_MA = 10
     grid_not_found = True
     while grid_not_found:
         try:
@@ -179,6 +179,20 @@ def setting_y_axis_intercept(data, interpolated_data, model):
 
 
 def check_for_extreme_values(sequence, sequence_to_check=None):
+    print("started check")
+    data = [sequence.ix[i].Price for i in sequence.index]
+    print("moved things to a list")
+    final_data = []
+    for elem in data:
+        try:
+            len(elem)
+            for i in range(len(elem)):
+                final_data.append(float(elem[i]))
+        except:
+            final_data.append(elem)
+    print("finished for loop")
+    print("finished post processing")
+    sequence = final_data[:]
     mean = statistics.mean(sequence)
     stdev = statistics.stdev(sequence)
     if sequence_to_check is not None:
@@ -191,11 +205,28 @@ def check_for_extreme_values(sequence, sequence_to_check=None):
     else:
         for val in sequence:
             if val >= mean + (stdev*2):
-                sequence.remove(val)
+                return True
             elif val <= mean - (stdev*2):
-                sequence.remove(val)
-        return sequence
+                return True
+        return False
+
+def remove_extreme_values(sequence, sequence_to_check=None):
     
+    data = [float(sequence.ix[i]) for i in sequence.index]
+    print("moved things to a list")
+    
+    mean = statistics.mean(data)
+    stdev = statistics.stdev(data)
+    print("created mean, std")
+    new_sequence = sequence.copy()
+    for ind,val in enumerate(data):
+        if val >= mean + (stdev*2):
+            new_sequence = new_sequence.drop(sequence.index[ind])
+        elif val <= mean - (stdev*2):
+            new_sequence = new_sequence.drop(sequence.index[ind])
+    print("removed bad values")
+    return new_sequence
+
     
 def clean_data(data):
     new_data = pd.DataFrame()
@@ -240,14 +271,14 @@ def trend_predict(data):
     cleaned_data = clean_data(data)
     print("finished cleaning data")
     # seasonal decompose
-
     if len(data) > 52:
         trend = sm.tsa.seasonal_decompose(data["Price"], freq=52).trend
     elif len(data) > 12:
         trend = sm.tsa.seasonal_decompose(data["Price"], freq=12).trend
     else:
         return None
-        
+
+    print("finished creating trend")
     trend = trend.fillna(0)
     trend = trend.iloc[trend.nonzero()[0]]
     s = cleaned_data.T.squeeze()
@@ -258,7 +289,10 @@ def trend_predict(data):
     new_data = new_data.iloc[new_data.nonzero()[0]]
     interpolated_data = interpolate(new_data.copy())
     print("interpolated data")
+    interpolated_data = remove_extreme_values(interpolated_data)
+    print("removed extreme data")
     model_order = list(model_search(interpolated_data))
+    print("model order decided")
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
     model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
@@ -271,7 +305,6 @@ def trend_predict(data):
     end_date = datetime.datetime(year=tmp_date.year+5, month=tmp_date.month, day= tmp_date.day)
     date_range = date_range_generate(interpolated_data.index[-1], end_date)
     print("leaving trend predict")
-
     return date_range, forecast, trend
 
 def is_nan(obj):
@@ -312,7 +345,7 @@ class Command(BaseCommand):
                     date_range, forecast, trend = result
                 else:
                     continue
-                import code
+                print("got result")
                 
                 for ind in range(len(forecast[0])):
                     try:
@@ -324,6 +357,7 @@ class Command(BaseCommand):
                         fitted.save()
                     except:
                         code.interact(local=locals())
+                print("saved fitted values")
                 print("finished Fitted values")
                 for ind in range(len(trend)):
                     try:
@@ -333,6 +367,7 @@ class Command(BaseCommand):
                         trend_elem.save()
                     except:
                         code.interact(local=locals())
+                print("Saved trend results")
         except:
             code.interact(local=locals())
 

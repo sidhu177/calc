@@ -375,7 +375,8 @@ _Only Installing Data Science Packages Locally_:
 
 Technically, all that needs to live on the server is the prediction data.  We could do all the modeling stuff locally and then push the results up to the server for visualization.  This however would mean, the modeling command would need to be run every time new data is added.  Long term we could also have a seperate environment for running the modeling that passes the data back to the calc server space and saves data via some sort of web hook.  This would allow us the ability to run the modeling piece from a cluster environment.  People seem to be asking for cloud.gov to support cluster computing.  Over the long term, I could see this happening.  And calc could be the first to make use of a cluster environment effectively.
 
-
+##Good general explanations of statistics terms:
+* [What is a confidence interval](https://www.quora.com/What-is-a-confidence-interval-in-laymans-terms/answer/Michael-Hochster)
 
 
 
