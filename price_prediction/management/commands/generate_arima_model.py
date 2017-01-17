@@ -220,9 +220,9 @@ def remove_extreme_values(sequence, sequence_to_check=None):
     print("created mean, std")
     new_sequence = sequence.copy()
     for ind,val in enumerate(data):
-        if val >= mean + (stdev*2):
+        if val >= mean + (stdev):
             new_sequence = new_sequence.drop(sequence.index[ind])
-        elif val <= mean - (stdev*2):
+        elif val <= mean - (stdev):
             new_sequence = new_sequence.drop(sequence.index[ind])
     print("removed bad values")
     return new_sequence
