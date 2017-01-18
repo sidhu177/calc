@@ -29,9 +29,29 @@ class FittedValuesByCategory(models.Model):
     labor_category = models.CharField(max_length=400)
     labor_key = models.CharField(max_length=400)
     upper_bound = models.DecimalField(decimal_places=2, max_digits=200)
-    all_fittedvalues = models.DecimalField(decimal_places=2, max_digits=200)
-    last_year_fittedvalues = models.DecimalField(decimal_places=2, max_digits=200)
-    last_two_years_fittedvalues = models.DecimalField(decimal_places=2, max_digits=200)
+    fittedvalues = models.DecimalField(decimal_places=2, max_digits=200)
+    lower_bound = models.DecimalField(decimal_places=2, max_digits=200)
+    start_date = models.DateField()
+
+    def __str__(self):
+        return self.labor_key
+
+class OneYearFitted(models.Model):
+    labor_category = models.CharField(max_length=400)
+    labor_key = models.CharField(max_length=400)
+    upper_bound = models.DecimalField(decimal_places=2, max_digits=200)
+    fittedvalues = models.DecimalField(decimal_places=2, max_digits=200)
+    lower_bound = models.DecimalField(decimal_places=2, max_digits=200)
+    start_date = models.DateField()
+
+    def __str__(self):
+        return self.labor_key
+
+class TwoYearsFitted(models.Model):
+    labor_category = models.CharField(max_length=400)
+    labor_key = models.CharField(max_length=400)
+    upper_bound = models.DecimalField(decimal_places=2, max_digits=200)
+    fittedvalues = models.DecimalField(decimal_places=2, max_digits=200)
     lower_bound = models.DecimalField(decimal_places=2, max_digits=200)
     start_date = models.DateField()
 
