@@ -1,0 +1,9 @@
+def generate_timestamps(export_date, begin_date, end_date, contract_year, option_years=5):
+    # Jan 4th 2017
+    # =1/4/2017-(1/9/2004+5+5)
+    years_of_contract = (end_date - begin_date).days/365.2425
+    num_option_periods = years_of_contract // option_years
+    current_contract_year = export_date - (begin_date+(num_option_periods*option_years))
+    
+    option_year_1_timestamp = begin_date + relativedelta( years=(num_option_periods*option_years) )
+    
