@@ -1,4 +1,0 @@
-
-This is your periodic reminder to check on and approve submitted price lists in CALC.
-
-{{ count_unreviewed }} price list{{ count_unreviewed|pluralize:"s have,has" }} not been reviewed.

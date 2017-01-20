@@ -111,13 +111,16 @@ def bulk_upload_succeeded(upload_source, num_contracts, num_bad_rows):
         'num_contracts': num_contracts,
         'num_bad_rows': num_bad_rows,
     }
+
+    rendered_email = render_to_string(
+        'data_capture/email/bulk_upload_succeeded.html',
+        ctx)
+
     result = send_mail(
         subject='CALC Region 10 bulk data results - upload #{}'.format(
             upload_source.id),
-        message=render_to_string(
-            'data_capture/email/bulk_upload_succeeded.txt',
-            ctx
-        ),
+        message=strip_tags(rendered_email),
+        html_message=rendered_email,
         from_email=None,
         recipient_list=[upload_source.submitter.email]
     )
@@ -132,14 +135,17 @@ def bulk_upload_failed(upload_source, traceback):
         'upload_source': upload_source,
         'traceback': traceback,
     }
+
+    rendered_email = render_to_string(
+        'data_capture/email/bulk_upload_failed.html',
+        ctx)
+
     result = send_mail(
         subject='CALC Region 10 bulk data results - upload #{}'.format(
             upload_source.id
         ),
-        message=render_to_string(
-            'data_capture/email/bulk_upload_failed.txt',
-            ctx
-        ),
+        message=strip_tags(rendered_email),
+        html_message=rendered_email,
         from_email=None,
         recipient_list=[upload_source.submitter.email]
     )
@@ -151,17 +157,22 @@ def bulk_upload_failed(upload_source, traceback):
 
 def approval_reminder(count_unreviewed):
     ctx = {
-        'count_unreviewed': count_unreviewed
+        'count_unreviewed': count_unreviewed,
     }
+
+    rendered_email = render_to_string(
+        'data_capture/email/approval_reminder.html',
+        ctx
+    )
+
     superusers = User.objects.filter(is_superuser=True)
     recipients = [s.email for s in superusers if s.email]
+
     result = send_mail(
         subject='CALC Reminder - {} price list{} not reviewed'.format(
             count_unreviewed, pluralize(count_unreviewed)),
-        message=render_to_string(
-            'data_capture/email/approval_reminder.txt',
-            ctx
-        ),
+        message=strip_tags(rendered_email),
+        html_message=rendered_email,
         from_email=None,
         recipient_list=recipients
     )

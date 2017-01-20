@@ -24,16 +24,17 @@ class EmailTests(ModelTestCase):
         self.request_mock = mock.MagicMock(
             build_absolute_uri=lambda s: 'http://test.com' + s)
 
-    def assertHasHtmlAlternative(self, message):
+    def assertHasOneHtmlAlternative(self, message):
         content_types = [alt[1] for alt in message.alternatives]
         self.assertIn('text/html', content_types)
+        self.assertEqual(len(content_types), 1)
 
     def assertHasDetailsLink(self, price_list, message):
         details_link = self.request_mock.build_absolute_uri(
             reverse('data_capture:price_list_details',
                     kwargs={'id': price_list.pk})
         )
-        self.assertHasHtmlAlternative(message)
+        self.assertHasOneHtmlAlternative(message)
         html_content = [content for (content, content_type)
                         in message.alternatives
                         if content_type == 'text/html'][0]
@@ -50,7 +51,7 @@ class EmailTests(ModelTestCase):
         self.assertEqual(message.subject, 'CALC Price List Approved')
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
-        self.assertHasHtmlAlternative(message)
+        self.assertHasOneHtmlAlternative(message)
         self.assertHasDetailsLink(price_list, message)
         self.assertEqual(result.context['price_list'], price_list)
 
@@ -72,7 +73,7 @@ class EmailTests(ModelTestCase):
         self.assertEqual(message.subject, 'CALC Price List Retired')
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
-        self.assertHasHtmlAlternative(message)
+        self.assertHasOneHtmlAlternative(message)
         self.assertHasDetailsLink(price_list, message)
         self.assertEqual(result.context['price_list'], price_list)
 
@@ -94,7 +95,7 @@ class EmailTests(ModelTestCase):
         self.assertEqual(message.subject, 'CALC Price List Rejected')
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
-        self.assertHasHtmlAlternative(message)
+        self.assertHasOneHtmlAlternative(message)
         self.assertHasDetailsLink(price_list, message)
         self.assertEqual(result.context['price_list'], price_list)
 
@@ -118,6 +119,7 @@ class EmailTests(ModelTestCase):
             'CALC Region 10 bulk data results - upload #{}'.format(src.pk))
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
+        self.assertHasOneHtmlAlternative(message)
         self.assertEqual(result.context['num_contracts'], 5)
         self.assertEqual(result.context['num_bad_rows'], 2)
 
@@ -134,6 +136,7 @@ class EmailTests(ModelTestCase):
             'CALC Region 10 bulk data results - upload #{}'.format(src.pk))
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
+        self.assertHasOneHtmlAlternative(message)
         self.assertEqual(result.context['traceback'], 'traceback_contents')
 
     def test_approval_reminder(self):
@@ -152,3 +155,4 @@ class EmailTests(ModelTestCase):
         )
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertEqual(result.context['count_unreviewed'], count)
+        self.assertHasOneHtmlAlternative(message)

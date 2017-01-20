@@ -1,9 +1,0 @@
-{% load data_capture %}
-
-This message is in regards to Region 10 CALC data upload #{{ upload_source.id }},
-uploaded by {{ upload_source.submitter.email }} on {{ upload_source.created_at|tz_timestamp }}.
-
-Unfortunately, an error occurred while importing the data.
-The traceback below may help the development team debug the problem.
-
-{{ traceback }}

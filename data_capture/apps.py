@@ -25,6 +25,7 @@ class DataCaptureSchedulerApp(AppConfig):
 
     # every Monday at noon, but scheduler uses UTC so it will be 5AM Pacific
     admin_reminder_cron = '* 12 * * MON'
+    admin_reminder_cron = '*/1 * * * *'  # TODO: REMOVE
     rq_queue_name = 'default'
 
     @classmethod

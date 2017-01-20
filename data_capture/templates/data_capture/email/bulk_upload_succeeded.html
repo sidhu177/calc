@@ -1,0 +1,16 @@
+{% load humanize %}
+{% load data_capture %}
+<p>
+  This message is in regards to Region 10 CALC data upload #{{ upload_source.id }}, uploaded by {{ upload_source.submitter.email }} on {{ upload_source.created_at|tz_timestamp }}.
+<p>
+<p>
+  The upload was <b>successful</b>!
+</p>
+<p>
+  {{ num_contracts|intcomma }} rows of rate information have been loaded and previous Region 10 data has been removed from the CALC database.
+</p>
+{% if bad_rows %}
+<p>
+  {{ bad_rows|length|intcomma }} were not parsed and could not be loaded.
+</p>
+{% endif %}
