@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load data_capture %}
 <p>
-  This message is in regards to Region 10 CALC data upload #{{ upload_source.id }}, uploaded by {{ upload_source.submitter.email }} on {{ upload_source.created_at|tz_timestamp }}.
+  This message is in regards to Region 10 CALC data upload <b>#{{ upload_source.id }}</b>, uploaded by <b>{{ upload_source.submitter.email }}</b> on <b>{{ upload_source.created_at|tz_timestamp }}</b>.
 </p>
 <p>
   The upload was <b>successful</b>!
