@@ -6,7 +6,7 @@ class LaborCategory(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=200)
 
     def __str__(self):
-        return self.labor_category +":"+ price
+        return str(self.labor_category) +":"+ str(self.price)
     
 class DecompressLaborCategory(models.Model):
     labor_category = models.CharField(max_length=400)

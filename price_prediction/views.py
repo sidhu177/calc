@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from price_prediction.models import FittedValuesByCategory
-from price_prediction.models import LaborCategoryLookUp
-from price_prediction.models import PriceModels
-from price_prediction.models import DecompressLaborCategory
+from price_prediction.models import LaborCategory
 from price_prediction.models import TrendByCategory
 from contracts.models import Contract
 import json
@@ -13,11 +11,11 @@ def prepare_data_for_plotting(data, fitted_values, trended_values):
     date_lookup = {}
     for ind,datum in enumerate(data):
         tmp = {}
-        timestamp = str(datum.contract_start)
+        timestamp = str(datum.date)
         timestamp = timestamp.split(" ")[0]
         tmp["date"] = timestamp
         date_lookup[timestamp] = ind
-        tmp["observed"] = float(datum.hourly_rate_year1)
+        tmp["observed"] = float(datum.price)
         data_object.append(tmp)
     for ind,value in enumerate(fitted_values):
         tmp = {}
@@ -55,10 +53,9 @@ def timeseries_analysis(request):
     if request.method == 'POST':
         post_data_dict = request.POST.dict()
         labor_category = post_data_dict["labor_category"]
-        results = Contract.objects.filter(labor_category=labor_category)
-        compress = DecompressLaborCategory.objects.filter(labor_category=labor_category)
-        fitted_values = FittedValuesByCategory.objects.filter(labor_key=compress[0].labor_key)
-        trended_values = TrendByCategory.objects.filter(labor_key=compress[0].labor_key)
+        results = LaborCategory.objects.filter(labor_category=labor_category)
+        fitted_values = FittedValuesByCategory.objects.filter(labor_key=labor_category)
+        trended_values = TrendByCategory.objects.filter(labor_key=labor_category)
         context = prepare_data_for_plotting(results, fitted_values, trended_values)
         return render(request, "price_prediction/timeseries_visual.html",context)
     elif request.method == "GET":

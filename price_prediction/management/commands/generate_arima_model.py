@@ -1,5 +1,5 @@
 from price_prediction.models import FittedValuesByCategory as Fitted
-from price_prediction.models import LaborCategoryLookUp as LookUp
+from price_prediction.models import LaborCategory
 from price_prediction.models import TrendByCategory as Trend
 from price_prediction.models import OneYearFitted, TwoYearsFitted
 import pandas as pd
@@ -282,24 +282,30 @@ def segment_data(data):
 
 
 def predict(data):
-    print("inside of trend predict")
-    
+    data = data.fillna(0)
+    data = data[data["Price"] != 0]
+    data.sort_index(inplace=True)
+    if len(data[data.apply(lambda x:min(x) == max(x), 1)]) == len(data):
+        return None
+    print("inside predict")
+
     print("finished cleaning data")
     # seasonal decompose
-    if len(data) > 52:
-        trend = sm.tsa.seasonal_decompose(data["Price"], freq=52).trend
-    elif len(data) > 12:
-        trend = sm.tsa.seasonal_decompose(data["Price"], freq=12).trend
-    else:
-        return None
-
+    try:
+        if len(data) > 52:
+            trend = sm.tsa.seasonal_decompose(data["Price"], freq=52).trend
+        elif len(data) > 12:
+            trend = sm.tsa.seasonal_decompose(data["Price"], freq=12).trend
+        else:
+            return None
+    except:
+        import code
+        code.interact(local=locals())
     print("finished creating trend")
     try:
         trend = trend.fillna(0)
         trend = trend.iloc[trend.nonzero()[0]]
-    
-        cleaned_data = clean_data(data)
-        s = cleaned_data.T.squeeze()
+        s = data.T.squeeze()
         s.sort_index(inplace=True)
     except:
         import code
@@ -310,7 +316,7 @@ def predict(data):
     new_data = new_data.iloc[new_data.nonzero()[0]]
     interpolated_data = interpolate(new_data.copy())
     print("interpolated data")
-    interpolated_data = remove_extreme_values(interpolated_data)
+    #interpolated_data = remove_extreme_values(interpolated_data)
     print("removed extreme data")
     try:
         model_order = list(model_search(interpolated_data))
@@ -344,20 +350,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         Fitted.objects.all().delete()
         Trend.objects.all().delete()
-        labor_categories = [i for i in LookUp.objects.all() if i.labor_key]
-        labor_categories = set([i.labor_key for i in labor_categories])
+        #OneYearFitted.objects.all().delete()
+        #TwoYearsFitted.objects.all().delete()
+        labor_categories = [i for i in LaborCategory.objects.all() if i.labor_category]
+        labor_categories = set([i.labor_category for i in labor_categories])
         try:
             for index, labor_category in enumerate(labor_categories):
-                labor_objects = LookUp.objects.filter(labor_key=labor_category)
-                
+                labor_objects = LaborCategory.objects.filter(labor_category=labor_category)
                 if len(labor_objects) < 12: #there isn't enough data for a prediction in this case
                     continue
                 print("completed lookup")
                 df = pd.DataFrame()
                 for labor_object in labor_objects:
                     df = df.append({
-                        "Date": labor_object.start_date,
-                        "Price": float(labor_object.labor_value)
+                        "Date": labor_object.date,
+                        "Price": float(labor_object.price)
                     }, ignore_index=True)
                 # sanity checking this is a datetime
                 print("created dataframe")
@@ -365,34 +372,34 @@ class Command(BaseCommand):
                 df = df.set_index("Date")
                 df.sort_index(inplace=True)
                 print("completed dataframe sorting")
-                _, one_year_df, two_years_df = segment_data(df)
+                #_, one_year_df, two_years_df = segment_data(df)
                 result = predict(df)
                 print("got to one year of results")
-                result_one_year = predict(one_year_df)
-                print("finished one year of results")
-                result_two_years = predict(two_years_df)
-                print("finished two years of results")
-                print("finished prediction")
+                # result_one_year = predict(one_year_df)
+                # print("finished one year of results")
+                # result_two_years = predict(two_years_df)
+                # print("finished two years of results")
+                # print("finished prediction")
                 if result:
                     date_range, forecast, trend = result
                 else:
                     continue
-                forecast_one_year = [
-                    [0 for _ in range(len(forecast[0]))],
-                    [0 for _ in range(len(forecast[0]))],
-                    [[0, 0] for _ in range(len(forecast[0]))]
-                ]
-                forecast_two_years = [
-                    [0 for _ in range(len(forecast[0]))],
-                    [0 for _ in range(len(forecast[0]))],
-                    [[0, 0] for _ in range(len(forecast[0]))]
-                ]
-                if result_one_year:
-                    print("created forecast_year_one")
-                    _, forecast_one_year, _ = result_one_year
-                if result_two_years:
-                    print("created forecast_year_two")
-                    _, forecast_two_years, _ = result_two_years
+                # forecast_one_year = [
+                #     [0 for _ in range(len(forecast[0]))],
+                #     [0 for _ in range(len(forecast[0]))],
+                #     [[0, 0] for _ in range(len(forecast[0]))]
+                # ]
+                # forecast_two_years = [
+                #     [0 for _ in range(len(forecast[0]))],
+                #     [0 for _ in range(len(forecast[0]))],
+                #     [[0, 0] for _ in range(len(forecast[0]))]
+                # ]
+                # if result_one_year:
+                #     print("created forecast_year_one")
+                #     _, forecast_one_year, _ = result_one_year
+                # if result_two_years:
+                #     print("created forecast_year_two")
+                #     _, forecast_two_years, _ = result_two_years
                 print("got result")
                 print("got to addeding to db")
                 for ind in range(len(forecast[0])):
@@ -406,30 +413,30 @@ class Command(BaseCommand):
                         print("inside forloop")
                     except:
                         code.interact(local=locals())
-                print("saved fitted values")
-                print("finished Fitted values")
-                for ind in range(len(forecast_one_year[0])):
-                    try:
-                        fitted = OneYearFitted(labor_key=labor_category,
-                                        lower_bound=forecast_one_year[2][ind][0],
-                                        fittedvalues=forecast_one_year[0][ind],
-                                        upper_bound=forecast_one_year[2][ind][1],
-                                        start_date=date_range[ind])
-                        fitted.save()
-                        print("inside year one forloop")
-                    except:
-                        code.interact(local=locals())
-                for ind in range(len(forecast_two_years[0])):
-                    try:
-                        fitted = TwoYearsFitted(labor_key=labor_category,
-                                        lower_bound=forecast_two_years[2][ind][0],
-                                        fittedvalues=forecast_two_years[0][ind],
-                                        upper_bound=forecast_two_years[2][ind][1],
-                                        start_date=date_range[ind])
-                        fitted.save()
-                        print("inside year two forloop")
-                    except:
-                        code.interact(local=locals())
+                # print("saved fitted values")
+                # print("finished Fitted values")
+                # for ind in range(len(forecast_one_year[0])):
+                #     try:
+                #         fitted = OneYearFitted(labor_key=labor_category,
+                #                         lower_bound=forecast_one_year[2][ind][0],
+                #                         fittedvalues=forecast_one_year[0][ind],
+                #                         upper_bound=forecast_one_year[2][ind][1],
+                #                         start_date=date_range[ind])
+                #         fitted.save()
+                #         print("inside year one forloop")
+                #     except:
+                #         code.interact(local=locals())
+                # for ind in range(len(forecast_two_years[0])):
+                #     try:
+                #         fitted = TwoYearsFitted(labor_key=labor_category,
+                #                         lower_bound=forecast_two_years[2][ind][0],
+                #                         fittedvalues=forecast_two_years[0][ind],
+                #                         upper_bound=forecast_two_years[2][ind][1],
+                #                         start_date=date_range[ind])
+                #         fitted.save()
+                #         print("inside year two forloop")
+                #     except:
+                #         code.interact(local=locals())
                 for ind in range(len(trend)):
                     try:
                         trend_elem = Trend(labor_key=labor_category,
