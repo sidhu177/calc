@@ -17,17 +17,18 @@ def prepare_data_for_plotting(data, fitted_values, trended_values):
         date_lookup[timestamp] = ind
         tmp["observed"] = float(datum.price)
         data_object.append(tmp)
+    
     for ind,value in enumerate(fitted_values):
         tmp = {}
         timestamp = str(value.start_date)
         timestamp = timestamp.split(" ")[0]
         if timestamp in date_lookup.keys():
-            data_object[date_lookup[timestamp]]["fitted"] = float(value.fittedvalue)
+            data_object[date_lookup[timestamp]]["fitted"] = float(value.fittedvalues)
             data_object[date_lookup[timestamp]]["lower_bound"] = float(value.lower_bound)
             data_object[date_lookup[timestamp]]["upper_bound"] = float(value.upper_bound)
         else:
             tmp["date"] = timestamp
-            tmp["fitted"] = float(value.fittedvalue)
+            tmp["fitted"] = float(value.fittedvalues)
             tmp["lower_bound"] = float(value.lower_bound)
             tmp["upper_bound"] = float(value.upper_bound)
             data_object.append(tmp)

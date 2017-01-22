@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class LaborCategory(models.Model):
     labor_category = models.CharField(max_length=400)
     date = models.DateField()
