@@ -68,29 +68,15 @@ def brute_search(data):
         # Here we explicitly test for a single MA
         # or AR process being a better fit
         # If either has a lower (better) aic score we return that model order
-        model_ar_one = sm.tsa.ARIMA(data, (1, 0, 0)).fit()
-        model_ma_one = sm.tsa.ARIMA(data, (0, 0, 1)).fit()
+        try:
+            model_ar_one = sm.tsa.ARIMA(data, (1, 0, 0)).fit()
+            model_ma_one = sm.tsa.ARIMA(data, (0, 0, 1)).fit()
+        except:
+            return None
         if model_ar_one.aic < model_ma_one.aic:
             return (1, 0, 0), obj_func((1, 0, 0))
         else:
             return (0, 0, 1), obj_func((0, 0, 1))
-
-
-def model_search(data):
-    """
-    Optimizers supported:
-    * brute
-    """
-    print("got to start of model search")
-    results = []
-    results.append(brute_search(data))
-    min_score = 100000000
-    best_order = ()
-    for result in results:
-        if result[1] < min_score:
-            min_score = result[1]
-            best_order = result[0]
-    return best_order
 
 
 def date_to_datetime(time_string):
@@ -225,7 +211,9 @@ def trend_predict(data):
     print("interpolated data")
     interpolated_data = remove_extreme_values(interpolated_data)
     print("removed extreme data")
-    model_order = list(model_search(interpolated_data))
+    model_order = list(brute_search(interpolated_data))
+    if model_order is  None:
+        return None
     print("model order decided")
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
