@@ -96,87 +96,10 @@ def model_search(data):
 def date_to_datetime(time_string):
     return datetime.datetime.strptime(time_string, '%m/%d/%Y')
 
-
-def ave_error(vals, f_vals):
-    """
-    parameters:
-    @vals - the values observed
-    @f_vals - the fitted values from the model
-    """
-    if (len(vals) == len(f_vals)) or (len(vals) < len(f_vals)):
-        ave_errors = [abs(vals[ind] - f_vals[ind]) for ind in range(len(vals))]
-        return sum(ave_errors)/len(vals)
-    else:
-        ave_errors = [abs(vals[i] - f_vals[i]) for i in range(len(f_vals))]
-        return sum(ave_errors)/len(vals)
-
-
-def make_prediction(model):
-    df = pd.DataFrame()
-    number_observations = len(model.fittedvalues)
-    date_list = [i.to_datetime() for i in list(model.fittedvalues.index)]
-    
-    if number_observations >= 100:
-        start = int(number_observations / 2)
-        deltas = []
-        for index in range(len(date_list)-1):
-            deltas.append(date_list[index+1] - date_list[index])
-        time_difference_in_days = [delta.days for delta in deltas]
-        average_delta_days = statistics.mean(time_difference_in_days)
-        stdev_delta_days = statistics.stdev(time_difference_in_days)
-        median_delta_days = statistics.median(time_difference_in_days)
-        total_days_in_5_years = 1825
-        if stdev_delta_days < average_delta_days or median_delta_days <= 0.5:
-            end = number_observations + int(total_days_in_5_years/average_delta_days)
-        else:
-            end = number_observations + int(total_days_in_5_years/median_delta_days)
-    else:
-        start = 1
-        end = number_observations + 100
-    #this is the method I need - model.forecast
-    #result = model.forecast(start = start, end = end, dynamic = True)
-    #model.plot_predict(start, end, dynamic = True)
-    #plt.show()
-    prediction = model.predict(start=start, end=end, dynamic=True)
-    forecasted = model.forecast(steps=60)
-    return prediction, forecasted
     
 # create a monthly continuous time series to pull from
 # interpolate values from trend
 # set prediction from new values from artificially generated time series.
-
-def setting_y_axis_intercept(data, interpolated_data, model):
-    try:
-        # if we are using the original data
-        data = list(interpolated_data["Price"])
-    except:
-        # if we are using the deseasonalized data
-        data = list(interpolated_data)
-    fittedvalues_with_prediction = make_prediction(model)
-    fittedvalues = model.fittedvalues
-    avg = statistics.mean(data)
-    median = statistics.median(data)
-    possible_fitted_values = []
-    possible_predicted_values = []
-    
-    possible_fitted_values.append([elem + avg for elem in fittedvalues])
-    possible_fitted_values.append([elem + data[0] for elem in fittedvalues])
-    possible_fitted_values.append([elem + median for elem in fittedvalues])
-    possible_fitted_values.append(fittedvalues)
-    possible_predicted_values.append([elem + avg for elem in fittedvalues])
-    possible_predicted_values.append([elem + data[0] for elem in fittedvalues])
-    possible_predicted_values.append([elem + median for elem in fittedvalues])
-    possible_predicted_values.append(fittedvalues)
-
-    min_error = 1000000
-    best_fitted_values = 0
-    for ind, f_values in enumerate(possible_fitted_values):
-        avg_error = ave_error(data, f_values)
-        if avg_error < min_error:
-            min_error = avg_error
-            best_fitted_values = ind
-    print("minimum error:", min_error)
-    return possible_predicted_values[best_fitted_values]
 
 
 def check_for_extreme_values(sequence, sequence_to_check=None):
@@ -308,10 +231,8 @@ def trend_predict(data):
     #model_order = (1,0,0)
     model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
     print("fit model")
-    #prediction, forecast = make_prediction(model)
     forecast = model.forecast(steps=60)
     print("forecasted future")
-    #model.fittedvalues = setting_y_axis_intercept(new_data, interpolated_data, model)
     tmp_date = interpolated_data.index[-1]
     end_date = datetime.datetime(year=tmp_date.year+5, month=tmp_date.month, day= tmp_date.day)
     date_range = date_range_generate(interpolated_data.index[-1], end_date)
