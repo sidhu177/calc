@@ -20,7 +20,7 @@ import asyncio
 
 
 def objective_function(data, order):
-    return sm.tsa.ARIMA(data, order).fit().aic
+    return sm.tsa.ARIMA(data, order).fit(disp=0).aic
 
 
 def brute_search(data):
@@ -42,7 +42,7 @@ def brute_search(data):
                 slice(1, upper_bound_MA, 1)
             )
             order = brute(obj_func, grid, finish=None)
-            return order, obj_func(order)
+            return order
 
         except Exception as e:
             error_string = str(e)
@@ -62,21 +62,21 @@ def brute_search(data):
             slice(1, 2, 1)
         )
         order = brute(obj_func, grid, finish=None)
-        return order, obj_func(order)
+        return order
 
     except:  # however we don't always meet invertibility conditions
         # Here we explicitly test for a single MA
         # or AR process being a better fit
         # If either has a lower (better) aic score we return that model order
         try:
-            model_ar_one = sm.tsa.ARIMA(data, (1, 0, 0)).fit()
-            model_ma_one = sm.tsa.ARIMA(data, (0, 0, 1)).fit()
+            model_ar_one = sm.tsa.ARIMA(data, (1, 0, 0)).fit(disp=0)
+            model_ma_one = sm.tsa.ARIMA(data, (0, 0, 1)).fit(disp=0)
         except:
             return None
         if model_ar_one.aic < model_ma_one.aic:
-            return (1, 0, 0), obj_func((1, 0, 0))
+            return (1, 0, 0)
         else:
-            return (0, 0, 1), obj_func((0, 0, 1))
+            return (0, 0, 1)
 
 
 def date_to_datetime(time_string):
@@ -211,13 +211,15 @@ def trend_predict(data):
     print("interpolated data")
     interpolated_data = remove_extreme_values(interpolated_data)
     print("removed extreme data")
-    model_order = list(brute_search(interpolated_data))
+    model_order = brute_search(interpolated_data)
     if model_order is  None:
         return None
+    else:
+        model_order = list(model_order)
     print("model order decided")
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
-    model = sm.tsa.ARIMA(interpolated_data, model_order).fit()
+    model = sm.tsa.ARIMA(interpolated_data, model_order).fit(disp=0)
     print("fit model")
     forecast = model.forecast(steps=60)
     print("forecasted future")
