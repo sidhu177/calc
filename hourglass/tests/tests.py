@@ -332,3 +332,9 @@ class ContextProcessorTests(DjangoTestCase):
         res = self.client.get('/')
         self.assertIn('ETHNIO_SCREENER_ID', res.context)
         self.assertEquals(res.context['ETHNIO_SCREENER_ID'], 'hoopla')
+
+    @override_settings(HELP_EMAIL='help@calc.com')
+    def test_help_email_is_included(self):
+        res = self.client.get('/')
+        self.assertIn('HELP_EMAIL', res.context)
+        self.assertEquals(res.context['HELP_EMAIL'], 'help@calc.com')

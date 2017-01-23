@@ -1,9 +1,12 @@
-from django.core.mail import send_mail
+import re
+
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.template.defaultfilters import pluralize
+from django.conf import settings
 
 from .models import SubmittedPriceList
 
@@ -15,6 +18,42 @@ class EmailResult():
     def __init__(self, was_successful, context=None):
         self.was_successful = was_successful
         self.context = context or {}
+
+
+def collapse_and_strip_tags(text):
+    '''
+    Strips HTML tags and collapases newlines in the given string.
+
+    Example:
+
+    >>> collapse_and_strip_tags('\\n\\n<p>hi james</p>\\n\\n\\n')
+    '\\nhi james\\n'
+    '''
+    return re.sub(r'\n+', '\n', strip_tags(text))
+
+
+def send_mail(subject, body, to, html_message=None, reply_to=None):
+    '''
+    Django's convinience send_mail function does not allow
+    specification of the reply-to header, so we instead use
+    the underlying EmailMultiAlternatives class to send CALC emails.
+
+    Returns an integer representing the number of emails sent (just like
+    Django's send_mail does).
+    '''
+    connection = get_connection()
+
+    msg = EmailMultiAlternatives(
+        connection=connection,
+        subject=subject,
+        body=body,
+        to=to,
+        reply_to=reply_to)
+
+    if html_message:
+        msg.attach_alternative(html_message, 'text/html')
+
+    return msg.send()
 
 
 def price_list_approved(price_list, request):
@@ -36,10 +75,10 @@ def price_list_approved(price_list, request):
 
     result = send_mail(
         subject='CALC Price List Approved',
-        message=strip_tags(rendered_email),
+        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
-        from_email=None,
-        recipient_list=[price_list.submitter.email]
+        reply_to=[settings.HELP_EMAIL],
+        to=[price_list.submitter.email],
     )
     return EmailResult(
         was_successful=result is 1,
@@ -65,10 +104,10 @@ def price_list_retired(price_list, request):
 
     result = send_mail(
         subject='CALC Price List Retired',
-        message=strip_tags(rendered_email),
+        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
-        from_email=None,
-        recipient_list=[price_list.submitter.email]
+        reply_to=[settings.HELP_EMAIL],
+        to=[price_list.submitter.email],
     )
     return EmailResult(
         was_successful=result is 1,
@@ -92,10 +131,10 @@ def price_list_rejected(price_list, request):
 
     result = send_mail(
         subject='CALC Price List Rejected',
-        message=strip_tags(rendered_email),
+        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
-        from_email=None,
-        recipient_list=[price_list.submitter.email]
+        reply_to=[settings.HELP_EMAIL],
+        to=[price_list.submitter.email]
     )
     if price_list.status is not SubmittedPriceList.STATUS_REJECTED:
         raise AssertionError('price_list.status must be STATUS_REJECTED')
@@ -119,10 +158,10 @@ def bulk_upload_succeeded(upload_source, num_contracts, num_bad_rows):
     result = send_mail(
         subject='CALC Region 10 bulk data results - upload #{}'.format(
             upload_source.id),
-        message=strip_tags(rendered_email),
+        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
-        from_email=None,
-        recipient_list=[upload_source.submitter.email]
+        reply_to=[settings.HELP_EMAIL],
+        to=[upload_source.submitter.email],
     )
     return EmailResult(
         was_successful=result is 1,
@@ -144,10 +183,10 @@ def bulk_upload_failed(upload_source, traceback):
         subject='CALC Region 10 bulk data results - upload #{}'.format(
             upload_source.id
         ),
-        message=strip_tags(rendered_email),
+        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
-        from_email=None,
-        recipient_list=[upload_source.submitter.email]
+        reply_to=[settings.HELP_EMAIL],
+        to=[upload_source.submitter.email],
     )
     return EmailResult(
         was_successful=result is 1,
@@ -171,10 +210,10 @@ def approval_reminder(count_unreviewed):
     result = send_mail(
         subject='CALC Reminder - {} price list{} not reviewed'.format(
             count_unreviewed, pluralize(count_unreviewed)),
-        message=strip_tags(rendered_email),
+        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
-        from_email=None,
-        recipient_list=recipients
+        reply_to=[settings.HELP_EMAIL],
+        to=recipients,
     )
     return EmailResult(
         was_successful=result is 1,  # or count of superusers

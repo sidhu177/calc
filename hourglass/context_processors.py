@@ -19,3 +19,8 @@ def google_analytics_tracking_id(request):
 def ethnio_screener_id(request):
     '''Include ETHNIO_SCREENER_ID in all request contexts'''
     return {'ETHNIO_SCREENER_ID': settings.ETHNIO_SCREENER_ID}
+
+
+def help_email(request):
+    '''Include HELP_EMAIL in all request contexts'''
+    return {'HELP_EMAIL': settings.HELP_EMAIL}

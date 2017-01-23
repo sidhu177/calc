@@ -60,6 +60,7 @@ vars().update(email_config)
 
 DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 SERVER_EMAIL = os.environ['SERVER_EMAIL']
+HELP_EMAIL = os.environ.get('HELP_EMAIL', DEFAULT_FROM_EMAIL)
 
 API_HOST = os.environ.get('API_HOST', '/api/')
 
@@ -79,6 +80,7 @@ TEMPLATES = [{
             'hourglass.context_processors.show_debug_ui',
             'hourglass.context_processors.google_analytics_tracking_id',
             'hourglass.context_processors.ethnio_screener_id',
+            'hourglass.context_processors.help_email',
             'frontend.context_processors.is_safe_mode_enabled',
             "django.contrib.auth.context_processors.auth",
             "django.template.context_processors.debug",

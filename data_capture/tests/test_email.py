@@ -15,7 +15,8 @@ from .test_models import ModelTestCase
 
 @freeze_time(datetime(2017, 1, 8, 20, 51, 0))
 @override_settings(DATA_CAPTURE_SCHEDULES=[FAKE_SCHEDULE],
-                   DEFAULT_FROM_EMAIL='hi@hi.com')
+                   DEFAULT_FROM_EMAIL='hi@hi.com',
+                   HELP_EMAIL="help@help.com",)
 class EmailTests(ModelTestCase):
     '''Tests for email sending functions'''
 
@@ -40,6 +41,38 @@ class EmailTests(ModelTestCase):
                         if content_type == 'text/html'][0]
         self.assertIn(details_link, html_content)
 
+    def assertHasReplyTo(self, message, reply_to_email='help@help.com'):
+        self.assertEqual(len(message.reply_to), 1)
+        self.assertEqual(message.reply_to[0], reply_to_email)
+
+    def test_send_mail_works(self):
+        result = email.send_mail(
+            subject='test email',
+            body='test body',
+            to=['test@test.com'],
+            reply_to=['reply-test@test.com'],
+        )
+        self.assertEqual(result, 1)
+        message = mail.outbox[0]
+        self.assertHasReplyTo(message, 'reply-test@test.com')
+        self.assertEqual(message.recipients(), ['test@test.com'])
+        self.assertEqual(message.subject, 'test email')
+        self.assertEqual(message.from_email, 'hi@hi.com')
+        self.assertEqual(message.body, 'test body')
+
+    def test_send_mail_includes_html_message_if_specified(self):
+        result = email.send_mail(
+            subject='test email',
+            body='test body',
+            to=['test@test.com'],
+            reply_to=['reply-test@test.com'],
+            html_message='<p>test body</p>',
+        )
+        self.assertEqual(result, 1)
+        message = mail.outbox[0]
+        self.assertHasOneHtmlAlternative(message)
+        self.assertEqual(message.alternatives[0][0], '<p>test body</p>')
+
     def test_price_list_approved(self):
         price_list = self.create_price_list(
             status=SubmittedPriceList.STATUS_APPROVED)
@@ -53,6 +86,7 @@ class EmailTests(ModelTestCase):
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
         self.assertHasOneHtmlAlternative(message)
         self.assertHasDetailsLink(price_list, message)
+        self.assertHasReplyTo(message)
         self.assertEqual(result.context['price_list'], price_list)
 
     def test_price_list_approved_raises_if_not_approved(self):
@@ -75,6 +109,7 @@ class EmailTests(ModelTestCase):
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
         self.assertHasOneHtmlAlternative(message)
         self.assertHasDetailsLink(price_list, message)
+        self.assertHasReplyTo(message)
         self.assertEqual(result.context['price_list'], price_list)
 
     def test_price_list_retired_raises_if_approved(self):
@@ -97,6 +132,7 @@ class EmailTests(ModelTestCase):
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
         self.assertHasOneHtmlAlternative(message)
         self.assertHasDetailsLink(price_list, message)
+        self.assertHasReplyTo(message)
         self.assertEqual(result.context['price_list'], price_list)
 
     def test_price_list_rejected_raises_if_wrong_status(self):
@@ -120,6 +156,7 @@ class EmailTests(ModelTestCase):
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
         self.assertHasOneHtmlAlternative(message)
+        self.assertHasReplyTo(message)
         self.assertEqual(result.context['num_contracts'], 5)
         self.assertEqual(result.context['num_bad_rows'], 2)
 
@@ -137,6 +174,7 @@ class EmailTests(ModelTestCase):
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertIn('Jan. 8, 2017, 3:51 p.m. (EST)', message.body)
         self.assertHasOneHtmlAlternative(message)
+        self.assertHasReplyTo(message)
         self.assertEqual(result.context['traceback'], 'traceback_contents')
 
     def test_approval_reminder(self):
@@ -154,5 +192,6 @@ class EmailTests(ModelTestCase):
             'CALC Reminder - {} price lists not reviewed'.format(count)
         )
         self.assertEqual(message.from_email, 'hi@hi.com')
-        self.assertEqual(result.context['count_unreviewed'], count)
         self.assertHasOneHtmlAlternative(message)
+        self.assertHasReplyTo(message)
+        self.assertEqual(result.context['count_unreviewed'], count)

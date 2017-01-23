@@ -288,6 +288,11 @@ string), the boolean is true; otherwise, it's false.
   emails to managers and admins. It corresponds to Django's [`SERVER_EMAIL`][]
   setting. It defaults to `system@localhost` when `DEBUG=True`.
 
+* `HELP_EMAIL` is the email  used as the reply-to address in system
+  generated emails to users. It is also the email address used in the site
+  footer and for other contact purposes. It should refer to an inbox that is
+  monitored. If not set, it will use the same value as `DEFAULT_FROM_EMAIL`.
+
 * `REDIS_URL` is the URL for redis, which is used by the task queue.
   When `DEBUG` is true, it defaults to `redis://localhost:6379/0`.
 
