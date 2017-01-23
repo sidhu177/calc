@@ -93,6 +93,7 @@ def price_list_retired(price_list, site_base_url='https://calc.gsa.gov'):
         'price_list': price_list,
         'details_link': details_link,
     }
+
     if price_list.status is not SubmittedPriceList.STATUS_RETIRED:
         raise AssertionError('price_list.status must be STATUS_RETIRED')
 
@@ -163,10 +164,15 @@ def bulk_upload_succeeded(upload_source, num_contracts, num_bad_rows):
     )
 
 
-def bulk_upload_failed(upload_source, traceback):
+def bulk_upload_failed(upload_source, traceback,
+                       site_base_url='https://calc.gsa.gov'):
+    r10_upload_link = site_base_url + reverse(
+        'data_capture:bulk_region_10_step_1')
+
     ctx = {
         'upload_source': upload_source,
         'traceback': traceback,
+        'r10_upload_link': r10_upload_link
     }
 
     rendered_email = render_to_string(
@@ -187,9 +193,13 @@ def bulk_upload_failed(upload_source, traceback):
     )
 
 
-def approval_reminder(count_unreviewed):
+def approval_reminder(count_unreviewed, site_base_url='https://calc.gsa.gov'):
+    unreviewed_url = site_base_url + reverse(
+        'admin:data_capture_unreviewedpricelist_changelist')
+
     ctx = {
         'count_unreviewed': count_unreviewed,
+        'unreviewed_url': unreviewed_url,
     }
 
     rendered_email = render_to_string(

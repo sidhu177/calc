@@ -24,15 +24,18 @@ class EmailTests(ModelTestCase):
         self.assertIn('text/html', content_types)
         self.assertEqual(len(content_types), 1)
 
+    def assertHasLink(self, message, url):
+        html_content = [content for (content, content_type)
+                        in message.alternatives
+                        if content_type == 'text/html'][0]
+        self.assertIn(url, html_content)
+
     def assertHasDetailsLink(self, price_list, message):
         details_link = 'http://test.com' + reverse(
             'data_capture:price_list_details', kwargs={'id': price_list.pk})
 
         self.assertHasOneHtmlAlternative(message)
-        html_content = [content for (content, content_type)
-                        in message.alternatives
-                        if content_type == 'text/html'][0]
-        self.assertIn(details_link, html_content)
+        self.assertHasLink(message, details_link)
 
     def assertHasReplyTo(self, message, reply_to_email='help@help.com'):
         self.assertEqual(len(message.reply_to), 1)
@@ -146,7 +149,8 @@ class EmailTests(ModelTestCase):
         src = create_bulk_upload_contract_source(
             self.user)
         src.save()
-        result = email.bulk_upload_failed(src, 'traceback_contents')
+        result = email.bulk_upload_failed(src, 'traceback_contents',
+                                          'http://test.com')
         self.assertTrue(result.was_successful)
         message = mail.outbox[0]
         self.assertEqual(message.recipients(), [self.user.email])
@@ -158,13 +162,17 @@ class EmailTests(ModelTestCase):
         self.assertHasOneHtmlAlternative(message)
         self.assertHasReplyTo(message)
         self.assertEqual(result.context['traceback'], 'traceback_contents')
+        self.assertIn('r10_upload_link', result.context)
+        self.assertHasLink(
+            message,
+            'http://test.com/data-capture/bulk/region-10/step/1')
 
     def test_approval_reminder(self):
         User.objects.create_superuser('admin', 'admin@localhost', 'password')
         User.objects.create_superuser('admin2', 'admin2@localhost', 'password')
         User.objects.create_superuser('blankadmin', '', 'password')
         count = 5
-        result = email.approval_reminder(count)
+        result = email.approval_reminder(count, 'http://test.com')
         self.assertTrue(result.was_successful)
         message = mail.outbox[0]
         self.assertEqual(message.recipients(),
@@ -177,3 +185,6 @@ class EmailTests(ModelTestCase):
         self.assertHasOneHtmlAlternative(message)
         self.assertHasReplyTo(message)
         self.assertEqual(result.context['count_unreviewed'], count)
+        self.assertHasLink(
+            message,
+            'http://test.com/admin/data_capture/unreviewedpricelist/')
