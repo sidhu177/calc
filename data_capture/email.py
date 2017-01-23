@@ -57,10 +57,9 @@ def send_mail(subject, to, html_message, reply_to=None):
     return msg.send()
 
 
-def price_list_approved(price_list, request):
-    details_link = request.build_absolute_uri(
-        reverse('data_capture:price_list_details',
-                kwargs={'id': price_list.pk}))
+def price_list_approved(price_list, site_base_url='https://calc.gsa.gov'):
+    details_link = site_base_url + reverse('data_capture:price_list_details',
+                                           kwargs={'id': price_list.pk})
 
     ctx = {
         'price_list': price_list,
@@ -86,10 +85,9 @@ def price_list_approved(price_list, request):
     )
 
 
-def price_list_retired(price_list, request):
-    details_link = request.build_absolute_uri(
-        reverse('data_capture:price_list_details',
-                kwargs={'id': price_list.pk}))
+def price_list_retired(price_list, site_base_url='https://calc.gsa.gov'):
+    details_link = site_base_url + reverse('data_capture:price_list_details',
+                                           kwargs={'id': price_list.pk})
 
     ctx = {
         'price_list': price_list,
@@ -114,10 +112,9 @@ def price_list_retired(price_list, request):
     )
 
 
-def price_list_rejected(price_list, request):
-    details_link = request.build_absolute_uri(
-        reverse('data_capture:price_list_details',
-                kwargs={'id': price_list.pk}))
+def price_list_rejected(price_list, site_base_url='https://calc.gsa.gov'):
+    details_link = site_base_url + reverse('data_capture:price_list_details',
+                                           kwargs={'id': price_list.pk})
 
     ctx = {
         'price_list': price_list,

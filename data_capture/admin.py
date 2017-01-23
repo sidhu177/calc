@@ -178,7 +178,7 @@ def approve(modeladmin, request, queryset):
     count = not_approved.count()
     for price_list in not_approved:
         price_list.approve(request.user)
-        email.price_list_approved(price_list, request)
+        email.price_list_approved(price_list, request.get_host())
 
     messages.add_message(
         request,
@@ -200,7 +200,7 @@ def retire(modeladmin, request, queryset):
     count = approved.count()
     for price_list in approved:
         price_list.retire(request.user)
-        email.price_list_retired(price_list, request)
+        email.price_list_retired(price_list, request.get_host())
     messages.add_message(
         request,
         messages.INFO,
@@ -221,7 +221,7 @@ def reject(modeladmin, request, queryset):
     count = unreviewed.count()
     for price_list in unreviewed:
         price_list.reject(request.user)
-        email.price_list_rejected(price_list, request)
+        email.price_list_rejected(price_list, request.get_host())
     messages.add_message(
         request,
         messages.INFO,

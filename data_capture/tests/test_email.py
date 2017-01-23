@@ -1,5 +1,4 @@
 from datetime import datetime
-from unittest import mock
 
 from django.core import mail
 from django.core.urlresolvers import reverse
@@ -20,21 +19,15 @@ from .test_models import ModelTestCase
 class EmailTests(ModelTestCase):
     '''Tests for email sending functions'''
 
-    def setUp(self):
-        super().setUp()
-        self.request_mock = mock.MagicMock(
-            build_absolute_uri=lambda s: 'http://test.com' + s)
-
     def assertHasOneHtmlAlternative(self, message):
         content_types = [alt[1] for alt in message.alternatives]
         self.assertIn('text/html', content_types)
         self.assertEqual(len(content_types), 1)
 
     def assertHasDetailsLink(self, price_list, message):
-        details_link = self.request_mock.build_absolute_uri(
-            reverse('data_capture:price_list_details',
-                    kwargs={'id': price_list.pk})
-        )
+        details_link = 'http://test.com' + reverse(
+            'data_capture:price_list_details', kwargs={'id': price_list.pk})
+
         self.assertHasOneHtmlAlternative(message)
         html_content = [content for (content, content_type)
                         in message.alternatives
@@ -66,7 +59,7 @@ class EmailTests(ModelTestCase):
         price_list = self.create_price_list(
             status=SubmittedPriceList.STATUS_APPROVED)
         price_list.save()
-        result = email.price_list_approved(price_list, self.request_mock)
+        result = email.price_list_approved(price_list, 'http://test.com')
         self.assertTrue(result.was_successful)
         message = mail.outbox[0]
         self.assertEqual(message.recipients(), [self.user.email])
@@ -83,13 +76,13 @@ class EmailTests(ModelTestCase):
             status=SubmittedPriceList.STATUS_UNREVIEWED)
         price_list.save()
         with self.assertRaises(AssertionError):
-            email.price_list_approved(price_list, self.request_mock)
+            email.price_list_approved(price_list, 'http://test.com')
 
     def test_price_list_retired(self):
         price_list = self.create_price_list(
             status=SubmittedPriceList.STATUS_RETIRED)
         price_list.save()
-        result = email.price_list_retired(price_list, self.request_mock)
+        result = email.price_list_retired(price_list, 'http://test.com')
         self.assertTrue(result.was_successful)
         message = mail.outbox[0]
         self.assertEqual(message.recipients(), [self.user.email])
@@ -106,13 +99,13 @@ class EmailTests(ModelTestCase):
             status=SubmittedPriceList.STATUS_APPROVED)
         price_list.save()
         with self.assertRaises(AssertionError):
-            email.price_list_retired(price_list, self.request_mock)
+            email.price_list_retired(price_list, 'http://test.com')
 
     def test_price_list_rejected(self):
         price_list = self.create_price_list(
             status=SubmittedPriceList.STATUS_REJECTED)
         price_list.save()
-        result = email.price_list_rejected(price_list, self.request_mock)
+        result = email.price_list_rejected(price_list, 'http://test.com')
         self.assertTrue(result.was_successful)
         message = mail.outbox[0]
         self.assertEqual(message.recipients(), [self.user.email])
@@ -129,7 +122,7 @@ class EmailTests(ModelTestCase):
             status=SubmittedPriceList.STATUS_APPROVED)
         price_list.save()
         with self.assertRaises(AssertionError):
-            email.price_list_rejected(price_list, self.request_mock)
+            email.price_list_rejected(price_list, 'http://test.com')
 
     def test_bulk_uploaded_succeeded(self):
         src = create_bulk_upload_contract_source(
