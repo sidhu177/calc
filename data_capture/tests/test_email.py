@@ -48,7 +48,7 @@ class EmailTests(ModelTestCase):
     def test_send_mail_works(self):
         result = email.send_mail(
             subject='test email',
-            body='test body',
+            html_message='<p>test body</p>',
             to=['test@test.com'],
             reply_to=['reply-test@test.com'],
         )
@@ -59,17 +59,6 @@ class EmailTests(ModelTestCase):
         self.assertEqual(message.subject, 'test email')
         self.assertEqual(message.from_email, 'hi@hi.com')
         self.assertEqual(message.body, 'test body')
-
-    def test_send_mail_includes_html_message_if_specified(self):
-        result = email.send_mail(
-            subject='test email',
-            body='test body',
-            to=['test@test.com'],
-            reply_to=['reply-test@test.com'],
-            html_message='<p>test body</p>',
-        )
-        self.assertEqual(result, 1)
-        message = mail.outbox[0]
         self.assertHasOneHtmlAlternative(message)
         self.assertEqual(message.alternatives[0][0], '<p>test body</p>')
 

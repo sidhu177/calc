@@ -32,7 +32,7 @@ def collapse_and_strip_tags(text):
     return re.sub(r'\n+', '\n', strip_tags(text))
 
 
-def send_mail(subject, body, to, html_message=None, reply_to=None):
+def send_mail(subject, to, html_message, reply_to=None):
     '''
     Django's convinience send_mail function does not allow
     specification of the reply-to header, so we instead use
@@ -43,15 +43,16 @@ def send_mail(subject, body, to, html_message=None, reply_to=None):
     '''
     connection = get_connection()
 
+    plaintext_message = collapse_and_strip_tags(html_message)
+
     msg = EmailMultiAlternatives(
         connection=connection,
         subject=subject,
-        body=body,
+        body=plaintext_message,
         to=to,
         reply_to=reply_to)
 
-    if html_message:
-        msg.attach_alternative(html_message, 'text/html')
+    msg.attach_alternative(html_message, 'text/html')
 
     return msg.send()
 
@@ -75,7 +76,6 @@ def price_list_approved(price_list, request):
 
     result = send_mail(
         subject='CALC Price List Approved',
-        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
         reply_to=[settings.HELP_EMAIL],
         to=[price_list.submitter.email],
@@ -104,7 +104,6 @@ def price_list_retired(price_list, request):
 
     result = send_mail(
         subject='CALC Price List Retired',
-        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
         reply_to=[settings.HELP_EMAIL],
         to=[price_list.submitter.email],
@@ -131,7 +130,6 @@ def price_list_rejected(price_list, request):
 
     result = send_mail(
         subject='CALC Price List Rejected',
-        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
         reply_to=[settings.HELP_EMAIL],
         to=[price_list.submitter.email]
@@ -158,7 +156,6 @@ def bulk_upload_succeeded(upload_source, num_contracts, num_bad_rows):
     result = send_mail(
         subject='CALC Region 10 bulk data results - upload #{}'.format(
             upload_source.id),
-        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
         reply_to=[settings.HELP_EMAIL],
         to=[upload_source.submitter.email],
@@ -183,7 +180,6 @@ def bulk_upload_failed(upload_source, traceback):
         subject='CALC Region 10 bulk data results - upload #{}'.format(
             upload_source.id
         ),
-        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
         reply_to=[settings.HELP_EMAIL],
         to=[upload_source.submitter.email],
@@ -210,7 +206,6 @@ def approval_reminder(count_unreviewed):
     result = send_mail(
         subject='CALC Reminder - {} price list{} not reviewed'.format(
             count_unreviewed, pluralize(count_unreviewed)),
-        body=collapse_and_strip_tags(rendered_email),
         html_message=rendered_email,
         reply_to=[settings.HELP_EMAIL],
         to=recipients,
