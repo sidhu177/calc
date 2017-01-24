@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.humanize',
+    'django.contrib.sites',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'debug_toolbar',
@@ -313,6 +314,8 @@ UAA_CLIENT_SECRET = os.environ.get('UAA_CLIENT_SECRET')
 LOGIN_URL = 'uaa_client:login'
 
 LOGIN_REDIRECT_URL = '/'
+
+SITE_ID = 1
 
 # We *always* want to send a Cache-Control header downstream, especially
 # in the event where we've got a reverse proxy with aggressive caching
