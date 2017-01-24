@@ -3,8 +3,9 @@ import io
 from django.test import TestCase
 from django.core.management import call_command
 from django.contrib.auth.models import Group
+from click.testing import CliRunner
 
-from ..management.commands import initgroups
+from ..management.commands import initgroups, send_example_emails
 
 
 class TestInitgroups(TestCase):
@@ -24,3 +25,9 @@ class TestInitgroups(TestCase):
         call_command('initgroups', stdout=output)
         for role in initgroups.ROLES:
             self.assertIsNotNone(Group.objects.get(name=role))
+
+
+class TestSendexampleemails(TestCase):
+    def test_it_does_not_explode(self):
+        result = CliRunner().invoke(send_example_emails.command)
+        self.assertEqual(result.exit_code, 0)
