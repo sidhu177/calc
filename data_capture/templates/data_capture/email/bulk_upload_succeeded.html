@@ -9,8 +9,8 @@
 <p>
   {{ num_contracts|intcomma }} rows of rate information have been loaded and previous Region 10 data has been removed from the CALC database.
 </p>
-{% if bad_rows %}
+{% if num_bad_rows %}
 <p>
-  {{ bad_rows|length|intcomma }} were not parsed and could not be loaded.
+  {{ num_bad_rows|intcomma }} were not parsed and could not be loaded.
 </p>
 {% endif %}
