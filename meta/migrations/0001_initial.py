@@ -2,16 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-
-
-def insert_site(apps, schema_editor):
-    print("running insert_site")
-    Site = apps.get_model("sites", "Site")
-    print(Site.objects.all())
-    site = Site.objects.get(pk=1)
-    site.domain = 'calc.gsa.gov'
-    site.name = 'CALC'
-    site.save()
+from ._util_0001 import insert_site
 
 
 class Migration(migrations.Migration):
