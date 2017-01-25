@@ -1,12 +1,19 @@
 from django.apps import apps
 from django.test import TestCase, override_settings
 from django.contrib.sites.models import Site
+from django.core.management import call_command
 
-from ..migrations._util_0001 import insert_site
+from ..migrations._util_0002 import insert_site
 
 
 class SiteTests(TestCase):
     def test_default_site_is_set_by_migration(self):
+        # We need to fake-migrate back and apply our migration that
+        # inserts the site, or else any TransactionTestCases that
+        # ran before us will screw up this test, for some reason. SO WEIRD.
+        call_command('migrate', 'meta', '0001_initial', '--fake')
+        call_command('migrate', 'meta', '0002_insert_site')
+
         site = Site.objects.get_current()
         self.assertEqual(site.domain, 'calc.gsa.gov')
         self.assertEqual(site.name, 'CALC')
