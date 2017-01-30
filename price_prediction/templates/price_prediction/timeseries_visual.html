@@ -8,18 +8,24 @@
   <style type="text/css">
     .c3-lines-observed .c3-line,
     .c3-lines-trend .c3-line {
-      stroke-width: 5;
+      stroke-width: 3;
     }
     .c3-circles-observed .c3-circle{
-      stroke: #9bdaf1;
+      stroke: #d6d7d9;
       fill: white!important;
-      stroke: 1px;
+      stroke-width: 1px;
     }
 
     .c3-circles-trend .c3-circle {
-      stroke: #0071bc;
+      stroke: #5b616b;
       fill: white!important;
-      stroke: 1px;
+      stroke-width: 1px;
+    }
+
+    .c3-circles-fitted .c3-circle {
+      stroke: #fdb81e;
+      /*fill: white!important;*/
+      stroke-width: 1px;
     }
 
   </style>
@@ -51,13 +57,17 @@ chart = c3.generate({
         },
         colors: {
           observed: '#d6d7d9',
-          trend: '#2e8540',
-          fitted: '#02bfe7',
-          lower_bound: '#d6d7d9',
-          upper_bound: '#d6d7d9',
+          trend: '#5b616b',
+          fitted: '#fdb81e',
+          lower_bound: '#fad980',
+          upper_bound: '#fad980',
         },
         regions: {
           fitted: [{'style':'dashed'}]
+        },
+        types: {
+          lower_bound: 'area',
+          upper_bound: 'area'
         }
     },
     axis: {
