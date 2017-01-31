@@ -220,7 +220,11 @@ def trend_predict(data):
     print("model order decided")
     model_order = tuple([int(elem) for elem in model_order])
     #model_order = (1,0,0)
-    model = sm.tsa.ARIMA(interpolated_data, model_order).fit(disp=0)
+    try:
+        model = sm.tsa.ARIMA(interpolated_data, model_order).fit(disp=0)
+    except:
+        import code
+        code.interact(local=locals())
     print("fit model")
     forecast = model.forecast(steps=60)
     print("forecasted future")
