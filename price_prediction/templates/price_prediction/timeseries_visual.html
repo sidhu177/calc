@@ -15,16 +15,19 @@
       fill: white!important;
       stroke-width: 1px;
     }
+
     .c3-circles-trend .c3-circle {
       stroke: #5b616b;
       fill: white!important;
       stroke-width: 1px;
     }
+
     .c3-circles-fitted .c3-circle {
       stroke: #fdb81e;
       /*fill: white!important;*/
       stroke-width: 1px;
     }
+
   </style>
 </head>
 <body>
@@ -41,8 +44,12 @@
 
 
 <script>
+
 //https://github.com/c3js/c3/issues/563 - solution
-chart = c3.generate({
+var prediction_exists = {{ prediction_exists|safe }};
+
+if (prediction_exists == "true") {
+  chart = c3.generate({
     data: {
         x: 'date',
         xFormat: '%Y-%m-%d',
@@ -58,11 +65,8 @@ chart = c3.generate({
           lower_bound: '#fad980',
           upper_bound: '#fad980',
         },
-        regions: {
-          fitted: [{'style':'dashed'}]
-        },
         types: {
-          upper_bound: 'area',
+          upper_bound: 'area-spline',
         }
     },
     axis: {
@@ -77,6 +81,35 @@ chart = c3.generate({
         connectNull: true
     }
 });
+} else{
+  chart = c3.generate({
+    data: {
+        x: 'date',
+        xFormat: '%Y-%m-%d',
+        json: {{data_object|safe}},
+        keys: {
+            x: 'date',
+            value: [ "observed", "trend" ]
+        },
+        colors: {
+          observed: '#d6d7d9',
+          trend: '#5b616b'
+        },
+    },
+    axis: {
+        x: {
+            type: "timeseries",
+            tick: {
+                format: '%Y-%m-%d'
+            }
+        }
+    },
+    line: {
+        connectNull: true
+    }
+});
+
+}
 </script>
 </body>
 </html>
