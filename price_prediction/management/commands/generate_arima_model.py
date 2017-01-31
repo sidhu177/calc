@@ -15,9 +15,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import asyncio
 
+MINIMUM_WAGE=10.20
+
 # this comes from here:
 # http://stackoverflow.com/questions/22770352/auto-arima-equivalent-for-python
-
 
 def objective_function(data, order):
     return sm.tsa.ARIMA(data, order).fit(disp=0).aic
@@ -260,11 +261,18 @@ async def main(labor_category):
         return
     print("got result")
     for i in range(len(forecast[0])):
-        fitted = Fitted(labor_key=labor_category,
-                        lower_bound=forecast[2][i][0],
+        if float(forecast[2][i][0]) < 10.20:
+            fitted = Fitted(labor_key=labor_category,
+                        lower_bound=MINIMUM_WAGE,
                         fittedvalues=forecast[0][i],
                         upper_bound=forecast[2][i][1],
                         start_date=date_range[i])
+        else:
+            fitted = Fitted(labor_key=labor_category,
+                            lower_bound=forecast[2][i][0],
+                            fittedvalues=forecast[0][i],
+                            upper_bound=forecast[2][i][1],
+                            start_date=date_range[i])
         fitted.save()
         print("saved fitted values")
         print("finished Fitted values")
