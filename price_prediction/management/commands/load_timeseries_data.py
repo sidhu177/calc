@@ -12,6 +12,14 @@ from django.core.management import call_command
 
 from price_prediction.models import LaborCategory
 
+#write tests for this -
+
+# make sure each of these functions performs appropriately
+# - smoke test
+# - (minimal) doc tests
+# - edge cases
+# - check to make sure data is saved to the database
+
 def date_to_datetime(time_string):
     return datetime.datetime.strptime(time_string, '%m/%d/%Y')
 

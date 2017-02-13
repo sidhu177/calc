@@ -1,5 +1,12 @@
 from django.db import models
 
+class OverallSpread(models.Model):
+    labor_category = models.CharField(max_length=400)
+    year = models.DecimalField(decimal_places=2, max_digits=200)
+    spread = models.DecimalField(decimal_places=2, max_digits=200)
+
+    def __str__(self):
+        return str(self.labor_category) +":"+ str(self.price)
 
 class LaborCategory(models.Model):
     labor_category = models.CharField(max_length=400)

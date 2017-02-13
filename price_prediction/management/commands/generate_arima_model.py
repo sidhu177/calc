@@ -183,6 +183,14 @@ def check_for_singular(data):
     else:
         return False
 
+#break out seasonal decomposition code
+#test to make sure model_order is consistently returning same result for same data
+#test flow of control like before
+#test to make sure the same extreme values are consistently removed for the same data
+#make sure clean data returns consistent result
+#check_for_singular code to make sure it works as expected
+#check generate_date_range
+#check the return statements - mypy
 
 def trend_predict(data):
     print("inside of trend predict")
@@ -240,6 +248,12 @@ def is_nan(obj):
     else:
         return False
 
+#make sure it's possible to connect to the database
+#make sure each branch of my code is exercises.
+#write a test for each every if, else statement
+#stringio instance via monkey patching
+#test to make sure minimum_wage is used throughout!!!
+
 async def main(labor_category):
     labor_objects = LaborCategory.objects.filter(labor_category=labor_category)
     if len(labor_objects) < 12: #there isn't enough data for a prediction in this case
@@ -265,7 +279,7 @@ async def main(labor_category):
         return
     print("got result")
     for i in range(len(forecast[0])):
-        if float(forecast[2][i][0]) < 10.20:
+        if float(forecast[2][i][0]) < MINIMUM_WAGE:
             fitted = Fitted(labor_key=labor_category,
                         lower_bound=MINIMUM_WAGE,
                         fittedvalues=forecast[0][i],

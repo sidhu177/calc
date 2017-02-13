@@ -143,7 +143,7 @@ def quantize(num, precision=2):
 
 
 class GetRates(APIView):
-
+#should go here?
     def get(self, request):
         bins = request.query_params.get('histogram', None)
 
