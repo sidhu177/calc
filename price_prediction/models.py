@@ -6,7 +6,7 @@ class OverallSpread(models.Model):
     spread = models.DecimalField(decimal_places=2, max_digits=200)
 
     def __str__(self):
-        return str(self.labor_category) +":"+ str(self.price)
+        return str(self.labor_category) 
 
 class LaborCategory(models.Model):
     labor_category = models.CharField(max_length=400)

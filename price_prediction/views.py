@@ -2,8 +2,10 @@ from django.shortcuts import render
 from price_prediction.models import FittedValuesByCategory
 from price_prediction.models import LaborCategory
 from price_prediction.models import TrendByCategory
+from price_prediction.models import OverallSpread
 from contracts.models import Contract
 import json
+import math
 
 def prepare_data_for_plotting(data, fitted_values, trended_values):
     #When x = Contract.objects.all()[0]; is x.contract_start the same as Being Date in the spreadsheet?
@@ -45,6 +47,22 @@ def prepare_data_for_plotting(data, fitted_values, trended_values):
             
     return {"data_object": json.dumps(data_object)}
 
+def prepare_variance_for_plotting(data):
+    #When x = Contract.objects.all()[0]; is x.contract_start the same as Being Date in the spreadsheet?
+    data_object = []
+    date_lookup = {}
+    for ind,datum in enumerate(data):
+        tmp = {}
+        timestamp = str(int(datum.year))
+        tmp["date"] = timestamp
+        date_lookup[timestamp] = ind
+        if not is_nan(float(datum.spread)):
+            tmp["observed"] = float(datum.spread)
+        else:
+            continue
+        data_object.append(tmp)
+    return {"data_object": json.dumps(data_object)}
+
 
 def is_nan(obj):
     if type(obj) == type(float()):
@@ -74,6 +92,21 @@ def timeseries_analysis(request):
         return render(request, "price_prediction/timeseries_visual.html",context)
     elif request.method == "GET":
         return render(request, "price_prediction/timeseries_visual.html",{"result":False})
+
+def variance_analysis(request):
+    """
+    This method takes in a labor category and returns a timeseries visualization of the labor category.
+    This includes the original time series, predicted pricing for the next 5 years and textual analysis of the data being presented
+    """
+    if request.method == 'POST':
+        post_data_dict = request.POST.dict()
+        labor_category = post_data_dict["labor_category"]
+        results = OverallSpread.objects.filter(labor_category=labor_category)
+        results = [result for result in results if not is_nan(result.spread)]
+        context = prepare_variance_for_plotting(results)
+        return render(request, "price_prediction/variance_visual.html",context)
+    elif request.method == "GET":
+        return render(request, "price_prediction/variance_visual.html",{"result":False})
 
 #Work flow:
 
