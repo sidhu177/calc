@@ -285,6 +285,52 @@ class ActionTests(AdminTestCase):
         with self.assertRaises(ObjectDoesNotExist):
             Contract.objects.get(pk=contract.pk)
 
+        def test_approve_doesnt_delete_if_sched_differs(self, msg_mock):
+            # create BulkUploadContractSource
+            source = BulkUploadContractSource.objects.create(
+                procurement_center=BulkUploadContractSource.SCHEDULE_70
+            )
+            # create contracts associated with that source
+            contract = get_contract_recipe().make(
+                idv_piid=self.price_list.contract_number,
+                schedule='SOME OTHER SCHEDULE',
+                upload_source=source)
+            contract.save()
+
+            # sanity check that contract exists
+            self.assertIsNotNone(Contract.objects.get(pk=contract.pk))
+
+            # call approve
+            admin.approve(None, self.request_mock,
+                          SubmittedPriceList.objects.all())
+            msg_mock.assert_called_once_with(
+                self.request_mock,
+                messages.INFO,
+                '1 price list(s) have been approved and added to CALC.'
+            )
+            self.assertIsNotNone(Contract.objects.get(pk=contract.pk))
+
+    def test_approve_doesnt_delete_if_not_bulk_upload(self, msg_mock):
+        # create contracts associated with that source
+        contract = get_contract_recipe().make(
+            idv_piid=self.price_list.contract_number,
+            schedule=self.price_list.get_schedule_title(),
+            upload_source=None)
+        contract.save()
+
+        # sanity check that contract exists
+        self.assertIsNotNone(Contract.objects.get(pk=contract.pk))
+
+        # call approve
+        admin.approve(None, self.request_mock,
+                      SubmittedPriceList.objects.all())
+        msg_mock.assert_called_once_with(
+            self.request_mock,
+            messages.INFO,
+            '1 price list(s) have been approved and added to CALC.'
+        )
+        self.assertIsNotNone(Contract.objects.get(pk=contract.pk))
+
     def test_retire_works(self, msg_mock):
         with mock.patch.object(email, 'price_list_retired',
                                wraps=email.price_list_retired) as em_monkey:
