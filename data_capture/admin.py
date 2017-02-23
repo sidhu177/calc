@@ -187,8 +187,7 @@ def approve(modeladmin, request, queryset):
             schedule=price_list.get_schedule_title(),  # on same schedule
             upload_source__isnull=False,  # and that have bulk upload src
         )
-        # TODO: keep track of num deleted (per contract num) and add to message
-        # num_existing = existing_bulk_contracts.count()
+        # keep track of num deleted (per contract num)
         existing_count = existing_bulk_contracts.count()
         if existing_count:
             deleted_counts[price_list.contract_number] = existing_count
