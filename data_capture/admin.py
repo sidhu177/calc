@@ -177,6 +177,7 @@ class SubmittedPriceListRowInline(admin.TabularInline):
 def approve(modeladmin, request, queryset):
     not_approved = queryset.exclude(status=SubmittedPriceList.STATUS_APPROVED)
     count = not_approved.count()
+    deleted_counts = {}
     for price_list in not_approved:
         # Remove existing Contract models that were bulk loaded
         # and that have the same contract number and are on the same
@@ -188,7 +189,10 @@ def approve(modeladmin, request, queryset):
         )
         # TODO: keep track of num deleted (per contract num) and add to message
         # num_existing = existing_bulk_contracts.count()
-        existing_bulk_contracts.delete()
+        existing_count = existing_bulk_contracts.count()
+        if existing_count:
+            deleted_counts[price_list.contract_number] = existing_count
+            existing_bulk_contracts.delete()
 
         price_list.approve(request.user)
         email.price_list_approved(price_list, request.get_host())
@@ -200,6 +204,14 @@ def approve(modeladmin, request, queryset):
             count
         )
     )
+
+    for del_contract_num, del_count in deleted_counts.items():
+        messages.add_message(
+            request,
+            messages.INFO,
+            '{} existing row(s) of bulk-loaded data for contract number {} '
+            'were removed from CALC'.format(del_count, del_contract_num)
+        )
 
 
 approve.short_description = (
