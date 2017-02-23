@@ -208,7 +208,7 @@ def approve(modeladmin, request, queryset):
     for del_contract_num, del_count in deleted_counts.items():
         messages.add_message(
             request,
-            messages.INFO,
+            messages.WARNING,
             '{} existing row(s) of bulk-loaded data for contract number {} '
             'were removed from CALC'.format(del_count, del_contract_num)
         )

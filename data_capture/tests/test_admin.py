@@ -2,6 +2,7 @@ import io
 import unittest.mock as mock
 from django.conf import settings
 from django.core.management import call_command
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.test import override_settings, TestCase
@@ -11,7 +12,7 @@ from .. import admin, email
 from ..models import SubmittedPriceList, SubmittedPriceListRow
 from .common import FAKE_SCHEDULE
 from .test_models import ModelTestCase
-from contracts.models import BulkUploadContractSource
+from contracts.models import BulkUploadContractSource, Contract
 from contracts.mommy_recipes import get_contract_recipe
 
 
@@ -259,18 +260,30 @@ class ActionTests(AdminTestCase):
             schedule=self.price_list.get_schedule_title(),
             upload_source=source)
         contract.save()
-        # TODO: sanity check that contract exists
+
+        # sanity check that contract exists
+        self.assertIsNotNone(Contract.objects.get(pk=contract.pk))
+
         # call approve
         admin.approve(None, self.request_mock,
                       SubmittedPriceList.objects.all())
 
-        msg_mock.assert_called_once_with(
+        self.assertEqual(msg_mock.call_count, 2)
+        msg_mock.assert_any_call(
             self.request_mock,
             messages.INFO,
             '1 price list(s) have been approved and added to CALC.'
         )
-        # TODO: assert original contracts are gone
 
+        msg_mock.assert_any_call(
+            self.request_mock,
+            messages.WARNING,
+            '1 existing row(s) of bulk-loaded data for contract number {} '
+            'were removed from CALC'.format(self.price_list.contract_number)
+        )
+        # assert original contract has been deleted
+        with self.assertRaises(ObjectDoesNotExist):
+            Contract.objects.get(pk=contract.pk)
 
     def test_retire_works(self, msg_mock):
         with mock.patch.object(email, 'price_list_retired',
