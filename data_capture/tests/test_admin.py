@@ -11,6 +11,8 @@ from .. import admin, email
 from ..models import SubmittedPriceList, SubmittedPriceListRow
 from .common import FAKE_SCHEDULE
 from .test_models import ModelTestCase
+from contracts.models import BulkUploadContractSource
+from contracts.mommy_recipes import get_contract_recipe
 
 
 @override_settings(
@@ -245,6 +247,30 @@ class ActionTests(AdminTestCase):
         self.price_list.refresh_from_db()
         self.assertEqual(self.price_list.status,
                          SubmittedPriceList.STATUS_APPROVED)
+
+    def test_approve_deletes_existing_bulk_loaded_contracts(self, msg_mock):
+        # create BulkUploadContractSource
+        source = BulkUploadContractSource.objects.create(
+            procurement_center=BulkUploadContractSource.SCHEDULE_70
+        )
+        # create contracts associated with that source
+        contract = get_contract_recipe().make(
+            idv_piid=self.price_list.contract_number,
+            schedule=self.price_list.get_schedule_title(),
+            upload_source=source)
+        contract.save()
+        # TODO: sanity check that contract exists
+        # call approve
+        admin.approve(None, self.request_mock,
+                      SubmittedPriceList.objects.all())
+
+        msg_mock.assert_called_once_with(
+            self.request_mock,
+            messages.INFO,
+            '1 price list(s) have been approved and added to CALC.'
+        )
+        # TODO: assert original contracts are gone
+
 
     def test_retire_works(self, msg_mock):
         with mock.patch.object(email, 'price_list_retired',

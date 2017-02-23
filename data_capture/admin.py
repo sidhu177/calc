@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 
+from contracts.models import Contract
 from . import email
 from .schedules import registry
 from .models import SubmittedPriceList, SubmittedPriceListRow
@@ -177,6 +178,18 @@ def approve(modeladmin, request, queryset):
     not_approved = queryset.exclude(status=SubmittedPriceList.STATUS_APPROVED)
     count = not_approved.count()
     for price_list in not_approved:
+        # Remove existing Contract models that were bulk loaded
+        # and that have the same contract number and are on the same
+        # schedule
+        existing_bulk_contracts = Contract.objects.filter(
+            idv_piid__iexact=price_list.contract_number,  # same contract num
+            schedule=price_list.get_schedule_title(),  # on same schedule
+            upload_source__isnull=False,  # and that have bulk upload src
+        )
+        # TODO: keep track of num deleted (per contract num) and add to message
+        # num_existing = existing_bulk_contracts.count()
+        existing_bulk_contracts.delete()
+
         price_list.approve(request.user)
         email.price_list_approved(price_list, request.get_host())
 
