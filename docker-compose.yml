@@ -38,3 +38,4 @@ services:
 volumes:
   node-modules:
   python-venv:
+  yarn-cache:

@@ -22,6 +22,7 @@ RUN pip install virtualenv
 WORKDIR /calc
 
 RUN npm install -g yarn
+RUN yarn config set cache-folder /calc/.yarn-cache
 
 ENV PATH /calc/node_modules/.bin:$PATH
 ENV DDM_IS_RUNNING_IN_DOCKER yup

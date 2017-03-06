@@ -10,9 +10,10 @@ services:
       # other non-Linux native code compiled on the Docker Host.
       - python-venv:/venv/
       - node-modules:/calc/node_modules/
+      - yarn-cache:/calc/.yarn-cache/
     environment:
       - DDM_VENV_DIR=/venv
-      - DDM_USER_OWNED_DIRS=/venv:/calc/node_modules
+      - DDM_USER_OWNED_DIRS=/venv:/calc/node_modules:/calc/.yarn-cache
       - DDM_HOST_USER=calc_user
       - NPM_CONFIG_ENGINE_STRICT=true
       - PYTHONUNBUFFERED=yup
