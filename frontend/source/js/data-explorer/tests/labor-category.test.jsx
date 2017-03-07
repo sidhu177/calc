@@ -14,8 +14,6 @@ const defaultProps = {
 
 const setup = makeSetup(LaborCategory, defaultProps);
 
-jest.mock('../autocomplete');
-
 describe('<LaborCategory>', () => {
   it('renders correctly', () => {
     const { props, wrapper } = setup();

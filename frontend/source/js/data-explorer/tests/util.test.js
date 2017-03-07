@@ -17,3 +17,15 @@ describe('util.getLastCommaSeparatedTerm()', () => {
   expect(util.getLastCommaSeparatedTerm('foo , bar')).toBe('bar');
   expect(util.getLastCommaSeparatedTerm('foo bar')).toBe('foo bar');
 });
+
+describe('util.parseQuery()', () => {
+  expect(util.parseQuery('?foo=bar')).toMatchObject({ foo: 'bar' });
+  expect(util.parseQuery('?foo=bar&baz=qux')).toMatchObject({ foo: 'bar', baz: 'qux' });
+  expect(util.parseQuery('?foo=foo+bar')).toMatchObject({ foo: 'foo bar' });
+  expect(util.parseQuery('?foo=foo%20bar')).toMatchObject({ foo: 'foo bar' });
+});
+
+describe('util.joinQuery()', () => {
+  expect(util.joinQuery({ foo: 'bar', baz: 'quux hi' }))
+    .toBe('?foo=bar&baz=quux%20hi');
+});

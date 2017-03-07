@@ -1,6 +1,7 @@
 @import 'libs/no-ui';
 @import 'base/variables';
 @import 'components/tables';
+@import 'components/autosuggest';
 
 body {
   background-color: $color-white; //override to steps.scss
@@ -22,32 +23,6 @@ nav li:first-child {
        -moz-transition: opacity .5s, height .5s;
             transition: opacity .5s, height .5s;
     clear: both;
-}
-
-.autocomplete-suggestions {
-  position: absolute;
-  display: none;
-  z-index: 9999;
-  overflow: hidden;
-  background: $color-white;
-  max-height: 29.4rem;
-  overflow: hidden;
-  overflow-y: auto;
-  border: 1px solid $color-gray-lighter;
-}
-
-.autocomplete-suggestion {
-  position: relative;
-  padding: .25em .5em;
-  &.selected {
-    color: $color-white;
-    background: $color-primary-alt;
-  }
-  .count {
-    position: absolute;
-    right: .5em;
-    text-align: right;
-  }
 }
 
 .loading {
@@ -496,7 +471,7 @@ a.focus-input {
 }
 
 #labor_category {
-  margin-bottom: .5rem;
+  margin: 0 0 .5rem 0;
 }
 
 #query-types {
