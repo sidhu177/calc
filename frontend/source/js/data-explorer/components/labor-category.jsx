@@ -1,31 +1,27 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import * as autocomplete from '../autocomplete';
-import { setQuery } from '../actions';
+import * as autocomplete from "../autocomplete";
+import { setQuery } from "../actions";
 
-import {
-  autobind,
-  handleEnter,
-  filterActive,
-} from '../util';
+import { autobind, handleEnter, filterActive } from "../util";
 
-import { MAX_QUERY_LENGTH } from '../constants';
+import { MAX_QUERY_LENGTH } from "../constants";
 
 export class LaborCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: this.props.query };
-    autobind(this, ['handleChange', 'handleEnter']);
+    autobind(this, ["handleChange", "handleEnter"]);
   }
 
   componentDidMount() {
     autocomplete.initialize(this.inputEl, {
       api: this.props.api,
       getQueryType: () => this.props.queryType,
-      setFieldValue: (value) => {
+      setFieldValue: value => {
         this.props.setQuery(value);
-      },
+      }
     });
   }
 
@@ -51,15 +47,19 @@ export class LaborCategory extends React.Component {
 
   render() {
     const id = `${this.props.idPrefix}labor_category`;
-    const className = filterActive(this.props.query !== '',
-                                   'form__inline');
+    const className = filterActive(this.props.query !== "", "form__inline");
 
     return (
       <div>
         <input
-          id={id} name="q" placeholder="Type a labor category"
-          className={className} type="text"
-          ref={(el) => { this.inputEl = el; }}
+          id={id}
+          name="q"
+          placeholder="Type a labor category"
+          className={className}
+          type="text"
+          ref={el => {
+            this.inputEl = el;
+          }}
           value={this.state.value}
           onChange={this.handleChange}
           onKeyDown={handleEnter(this.handleEnter)}
@@ -78,18 +78,18 @@ LaborCategory.propTypes = {
   queryType: React.PropTypes.string.isRequired,
   setQuery: React.PropTypes.func.isRequired,
   api: React.PropTypes.object.isRequired,
-  children: React.PropTypes.any,
+  children: React.PropTypes.any
 };
 
 LaborCategory.defaultProps = {
-  idPrefix: '',
-  children: null,
+  idPrefix: "",
+  children: null
 };
 
 export default connect(
   state => ({
     query: state.q,
-    queryType: state.query_type,
+    queryType: state.query_type
   }),
-  { setQuery },
+  { setQuery }
 )(LaborCategory);
