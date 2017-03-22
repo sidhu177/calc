@@ -22,7 +22,7 @@ services:
     volumes:
       - .:/calc
     stop_signal: SIGKILL
-    command: start-storybook -p 9001 -c .storybook -s ./frontend/static
+    command: npm run storybook
     ports:
       - 9001:9001
   rq_worker:

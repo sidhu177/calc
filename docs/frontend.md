@@ -64,6 +64,14 @@ this can be done via `docker-compose run app jest`; otherwise you can
 use `npm run test --`, followed by any
 [Jest CLI options](https://facebook.github.io/jest/docs/cli.html).
 
+We also use [storybook][] for manual testing and documentation of our
+React components. If you're using Docker, you can access it at port
+9001 on your Docker host. Otherwise, you can run it via:
+
+```
+npm run storybook
+```
+
 ### Data capture
 
 Data capture largely consists of Django templates combined with
@@ -100,3 +108,4 @@ When in doubt, see the [style guide][]!
 [style guide]: https://calc-dev.app.cloud.gov/styleguide/
 [yarn]: https://yarnpkg.com/
 [yarn workflow docs]: https://yarnpkg.com/en/docs/yarn-workflow
+[storybook]: https://getstorybook.io/

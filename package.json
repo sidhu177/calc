@@ -57,6 +57,7 @@
   },
   "scripts": {
     "gulp": "gulp",
+    "storybook": "start-storybook -p 9001 -c .storybook -s ./frontend/static",
     "eslint": "eslint --ext .jsx --ext .js . || true",
     "failable-eslint": "eslint --max-warnings 0 --ext .jsx --ext .js .",
     "test": "jest",
