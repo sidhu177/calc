@@ -11,6 +11,7 @@ export default class Tooltip extends React.Component {
   }
 
   componentDidMount() {
+    if (!this.el) return;
     $(this.el)
       .tooltipster({})
       .tooltipster('content', this.props.text);
@@ -20,6 +21,7 @@ export default class Tooltip extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (!this.el) return;
     if (this.props.text !== prevProps.text) {
       $(this.el).tooltipster('content', this.props.text);
     }
@@ -27,6 +29,7 @@ export default class Tooltip extends React.Component {
   }
 
   componentWillUnmount() {
+    if (!this.el) return;
     $(this.el).tooltipster('destroy');
     this.el.removeEventListener('focus', this.show, true);
     this.el.removeEventListener('blur', this.hide, true);
