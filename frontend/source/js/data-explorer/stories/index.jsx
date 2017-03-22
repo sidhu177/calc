@@ -38,10 +38,11 @@ storiesOf('Tooltip', module)
           aria-label="Hello, I am a tooltip!"
           onClick={(e) => { e.preventDefault(); }}
         >
-          I am a keyboard-focusable tooltip.
+          Here is a keyboard-focusable tooltip.
         </a>
       </Tooltip>
     ),
+    { inline: true },
   )
   .add('always showing', () => (
     <Tooltip text="I am always showing!" show>
