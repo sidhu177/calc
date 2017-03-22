@@ -4,6 +4,7 @@
   "private": true,
   "description": "An estimator for hourly rates on professional services contracts",
   "dependencies": {
+    "@kadira/storybook": "^2.35.3",
     "a11y-dialog": "2.5.2",
     "babel-core": "^6.23.1",
     "babel-jest": "^18.0.0",

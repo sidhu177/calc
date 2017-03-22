@@ -15,6 +15,16 @@ services:
     volumes:
       - .:/calc
     command: gulp
+  storybook:
+    extends:
+      file: docker-services.yml
+      service: base_app
+    volumes:
+      - .:/calc
+    stop_signal: SIGKILL
+    command: start-storybook -p 9001 -c .storybook -s ./frontend/static
+    ports:
+      - 9001:9001
   rq_worker:
     volumes:
       - .:/calc
