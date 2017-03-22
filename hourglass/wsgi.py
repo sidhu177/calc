@@ -37,5 +37,10 @@ try:
         '/docs/',
         '/static/docs/'
     )
+    application = static_url_rewriter(
+        application,
+        '/storybook/',
+        '/static/storybook/'
+    )
 except Exception as e:
     print(e)

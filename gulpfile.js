@@ -123,10 +123,24 @@ gulp.task('sphinx', (cb) => {
   });
 });
 
+gulp.task('build-storybook', (cb) => {
+  const build = spawn('npm', ['run', 'build-storybook'], {
+    stdio: 'inherit',
+    shell: true,
+  });
+  build.on('exit', (code) => {
+    if (code !== 0) {
+      cb(new Error('build-storybook failed!'));
+      return;
+    }
+    cb(null);
+  });
+});
+
 // production build task
 // will need to run before collectstatic
 // `npm run gulp -- build` or `gulp run build` if gulp-cli is installed globally
-gulp.task('build', ['sass', 'js', 'sphinx']);
+gulp.task('build', ['sass', 'js', 'sphinx', 'build-storybook']);
 
 // watch files for changes
 gulp.task('watch', ['set-watching', 'sass', 'js', 'sphinx'], () => {

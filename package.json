@@ -58,6 +58,7 @@
   "scripts": {
     "gulp": "gulp",
     "storybook": "start-storybook -p 9001 -c .storybook -s ./frontend/static",
+    "build-storybook": "build-storybook -c .storybook -o .storybook/static/storybook && sed -i.bak 's/\\/frontend\\//\\/static\\/frontend\\//g' .storybook/static/storybook/iframe.html",
     "eslint": "eslint --ext .jsx --ext .js . || true",
     "failable-eslint": "eslint --max-warnings 0 --ext .jsx --ext .js .",
     "test": "jest",
