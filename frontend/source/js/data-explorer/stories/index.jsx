@@ -6,18 +6,26 @@ import { EducationLevel } from '../components/education-level';
 import Tooltip from '../components/tooltip';
 
 storiesOf('EducationLevel', module)
-  .add('with none selected', () => (
-    <EducationLevel
-      levels={[]}
-      toggleEducationLevel={action('toggled')}
-    />
-  ))
-  .add('with one selected', () => (
-    <EducationLevel
-      levels={[constants.EDU_HIGH_SCHOOL]}
-      toggleEducationLevel={action('toggled')}
-    />
-  ));
+  .addWithInfo(
+    'with none selected',
+    ``,
+    () => (
+      <EducationLevel
+        levels={[]}
+        toggleEducationLevel={action('toggled')}
+      />
+    ),
+  )
+  .addWithInfo(
+    'with one selected',
+    ``,
+    () => (
+      <EducationLevel
+        levels={[constants.EDU_HIGH_SCHOOL]}
+        toggleEducationLevel={action('toggled')}
+      />
+    ),
+  );
 
 storiesOf('Tooltip', module)
   .addWithInfo(
@@ -42,10 +50,16 @@ storiesOf('Tooltip', module)
         </a>
       </Tooltip>
     ),
-    { inline: true },
   )
-  .add('always showing', () => (
-    <Tooltip text="I am always showing!" show>
-      This text will have a permanently visible tooltip.
-    </Tooltip>
-  ));
+  .addWithInfo(
+    'always showing',
+    `
+      This can be useful if you need external state or code to
+      control when the tooltip shows.
+    `,
+    () => (
+      <Tooltip text="I am always showing!" show>
+        This text will have a permanently visible tooltip.
+      </Tooltip>
+    ),
+  );
