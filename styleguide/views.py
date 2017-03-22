@@ -5,7 +5,7 @@ from frontend.upload import UploadWidget
 from frontend.steps import StepsWidget
 from data_capture.schedules.s70 import Schedule70PriceList
 from . import (ajaxform_example, date_example, radio_checkbox_example,
-               email_examples)
+               email_examples, storybook)
 
 
 def get_degraded_upload_widget():
@@ -53,6 +53,7 @@ def get_s70_pricelist_error_table():
 
 def index(request):
     ctx = {
+        'storybook_url': storybook.get_url(request.META['HTTP_HOST']),
         's70_error_table': get_s70_pricelist_error_table(),
         'degraded_upload_widget': get_degraded_upload_widget(),
         'existing_filename_upload_form': get_existing_filename_upload_form(),

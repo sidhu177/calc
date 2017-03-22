@@ -6,6 +6,7 @@ services:
     command: python manage.py runserver 0.0.0.0:${DOCKER_EXPOSED_PORT}
     environment:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
+      - STORYBOOK_PORT=9001
     links:
       - mailcatcher
   gulp:
