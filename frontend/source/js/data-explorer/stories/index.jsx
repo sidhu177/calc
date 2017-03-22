@@ -20,17 +20,29 @@ storiesOf('EducationLevel', module)
   ));
 
 storiesOf('Tooltip', module)
-  .add('showing on focus/hover', () => (
-    <Tooltip text="Hello, I am a tooltip!">
-      <a
-        href=""
-        aria-label="Hello, I am a tooltip!"
-        onClick={(e) => { e.preventDefault(); }}
-      >
-        I am a keyboard-focusable tooltip.
-      </a>
-    </Tooltip>
-  ))
+  .addWithInfo(
+    'showing on focus/hover',
+    `
+      The tooltip automatically shows and hides itself on focus
+      and blur events, so wrapping a focusable element in a tooltip
+      keeps things accessible for keyboard users.
+
+      This is not actually very friendly to screen reader users
+      because ATs will still identify the element as a link, but
+      it's better than nothing.
+    `,
+    () => (
+      <Tooltip text="Hello, I am a tooltip!">
+        <a
+          href=""
+          aria-label="Hello, I am a tooltip!"
+          onClick={(e) => { e.preventDefault(); }}
+        >
+          I am a keyboard-focusable tooltip.
+        </a>
+      </Tooltip>
+    ),
+  )
   .add('always showing', () => (
     <Tooltip text="I am always showing!" show>
       This text will have a permanently visible tooltip.
