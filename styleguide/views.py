@@ -53,7 +53,7 @@ def get_s70_pricelist_error_table():
 
 def index(request):
     ctx = {
-        'storybook_url': storybook.get_url(request.META['HTTP_HOST']),
+        'storybook_url': storybook.get_url(request.META.get('HTTP_HOST', '')),
         's70_error_table': get_s70_pricelist_error_table(),
         'degraded_upload_widget': get_degraded_upload_widget(),
         'existing_filename_upload_form': get_existing_filename_upload_form(),
