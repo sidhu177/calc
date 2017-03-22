@@ -8,7 +8,7 @@ import Tooltip from '../components/tooltip';
 storiesOf('EducationLevel', module)
   .addWithInfo(
     'with none selected',
-    ``,
+    '',
     () => (
       <EducationLevel
         levels={[]}
@@ -18,7 +18,7 @@ storiesOf('EducationLevel', module)
   )
   .addWithInfo(
     'with one selected',
-    ``,
+    '',
     () => (
       <EducationLevel
         levels={[constants.EDU_HIGH_SCHOOL]}
