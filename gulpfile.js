@@ -11,7 +11,6 @@ const path = require('path');
 
 const gulp = require('gulp');
 const sass = require('gulp-sass');
-const eyeglass = require('eyeglass');
 const cleancss = require('gulp-clean-css');
 const concat = require('gulp-concat');
 const sourcemaps = require('gulp-sourcemaps');
@@ -19,6 +18,7 @@ const rename = require('gulp-rename');
 const eslint = require('gulp-eslint');
 const gutil = require('gulp-util');
 const del = require('del');
+const bourbonNeatPaths = require('bourbon-neat').includePaths;
 const named = require('vinyl-named');
 
 const webpackUtil = require('./frontend/gulp/webpack-util');
@@ -55,7 +55,6 @@ const bundles = {
       'vendor/jquery.1.11.1.js',
       'vendor/jquery.xdomainrequest.js',
       'vendor/jquery.tooltipster.js',
-      'vendor/jquery.nouislider.all.min.js',
     ],
   },
   // Data Explorer scripts
@@ -154,7 +153,9 @@ gulp.task('clean', () => {
 // compile SASS sources
 gulp.task('sass', () => gulp.src(path.join(dirs.src.style, paths.sass))
   .pipe(sourcemaps.init())
-    .pipe(sass(eyeglass()).on('error', sass.logError))
+    .pipe(sass({
+      includePaths: [bourbonNeatPaths, 'node_modules'],
+    }).on('error', sass.logError))
     .pipe(rename({ suffix: '.min' }))
     .pipe(cleancss())
   .pipe(sourcemaps.write('./'))

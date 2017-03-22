@@ -1,0 +1,32 @@
+@import '../base/variables';
+@import 'rc-slider/assets/index';
+
+.experience-slider {
+  margin: $space-half $space-1x $space-1x $space-1x;
+
+  &.rc-slider {
+    width: auto;
+  }
+
+  .rc-slider-track {
+    background-color: $color-primary;
+    height: 6px;
+  }
+
+  .rc-slider-handle {
+    margin-top: -4px;
+    border-color: $color-primary;
+    background-color: $color-primary;
+
+    &:hover {
+      border-color: $color-primary;
+      background-color: $color-primary;
+    }
+  }
+
+  .rc-slider-rail {
+    background-color: $color-white;
+    border: 1px solid $color-base;
+    height: 6px;
+  }
+}
