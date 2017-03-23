@@ -42,10 +42,18 @@ def healthcheck(request):
         **get_database_info(),
     }
 
-    status_code = 200
+    ok = True
 
     if not (results['is_database_synchronized'] and
             results['canonical_url_matches_request_url']):
-        status_code = 500
+        ok = False
 
-    return JsonResponse(results, status=status_code)
+    # We're always returning 200 but indicating whether everything
+    # is *really* ok in the `is_everything_ok` key. We used to
+    # return 500 if the healthcheck failed, but this ended up
+    # causing odd behavior with CloudFront. For more details, see:
+    #
+    # https://github.com/18F/calc/issues/1516
+    results['is_everything_ok'] = ok
+
+    return JsonResponse(results, status=200)

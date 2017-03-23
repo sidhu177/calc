@@ -98,7 +98,7 @@ if sys.platform != 'win32':
 
 if False:
     # This is just needed so mypy will work; it's never executed.
-    from typing import Iterator, Any  # NOQA
+    from typing import Iterator, Any, List  # NOQA
 
 MY_DIR = os.path.abspath(os.path.dirname(__file__))
 HOST_UID = os.stat(MY_DIR).st_uid

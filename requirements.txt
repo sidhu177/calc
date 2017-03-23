@@ -20,7 +20,7 @@ defusedxml==0.5.0
 rq==0.7.1
 django-rq==0.9.4
 rq-scheduler==0.7.0
-mypy-lang==0.4.6
+mypy==0.501
 pytz==2016.10
 Markdown==2.6.8
 cg-django-uaa==0.0.1

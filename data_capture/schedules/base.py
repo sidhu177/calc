@@ -13,6 +13,7 @@ from ..models import SubmittedPriceList
 
 if False:
     from django.forms import Form  # NOQA
+    from typing import List  # NOQA
 
 min_price_validator = MinValueValidator(
     FEDERAL_MIN_CONTRACT_RATE,

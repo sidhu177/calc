@@ -88,11 +88,12 @@ class HealthcheckTests(DjangoTestCase):
         self.assertEqual(actual, expected)
 
     @override_settings(SECURE_SSL_REDIRECT=True)
-    def test_it_returns_500_when_canonical_and_request_url_mismatch(self):
+    def test_it_works_when_canonical_and_request_url_mismatch(self):
         self.assertResponseContains({
             'canonical_url': 'https://testserver/healthcheck/',
             'request_url': 'http://testserver/healthcheck/',
             'canonical_url_matches_request_url': False,
+            'is_everything_ok': False,
         })
 
     def test_it_includes_rq_jobs(self):
@@ -111,22 +112,24 @@ class HealthcheckTests(DjangoTestCase):
             f"{expected_pg_version.major}.{expected_pg_version.minor}",
         )
 
-    def test_it_returns_200_when_all_is_well(self):
+    def test_it_works_when_all_is_well(self):
         res = self.client.get('/healthcheck/')
         self.assertEqual(res.status_code, 200)
         self.assertResponseContains({
             'canonical_url_matches_request_url': True,
             'is_database_synchronized': True,
+            'is_everything_ok': True,
         }, res=res)
 
     @patch.object(healthcheck, 'get_database_info')
-    def test_it_returns_500_when_db_is_not_synchronized(self, mock):
+    def test_it_works_when_db_is_not_synchronized(self, mock):
         mock.return_value = {
             'postgres_version': settings.POSTGRES_VERSION,
             'is_database_synchronized': False,
+            'is_everything_ok': False,
         }
         res = self.client.get('/healthcheck/')
-        self.assertEqual(res.status_code, 500)
+        self.assertEqual(res.status_code, 200)
         self.assertResponseContains({
             'is_database_synchronized': False,
         }, res=res)
