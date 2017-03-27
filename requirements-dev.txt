@@ -15,6 +15,7 @@ beautifulsoup4==4.5.3
 freezegun==0.3.8
 pexpect==4.2.1
 ipdb==0.10.2
+httmock==1.2.6
 
 # These are used to generate the static documentation, which may be
 # served in production; but because they're statically compiled

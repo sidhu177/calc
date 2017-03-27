@@ -106,6 +106,10 @@ string), the boolean is true; otherwise, it's false.
   Running tests with RoboBrowser can be much faster and less error-prone
   than via Selenium, but it also means that the tests are less end-to-end.
 
+* `SLACKBOT_WEBHOOK_URL` is the URL of a [Slack incoming webhook][] that
+  will be sent messages whenever certain kinds of
+  [events](../slackbot/signals.py) occur in the app.
+
 [RoboBrowser]: http://robobrowser.readthedocs.io/
 [`SECRET_KEY`]: https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key
 [`DEFAULT_FROM_EMAIL`]: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-DEFAULT_FROM_EMAIL
@@ -114,3 +118,4 @@ string), the boolean is true; otherwise, it's false.
 [DJ-Database-URL schema]: https://github.com/kennethreitz/dj-database-url#url-schema
 [dj-email-url schema]: https://github.com/migonzalvar/dj-email-url#supported-backends
 [twelve-factor]: http://12factor.net/
+[Slack incoming webhook]: https://api.slack.com/incoming-webhooks

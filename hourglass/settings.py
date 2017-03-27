@@ -34,8 +34,11 @@ DEBUG = 'DEBUG' in os.environ
 
 HIDE_DEBUG_UI = 'HIDE_DEBUG_UI' in os.environ
 
+SLACKBOT_WEBHOOK_URL = os.environ.get('SLACKBOT_WEBHOOK_URL', '')
+
 if is_running_tests():
     HIDE_DEBUG_UI = True
+    SLACKBOT_WEBHOOK_URL = ''
 
 if DEBUG:
     os.environ.setdefault(
@@ -141,6 +144,7 @@ INSTALLED_APPS = (
     'styleguide',
     'meta',
     'frontend',
+    'slackbot.apps.SlackbotConfig',
 )  # type: Tuple[str, ...]
 
 SITE_ID = 1
@@ -275,6 +279,10 @@ LOGGING = {
             'level': 'INFO',
         },
         'rq_scheduler': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'slackbot': {
             'handlers': ['console'],
             'level': 'INFO',
         },

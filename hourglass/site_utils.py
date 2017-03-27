@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 
-def absolutify_url(url):
+def absolutify_url(url: str) -> str:
     '''
     If the URL is an absolute path, returns the URL prefixed with
     the current Site's protocol and host information.
@@ -24,7 +24,7 @@ def absolutify_url(url):
     return f"{protocol}://{host}{url}"
 
 
-def absolute_reverse(*args, **kwargs):
+def absolute_reverse(*args, **kwargs) -> str:
     '''
     Like Django's reverse(), but ensures the URL includes protocol
     and host information for the current Site, so that it can be

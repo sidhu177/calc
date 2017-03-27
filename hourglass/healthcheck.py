@@ -30,6 +30,13 @@ def get_database_info(database=DEFAULT_DB_ALIAS):
 
 
 def healthcheck(request):
+    '''
+    Return a JSON response with health-related information about the
+    current state of the app.
+
+    For more details, see `docs/monitoring.md`.
+    '''
+
     canonical_url = get_canonical_url(request)
     request_url = request.build_absolute_uri()
 
