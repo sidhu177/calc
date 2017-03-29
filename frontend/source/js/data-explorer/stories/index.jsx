@@ -1,29 +1,19 @@
 import React from 'react';
-import { storiesOf, action } from '@kadira/storybook';
+import { storiesOf } from '@kadira/storybook';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import * as constants from '../constants';
-import { EducationLevel } from '../components/education-level';
+import appReducer from '../reducers';
+import EducationLevel from '../components/education-level';
 import Tooltip from '../components/tooltip';
 
 storiesOf('EducationLevel', module)
-  .addWithInfo(
+  .add(
     'with none selected',
-    '',
     () => (
-      <EducationLevel
-        levels={[]}
-        toggleEducationLevel={action('toggled')}
-      />
-    ),
-  )
-  .addWithInfo(
-    'with one selected',
-    '',
-    () => (
-      <EducationLevel
-        levels={[constants.EDU_HIGH_SCHOOL]}
-        toggleEducationLevel={action('toggled')}
-      />
+      <Provider store={createStore(appReducer)}>
+        <EducationLevel />
+      </Provider>
     ),
   );
 
