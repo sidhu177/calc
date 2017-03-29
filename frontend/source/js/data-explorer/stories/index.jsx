@@ -1,29 +1,29 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 
-import * as constants from '../constants';
-import { EducationLevel } from '../components/education-level';
+import appReducer from '../reducers';
+import EducationLevel from '../components/education-level';
 import Tooltip from '../components/tooltip';
 
+const actionLoggerMiddleware = () => next => (reduxAction) => {
+  action(reduxAction.type)(reduxAction);
+  return next(reduxAction);
+};
+
+const storyStore = () => createStore(
+  appReducer,
+  applyMiddleware(actionLoggerMiddleware),
+);
+
 storiesOf('EducationLevel', module)
-  .addWithInfo(
+  .add(
     'with none selected',
-    '',
     () => (
-      <EducationLevel
-        levels={[]}
-        toggleEducationLevel={action('toggled')}
-      />
-    ),
-  )
-  .addWithInfo(
-    'with one selected',
-    '',
-    () => (
-      <EducationLevel
-        levels={[constants.EDU_HIGH_SCHOOL]}
-        toggleEducationLevel={action('toggled')}
-      />
+      <Provider store={storyStore()}>
+        <EducationLevel />
+      </Provider>
     ),
   );
 
