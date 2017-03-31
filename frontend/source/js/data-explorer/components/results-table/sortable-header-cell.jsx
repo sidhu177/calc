@@ -1,21 +1,22 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import { handleEnterOrSpace } from '../../util';
-import Tooltip from '../tooltip';
+import { handleEnterOrSpace } from "../../util";
+import Tooltip from "../tooltip";
 
-const createSortToggler = (key, sort, setSort) => () => {
-  let descending = false;
+const createSortToggler = (key, sort, setSort) =>
+  () => {
+    let descending = false;
 
-  if (sort.key === key && !sort.descending) {
-    descending = true;
-  }
+    if (sort.key === key && !sort.descending) {
+      descending = true;
+    }
 
-  setSort({
-    key,
-    descending,
-  });
-};
+    setSort({
+      key,
+      descending
+    });
+  };
 
 const createSortHeaderTooltip = (title, { sorted, descending }) => {
   if (!sorted) {
@@ -34,26 +35,27 @@ const getHeaderCellClasses = (key, sort) => ({
   sorted: sort.key === key,
   ascending: sort.key === key && !sort.descending,
   descending: sort.key === key && sort.descending,
-  [`column-${key}`]: true,
+  [`column-${key}`]: true
 });
 
 export function createHeaderCellConnector(description, title, key) {
-  return (Component) => {
+  return Component => {
     const wrappedComponent = ({ sort, setSort }) => {
       const classes = getHeaderCellClasses(key, sort);
 
-      return (<Component
-        className={classNames(classes)}
-        toggleSort={createSortToggler(key, sort, setSort)}
-        tooltip={createSortHeaderTooltip(description || title,
-                                               classes)}
-        title={title}
-      />);
+      return (
+        <Component
+          className={classNames(classes)}
+          toggleSort={createSortToggler(key, sort, setSort)}
+          tooltip={createSortHeaderTooltip(description || title, classes)}
+          title={title}
+        />
+      );
     };
 
     wrappedComponent.propTypes = {
       sort: React.PropTypes.object.isRequired,
-      setSort: React.PropTypes.func.isRequired,
+      setSort: React.PropTypes.func.isRequired
     };
 
     return wrappedComponent;
@@ -70,8 +72,12 @@ export class GenericHeaderCell extends React.Component {
     return (
       <th // eslint-disable-line jsx-a11y/no-static-element-interactions
         scope="col"
-        onFocus={() => { this.setState({ focused: true }); }}
-        onBlur={() => { this.setState({ focused: false }); }}
+        onFocus={() => {
+          this.setState({ focused: true });
+        }}
+        onBlur={() => {
+          this.setState({ focused: false });
+        }}
         tabIndex="0"
         role="button"
         aria-label={this.props.tooltip}
@@ -91,5 +97,5 @@ GenericHeaderCell.propTypes = {
   className: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
   tooltip: React.PropTypes.string.isRequired,
-  toggleSort: React.PropTypes.func.isRequired,
+  toggleSort: React.PropTypes.func.isRequired
 };

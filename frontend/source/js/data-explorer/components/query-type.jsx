@@ -1,37 +1,42 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import { setQueryType as setQueryTypeAction } from '../actions';
+import { setQueryType as setQueryTypeAction } from "../actions";
 import {
   QUERY_TYPE_MATCH_ALL,
   QUERY_TYPE_MATCH_PHRASE,
   QUERY_TYPE_MATCH_EXACT,
-  QUERY_TYPE_LABELS,
-} from '../constants';
+  QUERY_TYPE_LABELS
+} from "../constants";
 
 const INPUT_INFOS = {
   [QUERY_TYPE_MATCH_ALL]: {
-    idSuffix: 'match_all',
+    idSuffix: "match_all"
   },
   [QUERY_TYPE_MATCH_PHRASE]: {
-    idSuffix: 'match_phrase',
+    idSuffix: "match_phrase"
   },
   [QUERY_TYPE_MATCH_EXACT]: {
-    idSuffix: 'match_exact',
-  },
+    idSuffix: "match_exact"
+  }
 };
 
 export function QueryType({ queryType, setQueryType, idPrefix }) {
-  const input = (type) => {
+  const input = type => {
     const { idSuffix } = INPUT_INFOS[type];
     const id = `${idPrefix}${idSuffix}`;
 
     return (
       <span>
         <input
-          id={id} type="radio" name="query_type" value={type}
+          id={id}
+          type="radio"
+          name="query_type"
+          value={type}
           checked={type === queryType}
-          onChange={() => { setQueryType(type); }}
+          onChange={() => {
+            setQueryType(type);
+          }}
         />
         <label htmlFor={id}>
           {QUERY_TYPE_LABELS[type]}
@@ -52,14 +57,13 @@ export function QueryType({ queryType, setQueryType, idPrefix }) {
 QueryType.propTypes = {
   queryType: React.PropTypes.string.isRequired,
   setQueryType: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  idPrefix: React.PropTypes.string
 };
 
 QueryType.defaultProps = {
-  idPrefix: 'query_type_',
+  idPrefix: "query_type_"
 };
 
-export default connect(
-  state => ({ queryType: state.query_type }),
-  { setQueryType: setQueryTypeAction },
-)(QueryType);
+export default connect(state => ({ queryType: state.query_type }), {
+  setQueryType: setQueryTypeAction
+})(QueryType);

@@ -1,9 +1,9 @@
 /* global window */
 
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import { stripTrailingComma } from '../util';
+import { stripTrailingComma } from "../util";
 
 export class TitleTagSynchronizer extends React.Component {
   componentDidMount() {
@@ -38,13 +38,11 @@ export class TitleTagSynchronizer extends React.Component {
 
 TitleTagSynchronizer.propTypes = {
   q: React.PropTypes.string.isRequired,
-  document: React.PropTypes.object,
+  document: React.PropTypes.object
 };
 
 TitleTagSynchronizer.defaultProps = {
-  document: window.document,
+  document: window.document
 };
 
-export default connect(
-  state => ({ q: state.q }),
-)(TitleTagSynchronizer);
+export default connect(state => ({ q: state.q }))(TitleTagSynchronizer);

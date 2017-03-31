@@ -1,20 +1,20 @@
-import toJson from 'enzyme-to-json';
+import toJson from "enzyme-to-json";
 
-import EducationLevelItem from '../components/education-level-item';
-import makeSetup from './testSetup';
-import { EDU_LABELS } from '../constants';
+import EducationLevelItem from "../components/education-level-item";
+import makeSetup from "./testSetup";
+import { EDU_LABELS } from "../constants";
 
 const defaultProps = {
-  id: 'zzz-item',
-  value: 'AA',
+  id: "zzz-item",
+  value: "AA",
   checked: true,
-  onCheckboxClick: jest.fn(),
+  onCheckboxClick: jest.fn()
 };
 
 const setup = makeSetup(EducationLevelItem, defaultProps);
 
-describe('<EducationLevelItem>', () => {
-  it('renders correctly', () => {
+describe("<EducationLevelItem>", () => {
+  it("renders correctly", () => {
     const { props, wrapper } = setup();
 
     const checkbox = wrapper.find('input[type="checkbox"]');
@@ -25,17 +25,18 @@ describe('<EducationLevelItem>', () => {
     expect(label.text()).toBe(EDU_LABELS[props.value]);
   });
 
-  it('matches snapshot', () => {
+  it("matches snapshot", () => {
     const { wrapper } = setup();
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
-  it('calls onCheckboxClick on change', () => {
+  it("calls onCheckboxClick on change", () => {
     const { props, mounted } = setup();
     expect(props.onCheckboxClick.mock.calls.length).toBe(0);
 
-    mounted.find('input').simulate('change',
-      { target: { checked: !props.checked } });
+    mounted
+      .find("input")
+      .simulate("change", { target: { checked: !props.checked } });
 
     expect(props.onCheckboxClick.mock.calls.length).toBe(1);
   });

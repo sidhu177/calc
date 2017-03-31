@@ -1,8 +1,8 @@
 /* global window */
 
-export const IS_SUPPORTED = 'MutationObserver' in window;
+export const IS_SUPPORTED = "MutationObserver" in window;
 
-const DEFAULT_INIT_AUTO_TRACKER_NAME = '_initAutoTracker';
+const DEFAULT_INIT_AUTO_TRACKER_NAME = "_initAutoTracker";
 
 /**
  * Here we notify DAP about new links we've added to the page, so that
@@ -20,10 +20,10 @@ export function findLinksInNodeList(list) {
     if (node.nodeType === node.ELEMENT_NODE) {
       const nodeName = node.nodeName && node.nodeName.toLowerCase();
 
-      if (nodeName === 'a') {
+      if (nodeName === "a") {
         links.push(node);
       } else {
-        const innerLinks = node.querySelectorAll('a');
+        const innerLinks = node.querySelectorAll("a");
         for (let j = 0; j < innerLinks.length; j++) {
           links.push(innerLinks[i]);
         }
@@ -63,13 +63,15 @@ export function hackilyNotifyAutoTrackerOfNewLinks(initAutoTracker, links) {
 
 export function observe(
   parentEl = window.document.documentElement,
-  getInitAutoTracker = () => window[DEFAULT_INIT_AUTO_TRACKER_NAME],
+  getInitAutoTracker = () => window[DEFAULT_INIT_AUTO_TRACKER_NAME]
 ) {
-  const observer = new window.MutationObserver((mutations) => {
+  const observer = new window.MutationObserver(mutations => {
     const initAutoTracker = getInitAutoTracker();
 
-    if (window.document.readyState === 'loading' ||
-        typeof initAutoTracker !== 'function') {
+    if (
+      window.document.readyState === "loading" ||
+      typeof initAutoTracker !== "function"
+    ) {
       // DAP hasn't been loaded or initialized the auto tracker yet.
       // Once that happens, it'll find any links that were added as a
       // result of these particular mutations, so we can just leave now.
@@ -87,7 +89,7 @@ export function observe(
 
   observer.observe(parentEl, {
     childList: true,
-    subtree: true,
+    subtree: true
   });
 
   return observer;

@@ -1,19 +1,17 @@
-import React from 'react';
+import React from "react";
 
-import createSortableColumn from './sortable-column';
+import createSortableColumn from "./sortable-column";
 
 const column = createSortableColumn({
-  key: 'education_level',
-  title: 'Min Edu.',
-  description: 'Minimum years of education',
+  key: "education_level",
+  title: "Min Edu.",
+  description: "Minimum years of education"
 });
 
 export const HeaderCell = column.HeaderCell;
 
-export const DataCell = column.connectDataCell(
-  ({ className, value }) => (
-    <td className={className}>
-      {value || 'N/A'}
-    </td>
-  ),
-);
+export const DataCell = column.connectDataCell(({ className, value }) => (
+  <td className={className}>
+    {value || "N/A"}
+  </td>
+));

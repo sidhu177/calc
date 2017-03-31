@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import { excludeNone } from '../../actions';
+import { excludeNone } from "../../actions";
 
 function RestoreExcluded({ exclude, onClick }) {
   const len = exclude.length;
-  const rows = `row${len === 1 ? '' : 's'}`;
-  const handleClick = (e) => {
+  const rows = `row${len === 1 ? "" : "s"}`;
+  const handleClick = e => {
     e.preventDefault();
     onClick();
   };
@@ -15,28 +15,28 @@ function RestoreExcluded({ exclude, onClick }) {
     <a
       className="restore"
       href="?exclude="
-      style={len === 0 ? { display: 'none' } : null}
-      title={`${rows}: ${exclude.join(', ')}`}
+      style={len === 0 ? { display: "none" } : null}
+      title={`${rows}: ${exclude.join(", ")}`}
       onClick={handleClick}
     >
-      {len > 0 ? `★ Restore ${len} ${rows}` : ''}
+      {len > 0 ? `★ Restore ${len} ${rows}` : ""}
     </a>
   );
 }
 
 RestoreExcluded.propTypes = {
   exclude: React.PropTypes.array.isRequired,
-  onClick: React.PropTypes.func.isRequired,
+  onClick: React.PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    exclude: state.exclude,
+    exclude: state.exclude
   };
 }
 
 const mapDispatchToProps = {
-  onClick: excludeNone,
+  onClick: excludeNone
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RestoreExcluded);

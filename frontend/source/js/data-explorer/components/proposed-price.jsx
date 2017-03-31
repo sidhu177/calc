@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import { setProposedPrice } from '../actions';
+import { setProposedPrice } from "../actions";
 
 export class ProposedPrice extends React.Component {
   static handleGoClick(e) {
@@ -19,15 +19,15 @@ export class ProposedPrice extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { typed: this.props.proposedPrice || '' };
+    this.state = { typed: this.props.proposedPrice || "" };
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.proposedPrice !== this.props.proposedPrice) {
-      const typedFloat = parseFloat(this.state.typed || '0');
+      const typedFloat = parseFloat(this.state.typed || "0");
       if (typedFloat !== nextProps.proposedPrice) {
-        this.setState({ typed: nextProps.proposedPrice || '' });
+        this.setState({ typed: nextProps.proposedPrice || "" });
       }
     }
   }
@@ -56,13 +56,13 @@ export class ProposedPrice extends React.Component {
         if (decimalFound) {
           centDigits++;
         }
-      } else if (c === '.' && !decimalFound) {
+      } else if (c === "." && !decimalFound) {
         filteredChars.push(c);
         decimalFound = true;
       }
     }
 
-    this.setState({ typed: filteredChars.join('') });
+    this.setState({ typed: filteredChars.join("") });
   }
 
   render() {
@@ -78,15 +78,20 @@ export class ProposedPrice extends React.Component {
       <div className="proposed-price">
         <label htmlFor={id} className="sr-only">Proposed price</label>
         <input
-          id={id} type="text" name="proposed-price"
+          id={id}
+          type="text"
+          name="proposed-price"
           className="form__inline"
-          placeholder="Proposed price" value={this.state.typed}
+          placeholder="Proposed price"
+          value={this.state.typed}
           onChange={this.handleChange}
         />
         <button
           className="button-primary go"
           onClick={ProposedPrice.handleGoClick}
-        >Go</button>
+        >
+          Go
+        </button>
       </div>
     );
   }
@@ -95,14 +100,13 @@ export class ProposedPrice extends React.Component {
 ProposedPrice.propTypes = {
   proposedPrice: React.PropTypes.number.isRequired,
   setProposedPrice: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  idPrefix: React.PropTypes.string
 };
 
 ProposedPrice.defaultProps = {
-  idPrefix: '',
+  idPrefix: ""
 };
 
-export default connect(
-  state => ({ proposedPrice: state['proposed-price'] }),
-  { setProposedPrice },
-)(ProposedPrice);
+export default connect(state => ({ proposedPrice: state["proposed-price"] }), {
+  setProposedPrice
+})(ProposedPrice);

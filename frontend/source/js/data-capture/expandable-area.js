@@ -1,12 +1,12 @@
 /* global window, document */
 
-import 'document-register-element';
+import "document-register-element";
 
-import * as supports from './feature-detection';
+import * as supports from "./feature-detection";
 
-import ga from '../common/ga';
+import ga from "../common/ga";
 
-import dispatchBubbly from './custom-event';
+import dispatchBubbly from "./custom-event";
 
 const KEY_SPACE = 32;
 const KEY_ENTER = 13;
@@ -17,7 +17,7 @@ const KEY_ENTER = 13;
 
 class ExpandableArea extends window.HTMLElement {
   attachedCallback() {
-    if ('isUpgraded' in this) {
+    if ("isUpgraded" in this) {
       // We've already been attached.
       return;
     }
@@ -27,20 +27,21 @@ class ExpandableArea extends window.HTMLElement {
     // just means we won't progressively enhance on those browsers.
     this.expander = this.firstElementChild;
 
-    this.isUpgraded = Boolean(this.expander &&
-                              !supports.isForciblyDegraded(this));
+    this.isUpgraded = Boolean(
+      this.expander && !supports.isForciblyDegraded(this)
+    );
 
     if (this.isUpgraded) {
-      this.expander.setAttribute('aria-expanded', 'false');
-      this.expander.setAttribute('role', 'button');
-      this.expander.setAttribute('tabindex', '0');
+      this.expander.setAttribute("aria-expanded", "false");
+      this.expander.setAttribute("role", "button");
+      this.expander.setAttribute("tabindex", "0");
       this.expander.onclick = this.toggle.bind(this);
-      this.expander.onkeyup = (e) => {
+      this.expander.onkeyup = e => {
         if (e.keyCode === KEY_SPACE || e.keyCode === KEY_ENTER) {
           this.toggle();
         }
       };
-      dispatchBubbly(this, 'expandableareaready');
+      dispatchBubbly(this, "expandableareaready");
     }
   }
 
@@ -49,19 +50,24 @@ class ExpandableArea extends window.HTMLElement {
       return;
     }
 
-    const newVal = this.expander.getAttribute('aria-expanded') === 'true'
-                   ? 'false' : 'true';
-    this.expander.setAttribute('aria-expanded', newVal);
-    ga('send', 'event', 'expandable area',
-       newVal === 'true' ? 'expand' : 'collapse',
-       this.expander.textContent);
+    const newVal = this.expander.getAttribute("aria-expanded") === "true"
+      ? "false"
+      : "true";
+    this.expander.setAttribute("aria-expanded", newVal);
+    ga(
+      "send",
+      "event",
+      "expandable area",
+      newVal === "true" ? "expand" : "collapse",
+      this.expander.textContent
+    );
   }
 }
 
 ExpandableArea.prototype.SOURCE_FILENAME = __filename;
 
-document.registerElement('expandable-area', {
-  prototype: ExpandableArea.prototype,
+document.registerElement("expandable-area", {
+  prototype: ExpandableArea.prototype
 });
 
 module.exports = ExpandableArea;

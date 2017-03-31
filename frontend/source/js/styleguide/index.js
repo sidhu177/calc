@@ -1,1 +1,1 @@
-require('./web-component-link');
+require("./web-component-link");

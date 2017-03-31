@@ -1,9 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import Tooltip from '../tooltip';
-import { excludeRow as excludeRowAction } from '../../actions';
-import RestoreExcluded from './restore-excluded';
+import Tooltip from "../tooltip";
+import { excludeRow as excludeRowAction } from "../../actions";
+import RestoreExcluded from "./restore-excluded";
 
 export function HeaderCell() {
   return (
@@ -14,10 +14,11 @@ export function HeaderCell() {
 }
 
 function BaseDataCell({ excludeRow, result }) {
-  const handleExcludeRow = rowId => (e) => {
-    e.preventDefault();
-    excludeRow(rowId);
-  };
+  const handleExcludeRow = rowId =>
+    e => {
+      e.preventDefault();
+      excludeRow(rowId);
+    };
 
   const tooltip = `Exclude ${result.labor_category} from your search`;
 
@@ -25,25 +26,25 @@ function BaseDataCell({ excludeRow, result }) {
     <td className="cell column-exclude">
       <Tooltip text={tooltip}>
         <a
-          className="exclude-row" href=""
+          className="exclude-row"
+          href=""
           onClick={handleExcludeRow(result.id)}
           aria-label={tooltip}
         >
-            &times;
+          ×
         </a>
       </Tooltip>
     </td>
   );
 }
 
-BaseDataCell.cellKey = 'exclude';
+BaseDataCell.cellKey = "exclude";
 
 BaseDataCell.propTypes = {
   excludeRow: React.PropTypes.func.isRequired,
-  result: React.PropTypes.object.isRequired,
+  result: React.PropTypes.object.isRequired
 };
 
-export const DataCell = connect(
-  null,
-  { excludeRow: excludeRowAction },
-)(BaseDataCell);
+export const DataCell = connect(null, { excludeRow: excludeRowAction })(
+  BaseDataCell
+);

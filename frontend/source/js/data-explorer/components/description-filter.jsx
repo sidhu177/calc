@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
 
-export default function DescriptionFilter({
-  extraClassName,
-  label,
-  children,
-}) {
-  let className = 'filter';
+export default function DescriptionFilter(
+  {
+    extraClassName,
+    label,
+    children
+  }
+) {
+  let className = "filter";
 
   if (extraClassName) {
     className += ` ${extraClassName}`;
@@ -24,10 +26,10 @@ export default function DescriptionFilter({
 DescriptionFilter.propTypes = {
   extraClassName: React.PropTypes.string,
   label: React.PropTypes.string,
-  children: React.PropTypes.any.isRequired,
+  children: React.PropTypes.any.isRequired
 };
 
 DescriptionFilter.defaultProps = {
   extraClassName: null,
-  label: null,
+  label: null
 };

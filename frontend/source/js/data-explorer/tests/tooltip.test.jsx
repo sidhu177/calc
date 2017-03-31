@@ -1,12 +1,12 @@
-import toJson from 'enzyme-to-json';
+import toJson from "enzyme-to-json";
 
-import Tooltip from '../components/tooltip';
-import makeSetup from './testSetup';
+import Tooltip from "../components/tooltip";
+import makeSetup from "./testSetup";
 
 const defaultProps = {
-  children: '',
-  text: 'hi james',
-  show: false,
+  children: "",
+  text: "hi james",
+  show: false
 };
 
 const setup = makeSetup(Tooltip, defaultProps);
@@ -20,15 +20,15 @@ global.$ = () => {
   return m;
 };
 
-describe('<Tooltip>', () => {
+describe("<Tooltip>", () => {
   // NOTE: This test does not cover any tooltipster functionality,
   // which has all been mocked
-  it('matches snapshot', () => {
+  it("matches snapshot", () => {
     const { wrapper } = setup();
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
-  it('initializes tooltipster', () => {
+  it("initializes tooltipster", () => {
     setup();
     expect(tooltipsterMock.mock.calls.length).toBeGreaterThan(0);
   });

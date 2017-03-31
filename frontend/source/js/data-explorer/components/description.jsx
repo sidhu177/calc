@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import DescriptionFilter from './description-filter';
+import DescriptionFilter from "./description-filter";
 
 import {
   MIN_EXPERIENCE,
@@ -9,51 +9,53 @@ import {
   EDU_LABELS,
   SITE_LABELS,
   BUSINESS_SIZE_LABELS,
-  SCHEDULE_LABELS,
-} from '../constants';
+  SCHEDULE_LABELS
+} from "../constants";
 
-import { formatCommas, stripTrailingComma } from '../util';
+import { formatCommas, stripTrailingComma } from "../util";
 
-export function Description({
-  shownResults,
-  totalResults,
-  minExperience,
-  maxExperience,
-  education,
-  site,
-  businessSize,
-  schedule,
-  laborCategory,
-}) {
-  let results = ' results ';
-  const filtersClasses = ['filters'];
+export function Description(
+  {
+    shownResults,
+    totalResults,
+    minExperience,
+    maxExperience,
+    education,
+    site,
+    businessSize,
+    schedule,
+    laborCategory
+  }
+) {
+  let results = " results ";
+  const filtersClasses = ["filters"];
   const filters = [];
 
   if (laborCategory) {
     filters.push(
       <DescriptionFilter key="lab">
         {stripTrailingComma(laborCategory)}
-      </DescriptionFilter>,
+      </DescriptionFilter>
     );
   }
 
   if (education.length) {
     filters.push(
       <DescriptionFilter
-        key="edu" label="education level"
+        key="edu"
+        label="education level"
         extraClassName="education-filter"
       >
-        {education.map(x => EDU_LABELS[x]).join(', ')}
-      </DescriptionFilter>,
+        {education.map(x => EDU_LABELS[x]).join(", ")}
+      </DescriptionFilter>
     );
   }
 
-  if (minExperience !== MIN_EXPERIENCE ||
-      maxExperience !== MAX_EXPERIENCE) {
+  if (minExperience !== MIN_EXPERIENCE || maxExperience !== MAX_EXPERIENCE) {
     filters.push(
       <DescriptionFilter key="exp" label="experience">
         {minExperience} - {maxExperience} years
-      </DescriptionFilter>,
+      </DescriptionFilter>
     );
   }
 
@@ -61,7 +63,7 @@ export function Description({
     filters.push(
       <DescriptionFilter key="sit" label="worksite">
         {SITE_LABELS[site]}
-      </DescriptionFilter>,
+      </DescriptionFilter>
     );
   }
 
@@ -69,7 +71,7 @@ export function Description({
     filters.push(
       <DescriptionFilter key="bus" label="business size">
         {BUSINESS_SIZE_LABELS[businessSize]}
-      </DescriptionFilter>,
+      </DescriptionFilter>
     );
   }
 
@@ -77,14 +79,14 @@ export function Description({
     filters.push(
       <DescriptionFilter key="sch" label="schedule">
         {SCHEDULE_LABELS[schedule]}
-      </DescriptionFilter>,
+      </DescriptionFilter>
     );
   }
 
   if (filters.length) {
-    results += 'with ';
+    results += "with ";
   } else {
-    filtersClasses.push('hidden');
+    filtersClasses.push("hidden");
   }
 
   // TODO: The original version of this faded-in (but never out)
@@ -96,7 +98,7 @@ export function Description({
       {`Showing ${formatCommas(shownResults)} of `}
       <span className="total">{formatCommas(totalResults)}</span>
       {results}
-      <span className={filtersClasses.join(' ')}>
+      <span className={filtersClasses.join(" ")}>
         {filters}
       </span>
     </p>
@@ -112,7 +114,7 @@ Description.propTypes = {
   site: React.PropTypes.string.isRequired,
   businessSize: React.PropTypes.string.isRequired,
   schedule: React.PropTypes.string.isRequired,
-  laborCategory: React.PropTypes.string.isRequired,
+  laborCategory: React.PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -125,7 +127,7 @@ function mapStateToProps(state) {
     site: state.site,
     businessSize: state.business_size,
     schedule: state.schedule,
-    laborCategory: state.q,
+    laborCategory: state.q
   };
 }
 

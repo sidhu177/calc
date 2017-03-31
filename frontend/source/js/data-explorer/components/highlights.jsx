@@ -1,18 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import {
-  formatPrice,
-} from '../util';
+import { formatPrice } from "../util";
 
-export function Highlights({
-  stdDeviation,
-  avgPrice,
-  proposedPrice,
-}) {
+export function Highlights(
+  {
+    stdDeviation,
+    avgPrice,
+    proposedPrice
+  }
+) {
   const stdDevMinus = avgPrice - stdDeviation;
   const stdDevPlus = avgPrice + stdDeviation;
-  const proposedPriceStyle = proposedPrice ? { display: 'block' } : null;
+  const proposedPriceStyle = proposedPrice ? { display: "block" } : null;
 
   // TODO: The original implementation faded the proposed price in and
   // out as it was set/unset. We might want to do the same thing here.
@@ -54,14 +54,14 @@ export function Highlights({
 Highlights.propTypes = {
   stdDeviation: React.PropTypes.number.isRequired,
   avgPrice: React.PropTypes.number.isRequired,
-  proposedPrice: React.PropTypes.number.isRequired,
+  proposedPrice: React.PropTypes.number.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     stdDeviation: state.rates.data.first_standard_deviation,
     avgPrice: state.rates.data.average,
-    proposedPrice: state['proposed-price'],
+    proposedPrice: state["proposed-price"]
   };
 }
 

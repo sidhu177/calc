@@ -27,6 +27,8 @@ script:
 - bandit -r .
 - npm test
 - python frontend/tests/sauce_connect.py py.test --ignore=frontend/tests/test_selenium.py --cov
+  # Run production tests if we're in a Travis cron run
+- if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then py.test production_tests; fi
 after_success:
 - codeclimate-test-reporter
 env:

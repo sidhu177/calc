@@ -1,22 +1,14 @@
 /* global $ */
 
-import React from 'react';
-import { connect } from 'react-redux';
-import Range from 'rc-slider/lib/Range';
+import React from "react";
+import { connect } from "react-redux";
+import Range from "rc-slider/lib/Range";
 
-import {
-  setExperience,
-} from '../actions';
+import { setExperience } from "../actions";
 
-import {
-  autobind,
-  filterActive,
-} from '../util';
+import { autobind, filterActive } from "../util";
 
-import {
-  MIN_EXPERIENCE,
-  MAX_EXPERIENCE,
-} from '../constants';
+import { MIN_EXPERIENCE, MAX_EXPERIENCE } from "../constants";
 
 function makeOptions(min, max) {
   const options = [];
@@ -31,9 +23,9 @@ function makeOptions(min, max) {
 export class Experience extends React.Component {
   constructor(props) {
     super(props);
-    autobind(this, ['onSliderChange', 'onAfterSliderChange']);
+    autobind(this, ["onSliderChange", "onAfterSliderChange"]);
     this.state = {
-      sliderVal: [this.props.min, this.props.max],
+      sliderVal: [this.props.min, this.props.max]
     };
   }
 
@@ -51,10 +43,10 @@ export class Experience extends React.Component {
   onAfterSliderChange(val) {
     const [min, max] = val;
     if (min !== this.props.min) {
-      this.props.setExperience('min', min);
+      this.props.setExperience("min", min);
     }
     if (max !== this.props.max) {
-      this.props.setExperience('max', max);
+      this.props.setExperience("max", max);
     }
   }
 
@@ -64,16 +56,22 @@ export class Experience extends React.Component {
     const rangeId = `${this.props.idPrefix}range`;
     const minId = `${this.props.idPrefix}min`;
     const maxId = `${this.props.idPrefix}max`;
-    const baseClasses = 'select-small';
+    const baseClasses = "select-small";
     const minClasses = filterActive(min !== MIN_EXPERIENCE, baseClasses);
     const maxClasses = filterActive(max !== MAX_EXPERIENCE, baseClasses);
 
-    const onChange = type => (e) => {
-      this.props.setExperience(type, parseInt(e.target.value, 10));
-    };
+    const onChange = type =>
+      e => {
+        this.props.setExperience(type, parseInt(e.target.value, 10));
+      };
 
     return (
-      <div className="filter" ref={(el) => { this.rootEl = el; }}>
+      <div
+        className="filter"
+        ref={el => {
+          this.rootEl = el;
+        }}
+      >
         <fieldset>
           <legend>
             Experience:
@@ -81,7 +79,8 @@ export class Experience extends React.Component {
           <Range
             id={rangeId}
             allowCross={false}
-            min={MIN_EXPERIENCE} max={MAX_EXPERIENCE}
+            min={MIN_EXPERIENCE}
+            max={MAX_EXPERIENCE}
             value={this.state.sliderVal}
             onChange={this.onSliderChange}
             onAfterChange={this.onAfterSliderChange}
@@ -90,22 +89,26 @@ export class Experience extends React.Component {
           <div className="experience_range">
             <label htmlFor={minId} className="sr-only">Minimum Years</label>
             <select
-              id={minId} value={min} name="min_experience"
-              onChange={onChange('min')}
+              id={minId}
+              value={min}
+              name="min_experience"
+              onChange={onChange("min")}
               className={minClasses}
             >
               {makeOptions(MIN_EXPERIENCE, max)}
             </select>
-            {' - '}
+            {" - "}
             <label htmlFor={maxId} className="sr-only">Maximum Years</label>
             <select
-              id={maxId} value={max} name="max_experience"
-              onChange={onChange('max')}
+              id={maxId}
+              value={max}
+              name="max_experience"
+              onChange={onChange("max")}
               className={maxClasses}
             >
               {makeOptions(min, MAX_EXPERIENCE)}
             </select>
-            {' years'}
+            {" years"}
           </div>
         </fieldset>
       </div>
@@ -117,17 +120,17 @@ Experience.propTypes = {
   min: React.PropTypes.number.isRequired,
   max: React.PropTypes.number.isRequired,
   setExperience: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  idPrefix: React.PropTypes.string
 };
 
 Experience.defaultProps = {
-  idPrefix: 'experience-',
+  idPrefix: "experience-"
 };
 
 export default connect(
   state => ({
     min: state.min_experience,
-    max: state.max_experience,
+    max: state.max_experience
   }),
-  { setExperience },
+  { setExperience }
 )(Experience);

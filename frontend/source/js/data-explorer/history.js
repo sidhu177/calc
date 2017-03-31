@@ -10,27 +10,22 @@
  * easily share their searches with others.
  */
 
-import * as querystring from 'querystring';
+import * as querystring from "querystring";
 
-import {
-  setState,
-} from './actions';
+import { setState } from "./actions";
 
-import {
-  autobind,
-  parseQueryString,
-} from './util';
+import { autobind, parseQueryString } from "./util";
 
 import {
   allFields,
   serializers,
   deserializers,
-  getChangedSerializedFields,
-} from './serialization';
+  getChangedSerializedFields
+} from "./serialization";
 
 export default class StoreHistorySynchronizer {
   constructor(window) {
-    autobind(this, ['reflectToHistoryMiddleware']);
+    autobind(this, ["reflectToHistoryMiddleware"]);
 
     this.window = window;
     this.isReflectingToStore = false;
@@ -39,7 +34,7 @@ export default class StoreHistorySynchronizer {
 
   initialize(store, onLocationChanged) {
     this.onLocationChanged = onLocationChanged;
-    this.window.addEventListener('popstate', () => {
+    this.window.addEventListener("popstate", () => {
       this.reflectToStore(store);
       this.onLocationChanged();
     });
@@ -47,13 +42,12 @@ export default class StoreHistorySynchronizer {
   }
 
   reflectToStore(store) {
-    const qsFields = parseQueryString(
-      this.window.location.search.substring(1)); // substring after '?' char
+    const qsFields = parseQueryString(this.window.location.search.substring(1)); // substring after '?' char
 
     const state = store.getState();
     const changes = {};
 
-    allFields.forEach((field) => {
+    allFields.forEach(field => {
       const oldVal = serializers[field](state[field]);
       const newDeserializedVal = deserializers[field](qsFields[field]);
       const newVal = serializers[field](newDeserializedVal);
@@ -73,28 +67,29 @@ export default class StoreHistorySynchronizer {
   reflectToHistoryMiddleware(store) {
     const defaultState = store.getState();
 
-    return next => (action) => {
-      const oldState = store.getState();
-      const result = next(action);
-      const newState = store.getState();
-      const changed = allFields.some(
-        field => newState[field] !== oldState[field],
-      );
-
-      if (changed && !this.isReflectingToStore) {
-        const nonDefaultFields = getChangedSerializedFields(
-          defaultState,
-          newState,
-          allFields,
+    return next =>
+      action => {
+        const oldState = store.getState();
+        const result = next(action);
+        const newState = store.getState();
+        const changed = allFields.some(
+          field => newState[field] !== oldState[field]
         );
 
-        const qs = querystring.stringify(nonDefaultFields);
+        if (changed && !this.isReflectingToStore) {
+          const nonDefaultFields = getChangedSerializedFields(
+            defaultState,
+            newState,
+            allFields
+          );
 
-        this.window.history.pushState(null, null, `?${qs}`);
-        this.onLocationChanged();
-      }
+          const qs = querystring.stringify(nonDefaultFields);
 
-      return result;
-    };
+          this.window.history.pushState(null, null, `?${qs}`);
+          this.onLocationChanged();
+        }
+
+        return result;
+      };
   }
 }
