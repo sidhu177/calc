@@ -12,17 +12,24 @@
  * https://creativecommons.org/licenses/by-sa/2.5/
  */
 
-if (typeof window.CustomEvent !== 'function') {
+if (typeof window.CustomEvent !== "function") {
   const CustomEvent = (event, originalParams) => {
-    const params = Object.assign({
-      bubbles: false,
-      cancelable: false,
-      detail: undefined,
-    }, originalParams || {});
+    const params = Object.assign(
+      {
+        bubbles: false,
+        cancelable: false,
+        detail: undefined
+      },
+      originalParams || {}
+    );
 
-    const evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(event, params.bubbles, params.cancelable,
-                        params.detail);
+    const evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(
+      event,
+      params.bubbles,
+      params.cancelable,
+      params.detail
+    );
     return evt;
   };
 
@@ -31,7 +38,15 @@ if (typeof window.CustomEvent !== 'function') {
 }
 
 export default function dispatchBubbly(el, eventType, params) {
-  el.dispatchEvent(new window.CustomEvent(eventType, Object.assign({
-    bubbles: true,
-  }, params || {})));
+  el.dispatchEvent(
+    new window.CustomEvent(
+      eventType,
+      Object.assign(
+        {
+          bubbles: true
+        },
+        params || {}
+      )
+    )
+  );
 }

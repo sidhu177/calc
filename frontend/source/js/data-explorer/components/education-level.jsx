@@ -1,24 +1,16 @@
 /* global document */
 
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import SlideyPanel from './slidey-panel';
-import EducationLevelItem from './education-level-item';
+import SlideyPanel from "./slidey-panel";
+import EducationLevelItem from "./education-level-item";
 
-import {
-  autobind,
-  handleEnterOrSpace,
-  filterActive,
-} from '../util';
+import { autobind, handleEnterOrSpace, filterActive } from "../util";
 
-import {
-  EDU_LABELS,
-} from '../constants';
+import { EDU_LABELS } from "../constants";
 
-import {
-  toggleEducationLevel,
-} from '../actions';
+import { toggleEducationLevel } from "../actions";
 
 // TODO: We could just use jQuery for this, but I wanted to decouple
 // the new React code from jQuery as much as possible for now.
@@ -47,20 +39,23 @@ export class EducationLevel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
+      expanded: false
     };
-    autobind(this, ['handleToggleMenu', 'handleDocumentClick',
-      'handleCheckboxClick']);
+    autobind(this, [
+      "handleToggleMenu",
+      "handleDocumentClick",
+      "handleCheckboxClick"
+    ]);
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClick);
-    document.addEventListener('focus', this.handleDocumentClick, true);
+    document.addEventListener("click", this.handleDocumentClick);
+    document.addEventListener("focus", this.handleDocumentClick, true);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClick);
-    document.removeEventListener('focus', this.handleDocumentClick, true);
+    document.removeEventListener("click", this.handleDocumentClick);
+    document.removeEventListener("focus", this.handleDocumentClick, true);
   }
 
   handleDocumentClick(e) {
@@ -80,7 +75,7 @@ export class EducationLevel extends React.Component {
 
     e.preventDefault();
     this.setState({
-      expanded: !this.state.expanded,
+      expanded: !this.state.expanded
     });
   }
 
@@ -91,12 +86,15 @@ export class EducationLevel extends React.Component {
   render() {
     const levels = this.props.levels;
     const idPrefix = this.props.idPrefix;
-    const inputs = Object.keys(EDU_LABELS).map((value) => {
+    const inputs = Object.keys(EDU_LABELS).map(value => {
       const id = idPrefix + value;
       return (
         <EducationLevelItem
-          key={value} id={id} checked={levels.indexOf(value) >= 0}
-          value={value} onCheckboxClick={this.handleCheckboxClick}
+          key={value}
+          id={id}
+          checked={levels.indexOf(value) >= 0}
+          value={value}
+          onCheckboxClick={this.handleCheckboxClick}
         />
       );
     });
@@ -104,18 +102,17 @@ export class EducationLevel extends React.Component {
 
     if (levels.length === 0) {
       linkContent = (
-        <span className="eduSelect">Select
+        <span className="eduSelect">
+          Select
           <span className="sr-only"> to reveal Education Level options</span>
         </span>
       );
     } else {
-      const selectedLevels = levels.map((value) => {
+      const selectedLevels = levels.map(value => {
         const label = EDU_LABELS[value];
         return <span key={value} title={label}>{label}</span>;
       });
-      linkContent = (
-        <div className="multiSel">{selectedLevels}</div>
-      );
+      linkContent = <div className="multiSel">{selectedLevels}</div>;
     }
 
     const eduLevelId = `${this.props.idPrefix}education_level`;
@@ -126,11 +123,14 @@ export class EducationLevel extends React.Component {
         <dl
           id={eduLevelId}
           className="dropdown"
-          ref={(el) => { this.dropdownEl = el; }}
+          ref={el => {
+            this.dropdownEl = el;
+          }}
         >
           <dt>
             <a
-              href="" onClick={this.handleToggleMenu}
+              href=""
+              onClick={this.handleToggleMenu}
               role="button"
               aria-expanded={this.state.expanded.toString()}
               onKeyDown={handleEnterOrSpace(this.handleToggleMenu)}
@@ -145,10 +145,7 @@ export class EducationLevel extends React.Component {
               <fieldset>
                 <legend className="sr-only">Education level:</legend>
 
-                <SlideyPanel
-                  component="ul"
-                  expanded={this.state.expanded}
-                >
+                <SlideyPanel component="ul" expanded={this.state.expanded}>
                   {inputs}
                 </SlideyPanel>
               </fieldset>
@@ -163,14 +160,13 @@ export class EducationLevel extends React.Component {
 EducationLevel.propTypes = {
   levels: React.PropTypes.array.isRequired,
   idPrefix: React.PropTypes.string,
-  toggleEducationLevel: React.PropTypes.func.isRequired,
+  toggleEducationLevel: React.PropTypes.func.isRequired
 };
 
 EducationLevel.defaultProps = {
-  idPrefix: 'education-level-',
+  idPrefix: "education-level-"
 };
 
-export default connect(
-  state => ({ levels: state.education }),
-  { toggleEducationLevel },
-)(EducationLevel);
+export default connect(state => ({ levels: state.education }), {
+  toggleEducationLevel
+})(EducationLevel);

@@ -9,7 +9,7 @@
  */
 
 function ga(...args) {
-  if (typeof window.ga === 'function') {
+  if (typeof window.ga === "function") {
     return window.ga.apply(this, args);
   }
   return undefined;

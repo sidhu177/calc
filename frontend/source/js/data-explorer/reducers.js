@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
 import {
   MIN_EXPERIENCE,
@@ -7,8 +7,8 @@ import {
   EMPTY_RATES_DATA,
   DEFAULT_SORT,
   DEFAULT_QUERY_TYPE,
-  MAX_QUERY_LENGTH,
-} from './constants';
+  MAX_QUERY_LENGTH
+} from "./constants";
 
 import {
   EXCLUDE_NONE,
@@ -27,8 +27,8 @@ import {
   SET_QUERY_TYPE,
   SET_SITE,
   SET_BUSINESS_SIZE,
-  SET_QUERY,
-} from './actions';
+  SET_QUERY
+} from "./actions";
 
 function exclude(state = [], action) {
   switch (action.type) {
@@ -48,7 +48,7 @@ function contractYear(state = DEFAULT_CONTRACT_YEAR, action) {
   return state;
 }
 
-export function q(state = '', action) {
+export function q(state = "", action) {
   if (action.type === SET_QUERY) {
     const cleanedQuery = action.query.slice(0, MAX_QUERY_LENGTH);
     return cleanedQuery;
@@ -67,34 +67,34 @@ function education(state = [], action) {
 }
 
 function minExperience(state = MIN_EXPERIENCE, action) {
-  if (action.type === SET_EXPERIENCE && action.subtype === 'min') {
+  if (action.type === SET_EXPERIENCE && action.subtype === "min") {
     return action.years;
   }
   return state;
 }
 
 function maxExperience(state = MAX_EXPERIENCE, action) {
-  if (action.type === SET_EXPERIENCE && action.subtype === 'max') {
+  if (action.type === SET_EXPERIENCE && action.subtype === "max") {
     return action.years;
   }
   return state;
 }
 
-function site(state = '', action) {
+function site(state = "", action) {
   if (action.type === SET_SITE) {
     return action.site;
   }
   return state;
 }
 
-function businessSize(state = '', action) {
+function businessSize(state = "", action) {
   if (action.type === SET_BUSINESS_SIZE) {
     return action.size;
   }
   return state;
 }
 
-function schedule(state = '', action) {
+function schedule(state = "", action) {
   if (action.type === SET_SCHEDULE) {
     return action.schedule;
   }
@@ -109,13 +109,16 @@ function proposedPrice(state = 0, action) {
   return state;
 }
 
-function rates(state = {
-  error: null,
-  data: EMPTY_RATES_DATA,
-  inProgress: false,
-  stale: true,
-}, action) {
-  const normalizeData = (d) => {
+function rates(
+  state = {
+    error: null,
+    data: EMPTY_RATES_DATA,
+    inProgress: false,
+    stale: true
+  },
+  action
+) {
+  const normalizeData = d => {
     if (d && d.results && d.results.length) {
       return d;
     }
@@ -127,21 +130,21 @@ function rates(state = {
       return Object.assign({}, state, {
         inProgress: true,
         error: null,
-        stale: false,
+        stale: false
       });
     case COMPLETE_RATES_REQUEST:
       return {
         inProgress: false,
         error: action.error,
         data: normalizeData(action.data),
-        stale: false,
+        stale: false
       };
     case INVALIDATE_RATES:
       if (state.inProgress) {
         return state;
       }
       return Object.assign({}, state, {
-        stale: true,
+        stale: true
       });
     default:
       return state;
@@ -168,14 +171,14 @@ const combinedReducer = combineReducers({
   education,
   min_experience: minExperience,
   max_experience: maxExperience,
-  'contract-year': contractYear,
+  "contract-year": contractYear,
   site,
   business_size: businessSize,
   schedule,
   rates,
-  'proposed-price': proposedPrice,
+  "proposed-price": proposedPrice,
   sort,
-  query_type: queryType,
+  query_type: queryType
 });
 
 export default (state, action) => {

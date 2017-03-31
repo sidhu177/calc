@@ -1,41 +1,34 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
+import React from "react";
+import { connect } from "react-redux";
+import classNames from "classnames";
 
-import {
-  resetState,
-  invalidateRates,
-} from '../actions';
+import { resetState, invalidateRates } from "../actions";
 
-import histogramToImg from '../histogram-to-img';
+import histogramToImg from "../histogram-to-img";
 
-import Description from './description';
-import Highlights from './highlights';
-import Histogram from './histogram';
-import ProposedPrice from './proposed-price';
-import EducationLevel from './education-level';
-import Experience from './experience';
-import ExportData from './export-data';
-import ResultsTable from './results-table';
-import Schedule from './schedule';
-import ContractYear from './contract-year';
-import QueryType from './query-type';
-import Site from './site';
-import BusinessSize from './business-size';
-import LaborCategory from './labor-category';
-import LoadingIndicator from './loading-indicator';
-import TitleTagSynchronizer from './title-tag-synchronizer';
+import Description from "./description";
+import Highlights from "./highlights";
+import Histogram from "./histogram";
+import ProposedPrice from "./proposed-price";
+import EducationLevel from "./education-level";
+import Experience from "./experience";
+import ExportData from "./export-data";
+import ResultsTable from "./results-table";
+import Schedule from "./schedule";
+import ContractYear from "./contract-year";
+import QueryType from "./query-type";
+import Site from "./site";
+import BusinessSize from "./business-size";
+import LaborCategory from "./labor-category";
+import LoadingIndicator from "./loading-indicator";
+import TitleTagSynchronizer from "./title-tag-synchronizer";
 
-import { autobind } from '../util';
+import { autobind } from "../util";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    autobind(this, [
-      'handleSubmit',
-      'handleResetClick',
-      'handleDownloadClick',
-    ]);
+    autobind(this, ["handleSubmit", "handleResetClick", "handleDownloadClick"]);
   }
 
   getContainerClassNames() {
@@ -46,7 +39,7 @@ class App extends React.Component {
     if (this.props.ratesInProgress) {
       loading = true;
     } else if (this.props.ratesError) {
-      if (this.props.ratesError !== 'abort') {
+      if (this.props.ratesError !== "abort") {
         error = true;
         loaded = true;
       }
@@ -59,7 +52,7 @@ class App extends React.Component {
       card: true,
       loaded,
       loading,
-      error,
+      error
     };
   }
 
@@ -75,10 +68,7 @@ class App extends React.Component {
 
   handleDownloadClick(e) {
     e.preventDefault();
-    histogramToImg(
-      this.histogram.getWrappedInstance().svgEl,
-      this.canvasEl,
-    );
+    histogramToImg(this.histogram.getWrappedInstance().svgEl, this.canvasEl);
   }
 
   render() {
@@ -86,7 +76,7 @@ class App extends React.Component {
 
     return (
       <form
-        id={prefixId('search')}
+        id={prefixId("search")}
         className={classNames(this.getContainerClassNames())}
         onSubmit={this.handleSubmit}
         role="form"
@@ -96,7 +86,7 @@ class App extends React.Component {
           <div className="container">
             <p className="help-text">
               Enter your search terms below, separated by commas.
-              {' '}
+              {" "}
               (For example: Engineer, Consultant)
             </p>
             <div className="row">
@@ -105,7 +95,7 @@ class App extends React.Component {
                   <button className="submit button-primary">
                     Search
                   </button>
-                  {' '}
+                  {" "}
                   <input
                     onClick={this.handleResetClick}
                     className="reset button button-outline"
@@ -115,7 +105,7 @@ class App extends React.Component {
                 </LaborCategory>
               </div>
               <div className="twelve columns">
-                <div id={prefixId('query-types')}>
+                <div id={prefixId("query-types")}>
                   <QueryType />
                 </div>
               </div>
@@ -130,12 +120,16 @@ class App extends React.Component {
               <div className="graph-block columns nine">
                 {/* for converting the histogram into an img --> */}
                 <canvas
-                  ref={(el) => { this.canvasEl = el; }}
-                  id={prefixId('graph') /* Selenium needs it. */}
-                  className="hidden" width="710" height="280"
+                  ref={el => {
+                    this.canvasEl = el;
+                  }}
+                  id={prefixId("graph") /* Selenium needs it. */}
+                  className="hidden"
+                  width="710"
+                  height="280"
                 />
 
-                <div id={prefixId('description')}>
+                <div id={prefixId("description")}>
                   <Description />
                 </div>
 
@@ -145,8 +139,12 @@ class App extends React.Component {
                 <LoadingIndicator />
 
                 <div className="graph">
-                  <div id={prefixId('price-histogram')}>
-                    <Histogram ref={(el) => { this.histogram = el; }} />
+                  <div id={prefixId("price-histogram")}>
+                    <Histogram
+                      ref={el => {
+                        this.histogram = el;
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -156,7 +154,9 @@ class App extends React.Component {
                   <div className="four columns">
                     <a
                       className="button button-primary"
-                      id={prefixId('download-histogram') /* Selenium needs it. */}
+                      id={prefixId(
+                        "download-histogram"
+                      ) /* Selenium needs it. */}
                       href=""
                       onClick={this.handleDownloadClick}
                     >
@@ -170,11 +170,11 @@ class App extends React.Component {
 
                   <p className="help-text">
                     The rates shown here are fully burdened, applicable
-                    {' '}
+                    {" "}
                     worldwide, and representative of the current fiscal
-                    {' '}
+                    {" "}
                     year. This data represents rates awarded at the master
-                    {' '}
+                    {" "}
                     contract level.
                   </p>
                 </div>
@@ -213,18 +213,18 @@ App.propTypes = {
   ratesError: React.PropTypes.string,
   resetState: React.PropTypes.func.isRequired,
   invalidateRates: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  idPrefix: React.PropTypes.string
 };
 
 App.defaultProps = {
-  idPrefix: '',
-  ratesError: null,
+  idPrefix: "",
+  ratesError: null
 };
 
 export default connect(
   state => ({
     ratesInProgress: state.rates.inProgress,
-    ratesError: state.rates.error,
+    ratesError: state.rates.error
   }),
-  { resetState, invalidateRates },
+  { resetState, invalidateRates }
 )(App);

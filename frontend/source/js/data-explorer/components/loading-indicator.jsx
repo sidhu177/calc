@@ -1,13 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
 export function LoadingIndicator({ error, inProgress }) {
   let errorMessage = null;
-  let ariaStatus = inProgress ? 'Loading results' : 'Results loaded.';
+  let ariaStatus = inProgress ? "Loading results" : "Results loaded.";
 
   if (error) {
-    ariaStatus = '';
-    if (error !== 'abort') {
+    ariaStatus = "";
+    if (error !== "abort") {
       errorMessage = <div className="error-message">{error}</div>;
       ariaStatus = `An error occurred when loading results: ${error}`;
     }
@@ -35,16 +35,14 @@ export function LoadingIndicator({ error, inProgress }) {
 
 LoadingIndicator.propTypes = {
   error: React.PropTypes.string,
-  inProgress: React.PropTypes.bool.isRequired,
+  inProgress: React.PropTypes.bool.isRequired
 };
 
 LoadingIndicator.defaultProps = {
-  error: null,
+  error: null
 };
 
-export default connect(
-  state => ({
-    error: state.rates.error,
-    inProgress: state.rates.inProgress,
-  }),
-)(LoadingIndicator);
+export default connect(state => ({
+  error: state.rates.error,
+  inProgress: state.rates.inProgress
+}))(LoadingIndicator);

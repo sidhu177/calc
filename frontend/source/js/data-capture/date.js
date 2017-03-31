@@ -1,6 +1,6 @@
 /* global window, document */
 
-import 'document-register-element';
+import "document-register-element";
 
 const KEY_DASH = 189;
 const KEY_PERIOD = 190;
@@ -8,7 +8,7 @@ const KEY_SLASH = 191;
 
 class UswdsDate extends window.HTMLElement {
   _getNextInput(currentInput) {
-    const inputs = this.querySelectorAll('input');
+    const inputs = this.querySelectorAll("input");
     let useNext = false;
 
     for (let i = 0; i < inputs.length; i++) {
@@ -22,8 +22,11 @@ class UswdsDate extends window.HTMLElement {
     return null;
   }
   handleKeyDown(e) {
-    if (e.keyCode === KEY_DASH || e.keyCode === KEY_PERIOD ||
-        e.keyCode === KEY_SLASH) {
+    if (
+      e.keyCode === KEY_DASH ||
+      e.keyCode === KEY_PERIOD ||
+      e.keyCode === KEY_SLASH
+    ) {
       const nextInput = this._getNextInput(e.target);
 
       if (nextInput) {
@@ -33,14 +36,14 @@ class UswdsDate extends window.HTMLElement {
     }
   }
   createdCallback() {
-    this.addEventListener('keydown', this.handleKeyDown.bind(this), true);
+    this.addEventListener("keydown", this.handleKeyDown.bind(this), true);
   }
 }
 
 UswdsDate.prototype.SOURCE_FILENAME = __filename;
 
-document.registerElement('uswds-date', {
-  prototype: UswdsDate.prototype,
+document.registerElement("uswds-date", {
+  prototype: UswdsDate.prototype
 });
 
 module.exports = UswdsDate;

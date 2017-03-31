@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import { autobind } from '../util';
-import { EDU_LABELS } from '../constants';
+import { autobind } from "../util";
+import { EDU_LABELS } from "../constants";
 
 export default class EducationLevelItem extends React.Component {
   constructor(props) {
     super(props);
-    autobind(this, ['_onClick']);
+    autobind(this, ["_onClick"]);
   }
 
   _onClick() {
@@ -34,5 +34,5 @@ EducationLevelItem.propTypes = {
   id: React.PropTypes.string.isRequired,
   value: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool.isRequired,
-  onCheckboxClick: React.PropTypes.func.isRequired,
+  onCheckboxClick: React.PropTypes.func.isRequired
 };

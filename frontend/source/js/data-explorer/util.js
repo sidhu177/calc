@@ -1,13 +1,13 @@
 /* global event */
 
-import * as querystring from 'querystring';
-import classNames from 'classnames';
-import { format } from 'd3-format';
+import * as querystring from "querystring";
+import classNames from "classnames";
+import { format } from "d3-format";
 
-export const formatCommas = format(',');
-export const formatPrice = format(',.0f');
-export const formatPriceWithCents = format(',.02f');
-export const formatFriendlyPrice = (price) => {
+export const formatCommas = format(",");
+export const formatPrice = format(",.0f");
+export const formatPriceWithCents = format(",.02f");
+export const formatFriendlyPrice = price => {
   if (Math.floor(price) === price) {
     return formatPrice(price);
   }
@@ -18,7 +18,7 @@ const KEY_ENTER = 13;
 const KEY_SPACE = 32;
 
 export function handleEnter(cb) {
-  return (event) => {
+  return event => {
     if (event.keyCode === KEY_ENTER) {
       event.preventDefault();
       cb(event);
@@ -27,7 +27,7 @@ export function handleEnter(cb) {
 }
 
 export function handleEnterOrSpace(cb) {
-  return (event) => {
+  return event => {
     if (event.keyCode === KEY_ENTER || event.keyCode === KEY_SPACE) {
       event.preventDefault();
       cb(event);
@@ -38,14 +38,15 @@ export function handleEnterOrSpace(cb) {
 export function autobind(self, names) {
   const target = self;
 
-  names.forEach((name) => {
+  names.forEach(name => {
     target[name] = target[name].bind(target);
   });
 }
 
 export function templatize(str, undef) {
   const undefFunc = () => undef;
-  return d => str.replace(/{(\w+)}/g, (_, key) => d[key] || undefFunc.call(d, key));
+  return d =>
+    str.replace(/{(\w+)}/g, (_, key) => d[key] || undefFunc.call(d, key));
 }
 
 export function parsePrice(value, defaultValue = 0) {
@@ -58,8 +59,8 @@ export function parsePrice(value, defaultValue = 0) {
   return floatValue;
 }
 
-export function filterActive(isActive, otherClasses = '') {
-  return classNames(isActive ? 'filter_active' : '', otherClasses);
+export function filterActive(isActive, otherClasses = "") {
+  return classNames(isActive ? "filter_active" : "", otherClasses);
 }
 
 export function getLastCommaSeparatedTerm(term) {
@@ -69,7 +70,7 @@ export function getLastCommaSeparatedTerm(term) {
 
 export function stripTrailingComma(str) {
   // Removes trailing comma and whitespace from given string
-  return str.replace(/,\s*$/, '');
+  return str.replace(/,\s*$/, "");
 }
 
 export function parseQueryString(str) {
@@ -77,7 +78,7 @@ export function parseQueryString(str) {
 
   // querystring.parse will create array values if a querystring param name
   // is repeated. We'll just take the first value of any such array.
-  Object.keys(qsObj).forEach((key) => {
+  Object.keys(qsObj).forEach(key => {
     const val = qsObj[key];
     if (Array.isArray(val)) {
       qsObj[key] = val[0];

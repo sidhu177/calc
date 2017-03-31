@@ -44,9 +44,12 @@ function buildPageState(object) {
 }
 
 function rememberCurrentScrollPosition(window) {
-  window.history.replaceState(buildPageState({
-    pageYOffset: window.pageYOffset,
-  }), '');
+  window.history.replaceState(
+    buildPageState({
+      pageYOffset: window.pageYOffset
+    }),
+    ""
+  );
 }
 
 function changeHash(window, hash, cb) {
@@ -54,20 +57,20 @@ function changeHash(window, hash, cb) {
   const newId = hash.slice(1);
 
   if (currId !== newId) {
-    $(window).one('hashchange', cb);
+    $(window).one("hashchange", cb);
   }
-  window.location.hash = hash;  // eslint-disable-line no-param-reassign
+  window.location.hash = hash; // eslint-disable-line no-param-reassign
 }
 
 function smoothScroll(window, scrollTop, scrollMs, cb) {
   // WebKit uses `<body>` for keeping track of scrolling, while
   // Firefox and IE use `<html>`, so we need to animate both.
 
-  const $els = $('html, body', window.document);
+  const $els = $("html, body", window.document);
   let callbacksLeft = $els.length;
 
   $els.stop().animate({
-    scrollTop,
+    scrollTop
   }, scrollMs, () => {
     // This callback is going to be called multiple times because
     // we're animating on multiple elements, but we only want the
@@ -87,8 +90,8 @@ function smoothScroll(window, scrollTop, scrollMs, cb) {
  * to this page in the future.
  **/
 export function getOrCreateVisitId(window) {
-  const VISIT_ID_COUNTER = 'smoothScrollLatestVisitId';
-  const VISIT_ID = 'smoothScrollVisitId';
+  const VISIT_ID_COUNTER = "smoothScrollLatestVisitId";
+  const VISIT_ID = "smoothScrollVisitId";
 
   if (window.history.state && VISIT_ID in window.history.state) {
     return window.history.state[VISIT_ID];
@@ -103,9 +106,12 @@ export function getOrCreateVisitId(window) {
 
   storage[VISIT_ID_COUNTER] = ++latestVisitId;
 
-  window.history.replaceState(buildPageState({
-    [VISIT_ID]: latestVisitId,
-  }), '');
+  window.history.replaceState(
+    buildPageState({
+      [VISIT_ID]: latestVisitId
+    }),
+    ""
+  );
 
   return latestVisitId;
 }
@@ -113,10 +119,10 @@ export function getOrCreateVisitId(window) {
 function onPageReady(window, cb) {
   const doc = window.document;
 
-  if (doc.readyState === 'interactive' || doc.readyState === 'complete') {
+  if (doc.readyState === "interactive" || doc.readyState === "complete") {
     cb();
   } else {
-    window.addEventListener('DOMContentLoaded', cb, false);
+    window.addEventListener("DOMContentLoaded", cb, false);
   }
 }
 
@@ -150,7 +156,7 @@ export function activateManualScrollRestoration(window, scrollMs) {
   const scrollKey = () => `visit_${getOrCreateVisitId(window)}_scrollTop`;
   const scrollTop = parseInt(storage[scrollKey()], 10);
 
-  window.history.scrollRestoration = 'manual';   // eslint-disable-line no-param-reassign
+  window.history.scrollRestoration = "manual"; // eslint-disable-line no-param-reassign
 
   if (isNaN(scrollTop)) {
     smoothlyScrollToLocationHash(window, scrollMs);
@@ -161,12 +167,16 @@ export function activateManualScrollRestoration(window, scrollMs) {
     });
   }
 
-  window.addEventListener('beforeunload', () => {
-    // We can't store the position in window.history.state here because
-    // this will make some browsers flicker the URL in the address bar.
-    storage[scrollKey()] = doc.documentElement.scrollTop ||
-                           doc.body.scrollTop;
-  }, false);
+  window.addEventListener(
+    "beforeunload",
+    () => {
+      // We can't store the position in window.history.state here because
+      // this will make some browsers flicker the URL in the address bar.
+      storage[scrollKey()] = doc.documentElement.scrollTop ||
+        doc.body.scrollTop;
+    },
+    false
+  );
 
   return window;
 }
@@ -175,8 +185,8 @@ export function activate(window, options = {}) {
   const scrollMs = options.scrollMs || DEFAULT_SCROLL_MS;
   const onScroll = options.onScroll || (() => {});
 
-  $('html', window.document).on('click', 'a[href^="#"]', (e) => {
-    const scrollId = $(e.target).attr('href').slice(1);
+  $("html", window.document).on("click", 'a[href^="#"]', e => {
+    const scrollId = $(e.target).attr("href").slice(1);
     const scrollTarget = window.document.getElementById(scrollId);
 
     if (scrollTarget) {
@@ -191,14 +201,18 @@ export function activate(window, options = {}) {
     }
   });
 
-  window.addEventListener('popstate', (e) => {
-    if (e.state && 'pageYOffset' in e.state) {
-      smoothScroll(window, e.state.pageYOffset, scrollMs, onScroll);
-    }
-  }, false);
+  window.addEventListener(
+    "popstate",
+    e => {
+      if (e.state && "pageYOffset" in e.state) {
+        smoothScroll(window, e.state.pageYOffset, scrollMs, onScroll);
+      }
+    },
+    false
+  );
 
   // https://developers.google.com/web/updates/2015/09/history-api-scroll-restoration
-  if ('scrollRestoration' in window.history) {
+  if ("scrollRestoration" in window.history) {
     activateManualScrollRestoration(window, scrollMs);
   }
 }

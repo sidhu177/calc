@@ -1,17 +1,17 @@
 /* global jQuery, document, window */
 
-import 'document-register-element';
+import "document-register-element";
 
-import * as supports from './feature-detection';
+import * as supports from "./feature-detection";
 
-import ga from '../common/ga';
+import ga from "../common/ga";
 
-import dispatchBubbly from './custom-event';
+import dispatchBubbly from "./custom-event";
 
 const $ = jQuery;
 
-const MISC_ERROR = 'Sorry, we’re having trouble. ' +
-                   'Please try again later or refresh your browser.';
+const MISC_ERROR = "Sorry, we’re having trouble. " +
+  "Please try again later or refresh your browser.";
 
 class Delegate {
   constructor(window) {
@@ -30,7 +30,7 @@ class Delegate {
     //
     // For more details, see: http://stackoverflow.com/a/13123626
 
-    this.window.onpageshow = (e) => {
+    this.window.onpageshow = e => {
       if (e.persisted) {
         this.window.location.reload();
       }
@@ -46,7 +46,7 @@ class Delegate {
 
 let delegate = new Delegate(window);
 
-exports.setDelegate = (newDelegate) => {
+exports.setDelegate = newDelegate => {
   delegate = newDelegate;
   return delegate;
 };
@@ -77,12 +77,11 @@ exports.MISC_ERROR = MISC_ERROR;
 
 class AjaxForm extends window.HTMLFormElement {
   attachedCallback() {
-    this.isDegraded = !supports.formData() ||
-                      supports.isForciblyDegraded(this);
+    this.isDegraded = !supports.formData() || supports.isForciblyDegraded(this);
     if (!this.isDegraded) {
-      $(this).on('submit', this._onUpgradedSubmit.bind(this));
+      $(this).on("submit", this._onUpgradedSubmit.bind(this));
     }
-    dispatchBubbly(this, 'ajaxformready');
+    dispatchBubbly(this, "ajaxformready");
   }
 
   populateFormData(formData) {
@@ -94,11 +93,11 @@ class AjaxForm extends window.HTMLFormElement {
 
       if (el.isUpgraded) {
         formData.append(el.name, el.upgradedValue);
-      } else if (el.type === 'file') {
+      } else if (el.type === "file") {
         for (let j = 0; j < el.files.length; j++) {
           formData.append(el.name, el.files[j]);
         }
-      } else if (el.type === 'submit') {
+      } else if (el.type === "submit") {
         // This logic is used to support multiple submit buttons.
         // However, it's assumed that the "default" submit button, which
         // is triggered in browsers by being the first in the DOM tree,
@@ -106,7 +105,7 @@ class AjaxForm extends window.HTMLFormElement {
         if (document.activeElement === el) {
           formData.append(el.name, el.value);
         }
-      } else if (el.type === 'radio' || el.type === 'checkbox') {
+      } else if (el.type === "radio" || el.type === "checkbox") {
         // only append the radio or checkbox value if its `checked` property
         // is true
         if (el.checked) {
@@ -127,11 +126,11 @@ class AjaxForm extends window.HTMLFormElement {
     // baseline (non-Ajax) version of this form would have resulted in
     // the user being sent to the page defined by the `action` attribute
     // of the form we're now loading. So we'll simulate that in GA.
-    const action = $(newForm).attr('action');
+    const action = $(newForm).attr("action");
     if (action) {
-      ga('set', 'page', action);
+      ga("set", "page", action);
     }
-    ga('send', 'pageview');
+    ga("send", "pageview");
 
     // Replace the form and bind it.
     $(this).replaceWith(newForm);
@@ -152,34 +151,34 @@ class AjaxForm extends window.HTMLFormElement {
       processData: false,
       contentType: false,
       data: formData,
-      method: this.method,
+      method: this.method
     });
 
-    $(this).addClass('submit-in-progress');
+    $(this).addClass("submit-in-progress");
 
-    req.done((data) => {
+    req.done(data => {
       if (data.form_html) {
         this._replaceWithNewForm(data.form_html);
       } else if (data.redirect_url) {
         delegate.redirect(data.redirect_url);
       } else {
         delegate.alert(MISC_ERROR);
-        $(this).removeClass('submit-in-progress');
+        $(this).removeClass("submit-in-progress");
       }
     });
 
     req.fail(() => {
       delegate.alert(MISC_ERROR);
-      $(this).removeClass('submit-in-progress');
+      $(this).removeClass("submit-in-progress");
     });
   }
 }
 
 AjaxForm.prototype.SOURCE_FILENAME = __filename;
 
-document.registerElement('ajax-form', {
-  extends: 'form',
-  prototype: AjaxForm.prototype,
+document.registerElement("ajax-form", {
+  extends: "form",
+  prototype: AjaxForm.prototype
 });
 
 exports.AjaxForm = AjaxForm;

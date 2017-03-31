@@ -1,25 +1,24 @@
 /* global $ document */
 
-import { getLastCommaSeparatedTerm } from './util';
+import { getLastCommaSeparatedTerm } from "./util";
 
 export function appendHighlightedTerm($el, term, searchStr) {
-  const sanitizedSearch = searchStr.replace(/[^a-z0-9 ]/gi, '')
+  const sanitizedSearch = searchStr
+    .replace(/[^a-z0-9 ]/gi, "")
     .trim()
     .split(/[ ]+/)
-    .join('|');
+    .join("|");
 
-  const plainText = (start, end) => document.createTextNode(
-    term.substring(start, end),
-  );
-  const highlightedText = (start, end) => $('<b></b>').text(
-    term.substring(start, end),
-  )[0];
+  const plainText = (start, end) =>
+    document.createTextNode(term.substring(start, end));
+  const highlightedText = (start, end) =>
+    $("<b></b>").text(term.substring(start, end))[0];
 
   if (sanitizedSearch.length === 0) {
     return $el.append(plainText(term));
   }
 
-  const re = new RegExp(`(${sanitizedSearch})`, 'gi');
+  const re = new RegExp(`(${sanitizedSearch})`, "gi");
 
   let done = false;
   let lastIndex = 0;
@@ -39,7 +38,7 @@ export function appendHighlightedTerm($el, term, searchStr) {
 }
 
 export function destroy(el) {
-  $(el).autoComplete('destroy');
+  $(el).autoComplete("destroy");
 }
 
 export function processResults(result) {
@@ -48,19 +47,22 @@ export function processResults(result) {
   }
   const categories = result.map(d => ({
     term: d.labor_category,
-    count: d.count,
+    count: d.count
   }));
 
   return categories;
 }
 
-export function initialize(el, {
-  api,
-  getQueryType,
-  setFieldValue,
-}) {
+export function initialize(
+  el,
+  {
+    api,
+    getQueryType,
+    setFieldValue
+  }
+) {
   let autoCompReq;
-  let searchTerms = '';
+  let searchTerms = "";
 
   $(el).autoComplete({
     minChars: 2,
@@ -73,58 +75,68 @@ export function initialize(el, {
 
       const lastTerm = getLastCommaSeparatedTerm(term);
 
-      if (autoCompReq) { autoCompReq.abort(); }
-      autoCompReq = api.get({
-        uri: 'search/',
-        data: {
-          q: lastTerm,
-          query_type: getQueryType(),
+      if (autoCompReq) {
+        autoCompReq.abort();
+      }
+      autoCompReq = api.get(
+        {
+          uri: "search/",
+          data: {
+            q: lastTerm,
+            query_type: getQueryType()
+          }
         },
-      }, (error, result) => {
-        autoCompReq = null;
-        if (error) { return done([]); }
-        const categories = processResults(result);
-        return done(categories);
-      });
+        (error, result) => {
+          autoCompReq = null;
+          if (error) {
+            return done([]);
+          }
+          const categories = processResults(result);
+          return done(categories);
+        }
+      );
     },
     renderItem(item, searchStr) {
       const term = item.term || item;
-      const $div = $('<div class="autocomplete-suggestion"></div>')
-        .attr('data-val', term);
+      const $div = $('<div class="autocomplete-suggestion"></div>').attr(
+        "data-val",
+        term
+      );
 
       appendHighlightedTerm(
         $('<span class="term"></span>').appendTo($div),
         term,
-        searchStr,
+        searchStr
       );
-      $('<span class="count"></span>').text(item.count.toString())
+      $('<span class="count"></span>')
+        .text(item.count.toString())
         .appendTo($div);
 
-      return $('<div></div>').append($div).html();
+      return $("<div></div>").append($div).html();
     },
     onSelect(e, term) {
       let selectedInput;
 
       // check if search field has terms already
-      if (searchTerms.indexOf(',') !== -1) {
-        const termSplit = searchTerms.split(', ');
+      if (searchTerms.indexOf(",") !== -1) {
+        const termSplit = searchTerms.split(", ");
         // remove last typed (incomplete) input
         termSplit.pop();
         // combine existing search terms with new one
-        selectedInput = `${termSplit.join(', ')}, ${term}, `;
-      // if search field doesn't have terms
-      // but has selected an autocomplete suggestion,
-      // then just show term and comma delimiter
+        selectedInput = `${termSplit.join(", ")}, ${term}, `;
+        // if search field doesn't have terms
+        // but has selected an autocomplete suggestion,
+        // then just show term and comma delimiter
       } else {
         selectedInput = `${term}, `;
       }
 
       // update the search input field accordingly
       setFieldValue(selectedInput);
-    },
+    }
   });
 
-  $(el).on('blur', () => {
+  $(el).on("blur", () => {
     // If the user manually changed the field without actually
     // selecting anything in the autocomplete list, it should take
     // effect as soon as the user focuses on something else.

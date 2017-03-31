@@ -1,6 +1,6 @@
 /* global window, document */
 
-import dispatchBubbly from './custom-event';
+import dispatchBubbly from "./custom-event";
 
 /**
  * AlertsWidget represents an <alerts-widget> web component.
@@ -13,14 +13,14 @@ import dispatchBubbly from './custom-event';
 
 class AlertsWidget extends window.HTMLElement {
   attachedCallback() {
-    this.setAttribute('tabindex', '-1');
+    this.setAttribute("tabindex", "-1");
     this.focus();
-    dispatchBubbly(this, 'alertswidgetready');
+    dispatchBubbly(this, "alertswidgetready");
   }
 }
 
 AlertsWidget.prototype.SOURCE_FILENAME = __filename;
 
-document.registerElement('alerts-widget', {
-  prototype: AlertsWidget.prototype,
+document.registerElement("alerts-widget", {
+  prototype: AlertsWidget.prototype
 });

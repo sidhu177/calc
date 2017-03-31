@@ -1,11 +1,11 @@
 /* global QUnit document */
 
-QUnit.module('uswds-date');
+QUnit.module("uswds-date");
 
 function makeDate() {
-  const date = document.createElement('uswds-date');
-  const input1 = document.createElement('input');
-  const input2 = document.createElement('input');
+  const date = document.createElement("uswds-date");
+  const input1 = document.createElement("input");
+  const input2 = document.createElement("input");
 
   date.appendChild(input1);
   date.appendChild(input2);
@@ -13,7 +13,7 @@ function makeDate() {
   return { date, input1, input2 };
 }
 
-QUnit.test('input focus changed on "/"', (assert) => {
+QUnit.test('input focus changed on "/"', assert => {
   const { date, input1, input2 } = makeDate();
   let defaultPrevented = false;
 
@@ -24,22 +24,26 @@ QUnit.test('input focus changed on "/"', (assert) => {
   date.handleKeyDown({
     keyCode: 191,
     target: input1,
-    preventDefault: () => { defaultPrevented = true; },
+    preventDefault: () => {
+      defaultPrevented = true;
+    }
   });
 });
 
-QUnit.test('input focus not changed when on last input', (assert) => {
+QUnit.test("input focus not changed when on last input", assert => {
   const { date, input1, input2 } = makeDate();
   let defaultPrevented = false;
 
   input1.focus = () => {
-    throw new Error('I should not be called!');
+    throw new Error("I should not be called!");
   };
 
   date.handleKeyDown({
     keyCode: 191,
     target: input2,
-    preventDefault: () => { defaultPrevented = true; },
+    preventDefault: () => {
+      defaultPrevented = true;
+    }
   });
 
   assert.ok(!defaultPrevented);

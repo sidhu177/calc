@@ -7,17 +7,17 @@
 
 module.exports = {
   dragAndDrop() {
-    const div = document.createElement('div');
-    return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+    const div = document.createElement("div");
+    return "draggable" in div || ("ondragstart" in div && "ondrop" in div);
   },
 
   formData() {
-    return 'FormData' in window;
+    return "FormData" in window;
   },
 
   dataTransfer() {
     // Browsers that support FileReader support DataTransfer too.
-    return 'FileReader' in window;
+    return "FileReader" in window;
   },
 
   // We'd like to make it possible to forcibly degrade components that have
@@ -27,6 +27,6 @@ module.exports = {
   // who are experiencing browser compatibility issues can opt into.
 
   isForciblyDegraded(el) {
-    return !!$(el).closest('[data-force-degradation]').length;
-  },
+    return !!$(el).closest("[data-force-degradation]").length;
+  }
 };

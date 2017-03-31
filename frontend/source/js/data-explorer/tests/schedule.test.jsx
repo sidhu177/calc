@@ -1,26 +1,26 @@
-import toJson from 'enzyme-to-json';
+import toJson from "enzyme-to-json";
 
-import { Schedule } from '../components/schedule';
-import makeSetup from './testSetup';
-import { SCHEDULE_LABELS } from '../constants';
+import { Schedule } from "../components/schedule";
+import makeSetup from "./testSetup";
+import { SCHEDULE_LABELS } from "../constants";
 
 const defaultProps = {
-  schedule: '',
-  idPrefix: 'zzz_',
-  setSchedule: jest.fn(),
+  schedule: "",
+  idPrefix: "zzz_",
+  setSchedule: jest.fn()
 };
 
 const setup = makeSetup(Schedule, defaultProps);
 
-describe('<Schedule>', () => {
-  it('renders correctly', () => {
+describe("<Schedule>", () => {
+  it("renders correctly", () => {
     const { wrapper } = setup();
-    const select = wrapper.find('select#zzz_schedule');
+    const select = wrapper.find("select#zzz_schedule");
     expect(select.exists()).toBeTruthy();
-    const options = wrapper.find('option');
+    const options = wrapper.find("option");
     // should have options for all schedules + 1 for "(all)"
     expect(options.length).toBe(Object.keys(SCHEDULE_LABELS).length + 1);
-    Object.keys(SCHEDULE_LABELS).forEach((sched) => {
+    Object.keys(SCHEDULE_LABELS).forEach(sched => {
       const title = SCHEDULE_LABELS[sched];
       const opt = wrapper.find(`option[value="${sched}"]`);
       expect(opt.exists()).toBeTruthy();
@@ -28,27 +28,28 @@ describe('<Schedule>', () => {
     });
   });
 
-  it('matches snapshot', () => {
+  it("matches snapshot", () => {
     const { wrapper } = setup();
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
-  it('calls setSchedule on change', () => {
+  it("calls setSchedule on change", () => {
     const { props, mounted } = setup();
     expect(props.setSchedule.mock.calls.length).toBe(0);
 
-    mounted.find('select#zzz_schedule')
-      .simulate('change', { target: { value: 'MOBIS' } });
+    mounted
+      .find("select#zzz_schedule")
+      .simulate("change", { target: { value: "MOBIS" } });
 
     expect(props.setSchedule.mock.calls.length).toBe(1);
-    expect(props.setSchedule.mock.calls[0][0]).toBe('MOBIS');
+    expect(props.setSchedule.mock.calls[0][0]).toBe("MOBIS");
   });
 
-  it('has filter_active class when levels are selected', () => {
-    let { wrapper } = setup({ schedule: '' });
-    expect(wrapper.find('select.filter_active').exists()).toBeFalsy();
+  it("has filter_active class when levels are selected", () => {
+    let { wrapper } = setup({ schedule: "" });
+    expect(wrapper.find("select.filter_active").exists()).toBeFalsy();
 
-    ({ wrapper } = setup({ schedule: 'PES' }));
-    expect(wrapper.find('select.filter_active').exists()).toBeTruthy();
+    ({ wrapper } = setup({ schedule: "PES" }));
+    expect(wrapper.find("select.filter_active").exists()).toBeTruthy();
   });
 });

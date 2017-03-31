@@ -14,12 +14,12 @@ export default function histogramToImg(originalSvg, canvas) {
   // convert svg into canvas
   canvg(canvas, svg, { ignoreMouse: true, scaleWidth: 720, scaleHeight: 300 });
 
-  if (typeof Blob !== 'undefined') {
-    canvas.toBlob((blob) => {
-      saveAs(blob, 'histogram.png');
+  if (typeof Blob !== "undefined") {
+    canvas.toBlob(blob => {
+      saveAs(blob, "histogram.png");
     });
   } else {
-    img = canvas.toDataURL('image/png');
+    img = canvas.toDataURL("image/png");
     modalImg = new Image();
     modalImg.src = img;
 
@@ -30,8 +30,8 @@ export default function histogramToImg(originalSvg, canvas) {
       },
       showCloseButton: true,
       contentCSS: {
-        width: '800px',
-      },
+        width: "800px"
+      }
     });
   }
 }

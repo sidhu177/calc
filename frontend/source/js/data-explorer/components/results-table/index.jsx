@@ -1,14 +1,14 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import { setSort } from '../../actions';
-import createSortableColumn from './sortable-column';
-import * as ExcludedColumn from './excluded-column';
-import * as LaborCategoryColumn from './labor-category-column';
-import * as EducationColumn from './education-column';
-import * as ExperienceColumn from './experience-column';
-import * as PriceColumn from './price-column';
-import * as ContractNumberColumn from './contract-number-column';
+import { setSort } from "../../actions";
+import createSortableColumn from "./sortable-column";
+import * as ExcludedColumn from "./excluded-column";
+import * as LaborCategoryColumn from "./labor-category-column";
+import * as EducationColumn from "./education-column";
+import * as ExperienceColumn from "./experience-column";
+import * as PriceColumn from "./price-column";
+import * as ContractNumberColumn from "./contract-number-column";
 
 const COLUMNS = [
   ExcludedColumn,
@@ -18,13 +18,13 @@ const COLUMNS = [
   PriceColumn,
   ContractNumberColumn,
   createSortableColumn({
-    key: 'vendor_name',
-    title: 'Vendor',
+    key: "vendor_name",
+    title: "Vendor"
   }),
   createSortableColumn({
-    key: 'schedule',
-    title: 'Schedule',
-  }),
+    key: "schedule",
+    title: "Schedule"
+  })
 ];
 
 const { priceForContractYear } = PriceColumn;
@@ -35,10 +35,14 @@ export class ResultsTable extends React.Component {
       .filter(r => !!priceForContractYear(this.props.contractYear, r))
       .map(result => (
         <tr key={result.id}>
-          {COLUMNS.map((col) => {
+          {COLUMNS.map(col => {
             const cellKey = `${result.id}-${col.DataCell.cellKey}`;
             return (
-              <col.DataCell key={cellKey} sort={this.props.sort} result={result} />
+              <col.DataCell
+                key={cellKey}
+                sort={this.props.sort}
+                result={result}
+              />
             );
           })}
         </tr>
@@ -82,18 +86,18 @@ ResultsTable.propTypes = {
   setSort: React.PropTypes.func.isRequired,
   results: React.PropTypes.array.isRequired,
   contractYear: React.PropTypes.string.isRequired,
-  idPrefix: React.PropTypes.string,
+  idPrefix: React.PropTypes.string
 };
 
 ResultsTable.defaultProps = {
-  idPrefix: '',
+  idPrefix: ""
 };
 
 function mapStateToProps(state) {
   return {
     sort: state.sort,
     results: state.rates.data.results,
-    contractYear: state['contract-year'],
+    contractYear: state["contract-year"]
   };
 }
 

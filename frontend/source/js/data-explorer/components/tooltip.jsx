@@ -1,51 +1,49 @@
 /* global $ */
 
-import React from 'react';
+import React from "react";
 
-import { autobind } from '../util';
+import { autobind } from "../util";
 
 export default class Tooltip extends React.Component {
   constructor(props) {
     super(props);
-    autobind(this, ['show', 'hide']);
+    autobind(this, ["show", "hide"]);
   }
 
   componentDidMount() {
-    $(this.el)
-      .tooltipster({})
-      .tooltipster('content', this.props.text);
-    this.el.addEventListener('focus', this.show, true);
-    this.el.addEventListener('blur', this.hide, true);
+    $(this.el).tooltipster({}).tooltipster("content", this.props.text);
+    this.el.addEventListener("focus", this.show, true);
+    this.el.addEventListener("blur", this.hide, true);
     this.syncShowProp();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.text !== prevProps.text) {
-      $(this.el).tooltipster('content', this.props.text);
+      $(this.el).tooltipster("content", this.props.text);
     }
     this.syncShowProp();
   }
 
   componentWillUnmount() {
-    $(this.el).tooltipster('destroy');
-    this.el.removeEventListener('focus', this.show, true);
-    this.el.removeEventListener('blur', this.hide, true);
+    $(this.el).tooltipster("destroy");
+    this.el.removeEventListener("focus", this.show, true);
+    this.el.removeEventListener("blur", this.hide, true);
   }
 
   show() {
-    $(this.el).tooltipster('show');
+    $(this.el).tooltipster("show");
   }
 
   hide() {
-    $(this.el).tooltipster('hide');
+    $(this.el).tooltipster("hide");
   }
 
   syncShowProp() {
-    if (typeof this.props.show !== 'boolean') {
+    if (typeof this.props.show !== "boolean") {
       return;
     }
 
-    const isHidden = $(this.el).tooltipster('status') === 'hidden';
+    const isHidden = $(this.el).tooltipster("status") === "hidden";
 
     if (this.props.show && isHidden) {
       this.show();
@@ -56,7 +54,11 @@ export default class Tooltip extends React.Component {
 
   render() {
     return (
-      <span ref={(el) => { this.el = el; }}>
+      <span
+        ref={el => {
+          this.el = el;
+        }}
+      >
         {this.props.children}
       </span>
     );
@@ -66,10 +68,10 @@ export default class Tooltip extends React.Component {
 Tooltip.propTypes = {
   children: React.PropTypes.any,
   text: React.PropTypes.string.isRequired,
-  show: React.PropTypes.bool,
+  show: React.PropTypes.bool
 };
 
 Tooltip.defaultProps = {
   children: null,
-  show: false,
+  show: false
 };

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import createSortableColumn from './sortable-column';
+import createSortableColumn from "./sortable-column";
 
 const DOCUMENT_SVG = (
   <svg className="document-icon" width="8" height="8" viewBox="0 0 8 8">
@@ -12,25 +12,27 @@ const DOCUMENT_SVG = (
 );
 
 const column = createSortableColumn({
-  key: 'idv_piid',
-  title: 'Contract #',
-  description: 'Contract number',
+  key: "idv_piid",
+  title: "Contract #",
+  description: "Contract number"
 });
 
 export const HeaderCell = column.HeaderCell;
 
 function createGsaAdvantageUrl(contractNumber) {
-  const id = contractNumber.split('-').join('');
+  const id = contractNumber.split("-").join("");
 
   return `https://www.gsaadvantage.gov/ref_text/${id}/${id}_online.htm`;
 }
 
-export const DataCell = column.connectDataCell(
-  ({ className, value }) => (
-    <td className={className}>
-      <a target="_blank" rel="noopener noreferrer" href={createGsaAdvantageUrl(value)}>
-        {value} {DOCUMENT_SVG}
-      </a>
-    </td>
-  ),
-);
+export const DataCell = column.connectDataCell(({ className, value }) => (
+  <td className={className}>
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={createGsaAdvantageUrl(value)}
+    >
+      {value} {DOCUMENT_SVG}
+    </a>
+  </td>
+));

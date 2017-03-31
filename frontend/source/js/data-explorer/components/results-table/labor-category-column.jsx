@@ -1,18 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import createSortableColumn from './sortable-column';
+import createSortableColumn from "./sortable-column";
 
 const column = createSortableColumn({
-  key: 'labor_category',
-  title: 'Labor Category',
+  key: "labor_category",
+  title: "Labor Category"
 });
 
 export const HeaderCell = column.HeaderCell;
 
-export const DataCell = column.connectDataCell(
-  ({ className, value }) => (
-    <th className={className} scope="row">
-      {value}
-    </th>
-  ),
-);
+export const DataCell = column.connectDataCell(({ className, value }) => (
+  <th className={className} scope="row">
+    {value}
+  </th>
+));
