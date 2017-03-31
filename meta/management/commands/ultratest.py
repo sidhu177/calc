@@ -2,7 +2,7 @@ import sys
 import tempfile
 import subprocess
 from collections import namedtuple
-import djclick as click  # type: ignore
+import djclick as click
 import xml.etree.ElementTree as etree
 from django.core.management.base import CommandError
 from typing import List, Any

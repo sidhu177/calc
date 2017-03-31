@@ -2,7 +2,6 @@ import logging
 import os
 
 from django.core.management import BaseCommand
-from optparse import make_option
 
 from contracts.models import BulkUploadContractSource
 from contracts.loaders.schedule_70 import Schedule70Loader
@@ -34,26 +33,26 @@ class Command(BaseCommand):
 
     default_filename = 'contracts/docs/s70/s70_data.csv'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        parser.add_argument(
             '-f', '--filename',
-            default=default_filename,
-            help='input filename (.csv, default {})'.format(default_filename)
-        ),
-        make_option(
+            default=self.default_filename,
+            help='input filename (.csv, default {})'.format(
+                self.default_filename)
+        )
+        parser.add_argument(
             '-a', '--append',
             dest='replace',
             action='store_false',
             default=True,
             help='Append data (default is to replace).'
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '-s', '--strict',
             action='store_true',
             default=False,
             help='Abort if any input data fails validation.'
-        ),
-    )
+        )
 
     def handle(self, *args, **options):
         filename = options['filename']

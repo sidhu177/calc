@@ -26,13 +26,4 @@ describe('autocomplete.processResults', () => {
     ]));
     expect(r.length).toBe(2);
   });
-
-  it('should default to 20 max categories', () => {
-    const lotsOfResults = [];
-    for (let i = 0; i < 30; i++) {
-      lotsOfResults.push({ labor_category: `${i}`, count: i });
-    }
-    const r = processResults(lotsOfResults);
-    expect(r.length).toBe(20);
-  });
 });

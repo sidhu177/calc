@@ -14,7 +14,7 @@ RATES_API_PATH = '/api/rates/'
 class ContractsPaginationTest(TestCase):
 
     def setUp(self):
-        ContractsTest.make_test_set()
+        GetRatesTests.make_test_set()
         self.path = RATES_API_PATH
 
     def absolute_uri(self, path=''):
@@ -41,7 +41,7 @@ class ContractsPaginationTest(TestCase):
         self.assertEqual(resp.status_code, 404)
 
 
-class ContractsTest(TestCase):
+class GetRatesTests(TestCase):
     """ tests for the /api/rates endpoint """
     BUSINESS_SIZES = ('small business', 'other than small business')
 

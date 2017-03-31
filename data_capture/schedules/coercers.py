@@ -24,11 +24,11 @@ def strip_non_numeric(text):
     return re.sub("[^\d\.]", "", text)
 
 
-def strip_and_lower(s):
+def strip_punctuation_and_lower(s):
     '''
     Helper to remove punctuation and lowercase the given input
 
-    >>> strip_and_lower('@!.HELLO, Friend!!!!')
+    >>> strip_punctuation_and_lower('@!.HELLO, Friend!!!!')
     'hello friend'
     '''
     exclude = set(string.punctuation)
@@ -102,11 +102,11 @@ def extract_min_education(text):
         return text
 
     # first remove all punctuation, make lowercase, and split on whitespace
-    stripped_and_split_text = strip_and_lower(text).split()
+    stripped_and_split_text = strip_punctuation_and_lower(text).split()
 
     # generate a list of tuples of the form
     # (education choice, stripped-lowered-split education choice)
-    desired = [(label, strip_and_lower(label).split())
+    desired = [(label, strip_punctuation_and_lower(label).split())
                for _, label in EDUCATION_CHOICES]
 
     # for each stripped-lowered-split education choice
@@ -132,6 +132,9 @@ def extract_hour_unit_of_issue(text):
     >>> extract_hour_unit_of_issue('hour')
     'Hour'
 
+    >>> extract_hour_unit_of_issue('  hourly  ')
+    'Hour'
+
     Returns the original string if it does not match
 
     >>> extract_hour_unit_of_issue('boop')
@@ -142,7 +145,7 @@ def extract_hour_unit_of_issue(text):
     >>> extract_hour_unit_of_issue(50)
     50
     '''
-    if not isinstance(text, str) or not hour_regex.match(text):
+    if not isinstance(text, str) or not hour_regex.match(text.strip()):
         return text
 
     return 'Hour'

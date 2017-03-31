@@ -1,0 +1,1 @@
+global.myFilename = __filename;

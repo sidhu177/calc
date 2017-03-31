@@ -112,14 +112,6 @@ th:hover.tooltips span {
   z-index: 999;
 }
 
-
-/**
- * no-UI overrides
- **/
-.noUi-connect {
-  background: $color-primary;
-}
-
 /* Skeleton adds margin even to the first column in a row. */
 .row .column:first-child,
 .row .columns:first-child {

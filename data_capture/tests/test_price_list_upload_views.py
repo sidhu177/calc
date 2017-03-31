@@ -22,7 +22,7 @@ class HandleCancelMixin():
         self.login()
         res = self.client.post(self.url, {'cancel': ''})
         self.assertEqual(res.status_code, 302)
-        self.assertEqual(res['Location'], 'http://testserver/')
+        self.assertEqual(res['Location'], '/')
         session = self.client.session
         for k in list(session.keys()):
             self.assertFalse(k.startswith('data_capture:'))
@@ -509,7 +509,7 @@ class Step4Tests(PriceListStepTestCase,
         session.save()
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 302)
-        self.assertEqual(res['Location'], 'http://testserver' + Step3Tests.url)
+        self.assertEqual(res['Location'], Step3Tests.url)
 
     def test_redirects_if_no_valid_rows_in_gleaned_data(self):
         self.login()
@@ -519,7 +519,7 @@ class Step4Tests(PriceListStepTestCase,
         self.set_fake_gleaned_data([])
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 302)
-        self.assertEqual(res['Location'], 'http://testserver' + Step3Tests.url)
+        self.assertEqual(res['Location'], Step3Tests.url)
 
     def test_gleaned_data_with_valid_rows_is_required_on_POST(self):
         self.login()

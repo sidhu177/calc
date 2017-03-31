@@ -46,7 +46,7 @@ export function processResults(result) {
   if (!result || !result.length) {
     return [];
   }
-  const categories = result.slice(0, 20).map(d => ({
+  const categories = result.map(d => ({
     term: d.labor_category,
     count: d.count,
   }));

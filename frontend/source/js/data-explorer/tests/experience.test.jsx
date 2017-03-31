@@ -13,19 +13,8 @@ const defaultProps = {
 
 const setup = makeSetup(Experience, defaultProps);
 
-// mock the global jquery object function used in <Experience>
-let noUiSliderMock = jest.fn();
-
-global.$ = () => {
-  const m = jest.fn();
-  m.noUiSlider = noUiSliderMock;
-  m.on = jest.fn();
-  return m;
-};
 
 describe('<Experience>', () => {
-  // NOTE: This test does not cover any noUiSlider functionality,
-  // which has all been mocked
   it('renders correctly', () => {
     const { props, wrapper } = setup();
 
@@ -43,6 +32,11 @@ describe('<Experience>', () => {
     const maxOptions = wrapper.find('select#zzz_max > option');
     expect(maxOptions.length).toBe((MAX_EXPERIENCE - props.min) + 1);
 
+    const range = wrapper.find('#zzz_range');
+    expect(range.exists()).toBeTruthy();
+    expect(range.prop('max')).toBe(MAX_EXPERIENCE);
+    expect(range.prop('min')).toBe(MIN_EXPERIENCE);
+
     minOptions.forEach((opt, i) => {
       expect(opt.prop('value')).toBe(i);
     });
@@ -55,18 +49,6 @@ describe('<Experience>', () => {
   it('matches snapshot', () => {
     const { wrapper } = setup();
     expect(toJson(wrapper)).toMatchSnapshot();
-  });
-
-  it('initializes noUiSlider', () => {
-    noUiSliderMock = jest.fn(); // make a new mock for ease of testing
-    const { props } = setup();
-    expect(noUiSliderMock.mock.calls.length).toBe(1);
-    const sliderArgs = noUiSliderMock.mock.calls[0][0];
-    expect(sliderArgs.start[0]).toBe(props.min);
-    expect(sliderArgs.start[1]).toBe(props.max);
-    expect(sliderArgs.step).toBe(1);
-    expect(sliderArgs.range.min).toBe(MIN_EXPERIENCE);
-    expect(sliderArgs.range.max).toBe(MAX_EXPERIENCE);
   });
 
   it('calls setExperience when option is selected', () => {

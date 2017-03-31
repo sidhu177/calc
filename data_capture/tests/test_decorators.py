@@ -79,7 +79,7 @@ class HandleCancelTests(TestCase):
     def test_returns_redirect(self):
         res = self.client.post('/test_view/', {'cancel': ''})
         self.assertEqual(302, res.status_code)
-        self.assertEqual(res['Location'], 'http://testserver/')
+        self.assertEqual(res['Location'], '/')
 
     def test_returns_json_redirect_when_ajax_post(self):
         res = self.client.post('/test_view/',
@@ -101,4 +101,4 @@ class HandleCancelTests(TestCase):
         res = self.client.post('/redirect_name_view/', {'cancel': ''})
         self.assertSessionOk()
         self.assertEqual(302, res.status_code)
-        self.assertEqual(res['Location'], 'http://testserver/another_view/')
+        self.assertEqual(res['Location'], '/another_view/')

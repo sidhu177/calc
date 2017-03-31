@@ -2,11 +2,11 @@
 dj-database-url==0.4.2
 dj-email-url==0.0.10
 django-click==1.2.0
-Django==1.8.16
+Django==1.9.12
 django-cors-headers==2.0.2
 django-debug-toolbar==1.6
 djangorestframework==3.5.3
-djorm-ext-pgfulltext==0.9.3
+git+git://github.com/18F/djorm-ext-pgfulltext@179c45929288e6b14f3067489c1ba8f9e158a974
 gunicorn==19.6.0
 newrelic==2.78.0.57
 psycopg2==2.6.2
@@ -20,7 +20,8 @@ defusedxml==0.5.0
 rq==0.7.1
 django-rq==0.9.4
 rq-scheduler==0.7.0
-mypy-lang==0.4.6
+mypy==0.501
 pytz==2016.10
 Markdown==2.6.8
 cg-django-uaa==0.0.1
+semantic_version==2.6.0

@@ -70,7 +70,7 @@ class ProtectedViewTestCase(BaseLoginTestCase):
         self.assertEqual(res.status_code, 302)
         self.assertEqual(
             res['Location'],
-            'http://testserver/auth/login?next=%s' % url
+            '/auth/login?next=%s' % url
         )
 
     def test_login_is_required(self):

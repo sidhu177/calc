@@ -9,6 +9,10 @@
 
 h3.styleguide-section {
   border-bottom: 1px solid lightgray;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
 }
 
 .styleguide-section a {

@@ -13,7 +13,7 @@ locally:
 * [Node 6.0](https://nodejs.org/)
 * [yarn](https://yarnpkg.com)
   * Install globally via `npm install -g yarn`
-* [Postgres](https://www.postgresql.org/)
+* [Postgres 9.5](https://www.postgresql.org/)
   * It's easiest to have a local instance of it running on its default
     port, as this requires no extra configuration on the CALC side.
 * [Redis](https://redis.io/)

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import Range from 'rc-slider/lib/Range';
 
 import {
   setExperience,
@@ -30,67 +31,25 @@ function makeOptions(min, max) {
 export class Experience extends React.Component {
   constructor(props) {
     super(props);
-    autobind(this, ['onSliderSlide', 'onSliderChange']);
+    autobind(this, ['onSliderChange', 'onAfterSliderChange']);
     this.state = {
-      isSliding: false,
-      sliderVal: null,
+      sliderVal: [this.props.min, this.props.max],
     };
   }
 
-  componentDidMount() {
-    // We're currently using an old version of noUiSlider (7.0.10). Its
-    // documentation can only be seen via archive.org:
-    //
-    // https://web.archive.org/web/20141224210103/http://refreshless.com/nouislider/
-
-    $(this.sliderEl).noUiSlider({
-      start: [
-        this.props.min,
-        this.props.max,
-      ],
-      step: 1,
-      connect: true,
-      range: {
-        min: MIN_EXPERIENCE,
-        max: MAX_EXPERIENCE,
-      },
-    });
-    $(this.sliderEl).on({
-      slide: this.onSliderSlide,
-      change: this.onSliderChange,
-    });
-  }
-
-  componentDidUpdate() {
-    if (!this.state.isSliding) {
-      const [min, max] = this.getSliderVal();
-
-      if (min !== this.props.min || max !== this.props.max) {
-        $(this.sliderEl).val([this.props.min, this.props.max]);
-      }
+  componentWillReceiveProps(newProps) {
+    const [min, max] = this.state.sliderVal;
+    if (min !== newProps.min || max !== newProps.max) {
+      this.setState({ sliderVal: [newProps.min, newProps.max] });
     }
   }
 
-  onSliderSlide() {
-    $('.noUi-horizontal .noUi-handle', this.rootEl).addClass('filter_focus');
-
-    this.setState({
-      isSliding: true,
-      sliderVal: this.getSliderVal(),
-    });
+  onSliderChange(val) {
+    this.setState({ sliderVal: val });
   }
 
-  onSliderChange() {
-    $('.noUi-horizontal .noUi-handle', this.rootEl)
-      .removeClass('filter_focus');
-
-    const [min, max] = this.getSliderVal();
-
-    this.setState({
-      isSliding: false,
-      sliderVal: null,
-    });
-
+  onAfterSliderChange(val) {
+    const [min, max] = val;
     if (min !== this.props.min) {
       this.props.setExperience('min', min);
     }
@@ -99,18 +58,10 @@ export class Experience extends React.Component {
     }
   }
 
-  getSliderVal() {
-    return $(this.sliderEl).val().map(x => parseInt(x, 10));
-  }
-
   render() {
-    let min = this.props.min;
-    let max = this.props.max;
+    const [min, max] = this.state.sliderVal;
 
-    if (this.state.isSliding) {
-      [min, max] = this.state.sliderVal;
-    }
-
+    const rangeId = `${this.props.idPrefix}range`;
     const minId = `${this.props.idPrefix}min`;
     const maxId = `${this.props.idPrefix}max`;
     const baseClasses = 'select-small';
@@ -127,7 +78,15 @@ export class Experience extends React.Component {
           <legend>
             Experience:
           </legend>
-          <div className="slider" ref={(el) => { this.sliderEl = el; }} />
+          <Range
+            id={rangeId}
+            allowCross={false}
+            min={MIN_EXPERIENCE} max={MAX_EXPERIENCE}
+            value={this.state.sliderVal}
+            onChange={this.onSliderChange}
+            onAfterChange={this.onAfterSliderChange}
+            className="experience-slider"
+          />
           <div className="experience_range">
             <label htmlFor={minId} className="sr-only">Minimum Years</label>
             <select

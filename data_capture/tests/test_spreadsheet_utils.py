@@ -1,11 +1,12 @@
 import copy
+import re
 
 from unittest.mock import Mock, MagicMock
-from django.test import TestCase
+from django.test import SimpleTestCase as TestCase
 from django.core.exceptions import ValidationError
 
 from ..schedules.spreadsheet_utils import (
-    generate_column_index_map, safe_cell_str_value)
+    generate_column_index_map, safe_cell_str_value, ColumnTitle)
 
 
 class SafeCellStrValueTests(TestCase):
@@ -40,6 +41,18 @@ class SafeCellStrValueTests(TestCase):
         self.assertEqual(safe_cell_str_value(s, 1, 1, int), '5')
 
 
+class TestColumnTitle(TestCase):
+    def test_str_alternatives_match(self):
+        title = ColumnTitle('zzz', ['HEADING 3'])
+        self.assertTrue(title.matches('  heading 3'))
+        self.assertFalse(title.matches('  heading 4'))
+
+    def test_regex_alternatives_match(self):
+        title = ColumnTitle('zzz', [re.compile(r'BOP.*')])
+        self.assertTrue(title.matches('BOPkfie'))
+        self.assertFalse(title.matches('blergBOPkfie'))
+
+
 class TestGenerateColumnIndexMap(TestCase):
     def setUp(self):
         self.heading_row = [
@@ -51,7 +64,7 @@ class TestGenerateColumnIndexMap(TestCase):
         self.field_title_map = {
             'field_1': 'heading 1',
             'field_2': 'heading 2',
-            'field_3': 'heading 3',
+            'field_3': ColumnTitle('heading 3'),
         }
 
     def test_generate_column_index_map_works(self):

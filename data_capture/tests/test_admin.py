@@ -103,7 +103,8 @@ class SuperuserViewTests(DebugAdminTestCase):
         self.user = self.login(is_superuser=True)
 
     def test_can_set_superuser(self):
-        res = self.client.get('/admin/auth/user/{}/'.format(self.user.id))
+        res = self.client.get(
+            '/admin/auth/user/{}/change/'.format(self.user.id))
         self.assertContains(res, 'Superuser')
         self.assertEqual(res.status_code, 200)
 
@@ -126,7 +127,8 @@ class NonSuperuserViewTests(DebugAdminTestCase):
                             status_code=200)
 
     def test_cannot_set_superuser(self):
-        res = self.client.get('/admin/auth/user/{}/'.format(self.user.id))
+        res = self.client.get(
+            '/admin/auth/user/{}/change/'.format(self.user.id))
         self.assertNotContains(res, 'Superuser')
         self.assertEqual(res.status_code, 200)
 
@@ -161,7 +163,7 @@ class NonSuperuserViewTests(DebugAdminTestCase):
 
     def test_unreviewed_pricelist_detail_returns_200(self):
         res = self.client.get(
-            '/admin/data_capture/unreviewedpricelist/{}/'.format(
+            '/admin/data_capture/unreviewedpricelist/{}/change/'.format(
                 self.price_list.id
             )
         )
@@ -170,7 +172,7 @@ class NonSuperuserViewTests(DebugAdminTestCase):
     def test_retired_pricelist_detail_returns_200(self):
         self.price_list.retire(self.user)
         res = self.client.get(
-            '/admin/data_capture/retiredpricelist/{}/'.format(
+            '/admin/data_capture/retiredpricelist/{}/change/'.format(
                 self.price_list.id
             )
         )
@@ -179,7 +181,7 @@ class NonSuperuserViewTests(DebugAdminTestCase):
     def test_approved_pricelist_detail_returns_200(self):
         self.price_list.approve(self.user)
         res = self.client.get(
-            '/admin/data_capture/approvedpricelist/{}/'.format(
+            '/admin/data_capture/approvedpricelist/{}/change/'.format(
                 self.price_list.id
             )
         )
@@ -188,7 +190,7 @@ class NonSuperuserViewTests(DebugAdminTestCase):
     def test_rejected_pricelist_detail_returns_200(self):
         self.price_list.reject(self.user)
         res = self.client.get(
-            '/admin/data_capture/rejectedpricelist/{}/'.format(
+            '/admin/data_capture/rejectedpricelist/{}/change/'.format(
                 self.price_list.id
             )
         )
@@ -291,7 +293,7 @@ class SubmittedPriceListRowAdminTests(AdminTestCase):
             self.price_list.status = val
             self.assertEqual(
                 self.pl_model_admin.contract_number(self.row),
-                '<a href="/admin/data_capture/{}pricelist/{}/">{}</a>'.format(
+                '<a href="/admin/data_capture/{}pricelist/{}/change/">{}</a>'.format(  # NOQA
                     label,
                     self.price_list.id,
                     self.price_list.contract_number)

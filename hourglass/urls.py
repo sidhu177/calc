@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
 
+import data_explorer.views
 from .decorators import staff_login_required
 from .healthcheck import healthcheck
 from .robots import robots_txt
@@ -15,12 +16,9 @@ from .changelog import django_view as view_changelog
 admin.site.login = staff_login_required(admin.site.login)
 
 urlpatterns = [
-    # Examples:
-    # url(r'^$', 'hourglass.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-    url(r'^$', 'data_explorer.views.index', name='index'),
-    url(r'^about/$', 'data_explorer.views.about', name='about'),
-    url(r'^logout/$', 'data_explorer.views.logout', name='logout'),
+    url(r'^$', data_explorer.views.index, name='index'),
+    url(r'^about/$', data_explorer.views.about, name='about'),
+    url(r'^logout/$', data_explorer.views.logout, name='logout'),
     url(r'^safe-mode/', include('frontend.safe_mode', namespace='safe_mode')),
     url(r'^healthcheck/', healthcheck),
     url(r'^api/', include('api.urls')),

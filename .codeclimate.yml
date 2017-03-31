@@ -16,6 +16,8 @@ engines:
     checks:
       import/no-unresolved:
         enabled: false
+      import/extensions:
+        enabled: false
     extensions:
     - .js
     - .jsx

@@ -6,10 +6,35 @@ from itertools import cycle
 from django.test import TestCase, SimpleTestCase
 from contracts.mommy_recipes import get_contract_recipe
 
-from ..models import Contract, convert_to_tsquery
+from ..models import Contract, convert_to_tsquery, CashField
 
 
 _normalize = Contract.normalize_labor_category
+
+
+class CashFieldTests(SimpleTestCase):
+    def test_value_error_raised_on_invalid_decimal_places(self):
+        with self.assertRaisesRegexp(ValueError, r'must have exactly 2'):
+            CashField(max_digits=10, decimal_places=4)
+
+    def test_to_python_returns_none_when_value_is_none(self):
+        c = CashField(max_digits=10, decimal_places=2)
+        self.assertEqual(c.to_python(None), None)
+
+    def test_to_python_returns_decimal_when_value_is_float(self):
+        c = CashField(max_digits=10, decimal_places=2)
+        self.assertEqual(c.to_python(1.0 / 3), Decimal('0.33'))
+
+    def test_to_python_rounds_decimals(self):
+        c = CashField(max_digits=10, decimal_places=2)
+        self.assertEqual(c.to_python(Decimal('0.336')), Decimal('0.34'))
+        self.assertEqual(c.to_python(Decimal('0.334')), Decimal('0.33'))
+
+    def test_clean_calls_to_python(self):
+        # This is really a test to ensure that Django is working
+        # the way we think it is.
+        c = CashField(max_digits=10, decimal_places=2)
+        self.assertEqual(c.clean(1.0 / 3, None), Decimal('0.33'))
 
 
 class NormalizeLaborCategoryTests(SimpleTestCase):
@@ -381,6 +406,19 @@ class ContractSearchTestCase(BaseContractSearchTestCase):
             u'Interpretation Services Class 4: Afrikan,Akan,Albanian',
             u'Interpretation Services Class 1: Spanish',
             u'Interpretation Services Class 2: French, German, Italian'
+        ])
+
+
+class UnicodeContractSearchTestCase(BaseContractSearchTestCase):
+    CATEGORIES = [
+        '\u5982',
+        '\u679c',
+    ]
+
+    def test_search_finds_thing(self):
+        results = Contract.objects.search('\u5982')
+        self.assertCategoriesEqual(results, [
+            '\u5982',
         ])
 
 

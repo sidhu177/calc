@@ -13,7 +13,7 @@
       var API_HOST = "{{ API_HOST }}";
     </script>
     {# For the list of files included in this built script, see gulpfile.js #}
-    <script src= "{% static 'frontend/built/js/common/vendor.min.js' %}"></script>
+    <script src= "{% static 'frontend/built/js/common.vendor.js' %}"></script>
   </head>
   <body>
     <div id="qunit"></div>
@@ -23,8 +23,8 @@
       var QUNIT_FIXTURE_DATA = {% qunit_fixture_data_json %};
     </script>
     <script src="{% static 'frontend/js/vendor/qunit-1.16.0.js' %}"></script>
-    <script src="{% static 'frontend/built/js/common/index.min.js' %}"></script>
-    <script src="{% static 'frontend/built/js/tests/index.min.js' %}"></script>
+    <script src="{% static 'frontend/built/js/common.js' %}"></script>
+    <script src="{% static 'frontend/built/js/tests.js' %}"></script>
     {% include 'frontend/safe_mode/test.html' %}
   </body>
 </html>

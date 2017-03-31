@@ -7,7 +7,7 @@ from django.test import TestCase
 
 from contracts.loaders.region_10 import FEDERAL_MIN_CONTRACT_RATE
 from contracts.loaders.schedule_70 import Schedule70Loader
-from contracts.models import Contract
+from contracts.models import Contract, CashField
 from contracts.mommy_recipes import get_contract_recipe
 
 
@@ -117,13 +117,13 @@ class LoadS70TestCase(TestCase):
         self.assertEquals(contract.labor_category, 'Messy Category')
 
     def test_sets_hourly1_and_current_price(self):
-        price = 999.99
+        price = CashField.cash(999.99)
         c = Schedule70Loader.make_contract(self.make_row(price=str(price)))
         self.assertEquals(c.hourly_rate_year1, price)
         self.assertEquals(c.current_price, price)
 
     def test_no_display_price_if_too_low(self):
-        price = FEDERAL_MIN_CONTRACT_RATE - 1.0
+        price = CashField.cash(FEDERAL_MIN_CONTRACT_RATE - 1.0)
         c = Schedule70Loader.make_contract(self.make_row(price=str(price)))
         self.assertEquals(c.hourly_rate_year1, price)
         self.assertIsNone(c.current_price)

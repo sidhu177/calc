@@ -5,7 +5,7 @@ cache:
 python:
 - 3.6
 addons:
-  postgresql: 9.3
+  postgresql: 9.5
 matrix:
   fast_finish: true
 services:
@@ -34,7 +34,7 @@ env:
   - TRAVIS_NODE_VERSION=6.5.0
   - NPM_CONFIG_ENGINE_STRICT=true
   - PHANTOMJS_TIMEOUT=15
-  - CF_CLI_VERSION=6.22.2
+  - CF_CLI_VERSION=6.25.0
   - SKIP_STATIC_ASSET_BUILDING=yup
   - DEBUG=yup
   - DATABASE_URL=postgres://postgres@localhost/hourglass

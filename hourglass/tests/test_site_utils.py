@@ -41,3 +41,11 @@ class SiteUtilsTests(TestCase):
             absolutify_url('/blap'),
             'http://example.com/blap'
         )
+
+    @override_settings(DEBUG=True, DEBUG_HTTPS=True,
+                       SECURE_SSL_REDIRECT=True)
+    def test_absolutify_url_works_when_debug_https_is_true(self):
+        self.assertEqual(
+            absolutify_url('/blap'),
+            'https://example.com/blap'
+        )

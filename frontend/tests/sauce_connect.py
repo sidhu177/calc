@@ -6,7 +6,7 @@ import pexpect
 
 if False:
     # This is just needed so mypy will work; it's never executed.
-    from typing import Optional  # NOQA
+    from typing import Optional, Dict, List  # NOQA
 
 MY_DIR = os.path.abspath(os.path.dirname(__file__))
 

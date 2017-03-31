@@ -267,6 +267,8 @@ class GetRatesCSV(APIView):
 
 class GetAutocomplete(APIView):
 
+    MAX_RESULTS = 20
+
     def get(self, request, format=None):
         """
         Query Params:
@@ -283,8 +285,13 @@ class GetAutocomplete(APIView):
                 data = Contract.objects.filter(labor_category__icontains=q)
             else:
                 data = Contract.objects.multi_phrase_search(q)
+
             data = data.values('_normalized_labor_category').annotate(
                 count=Count('_normalized_labor_category')).order_by('-count')
+
+            # limit data to MAX_RESULTS
+            data = data[:self.MAX_RESULTS]
+
             data = [
                 {'labor_category': d['_normalized_labor_category'],
                  'count': d['count']}

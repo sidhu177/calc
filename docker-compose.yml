@@ -11,7 +11,9 @@ services:
     ports:
       - "${DOCKER_EXPOSED_PORT}:${DOCKER_EXPOSED_PORT}"
   db:
-    image: postgres:9.4
+    image: postgres:9.5.4
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=calc
       - POSTGRES_USER=calc_user
@@ -39,3 +41,4 @@ volumes:
   node-modules:
   python-venv:
   home:
+  pgdata:

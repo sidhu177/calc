@@ -170,7 +170,7 @@ class Region10UploadStep2Tests(R10StepTestCase):
         self.setup_upload_source(user)
         res = self.client.post(self.url, {'cancel': ''})
         self.assertEqual(res.status_code, 302)
-        self.assertEqual(res['Location'], 'http://testserver/')
+        self.assertEqual(res['Location'], '/')
         session = self.client.session
         self.assertNotIn('data_capture:upload_source_id', session)
 

@@ -190,6 +190,51 @@ class BulkUploadContractSource(models.Model):
         db_index=True, max_length=5, choices=PROCUREMENT_CENTER_CHOICES)
 
 
+class CashField(models.DecimalField):
+    '''
+    Custom field class for storing cash amounts in U.S. dollars and cents.
+    '''
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.decimal_places != 2:
+            raise ValueError(f'{self.__class__.__name__} must have '
+                             f'exactly 2 decimal places')
+
+    @staticmethod
+    def cash(val):
+        '''
+        Converts the given value, which may be a floating-point number,
+        to a Decimal that represents a monetary value.
+
+        Examples:
+
+            >>> CashField.cash(1.0 / 3)
+            Decimal('0.33')
+
+            >>> CashField.cash(350)
+            Decimal('350.00')
+        '''
+
+        return Decimal(val).quantize(Decimal('.01'))
+
+    def to_python(self, value):
+        '''
+        It's possible that our cash-related fields have been set to
+        float values that don't convert nicely to Decimal values with
+        a reasonable number of digits in the cents part.
+
+        This will trip Django 1.9's max_digits validators, so we'll
+        ensure that our values don't have an excessive number of cents
+        digits.
+        '''
+
+        value = super().to_python(value)
+        if value is None:
+            return value
+        return self.cash(value)
+
+
 class Contract(models.Model):
 
     idv_piid = models.CharField(max_length=128)  # index this field
@@ -203,20 +248,20 @@ class Contract(models.Model):
         db_index=True, choices=EDUCATION_CHOICES, max_length=5, null=True,
         blank=True)
     min_years_experience = models.IntegerField(db_index=True)
-    hourly_rate_year1 = models.DecimalField(max_digits=10, decimal_places=2)
-    hourly_rate_year2 = models.DecimalField(
+    hourly_rate_year1 = CashField(max_digits=10, decimal_places=2)
+    hourly_rate_year2 = CashField(
         max_digits=10, decimal_places=2, null=True, blank=True)
-    hourly_rate_year3 = models.DecimalField(
+    hourly_rate_year3 = CashField(
         max_digits=10, decimal_places=2, null=True, blank=True)
-    hourly_rate_year4 = models.DecimalField(
+    hourly_rate_year4 = CashField(
         max_digits=10, decimal_places=2, null=True, blank=True)
-    hourly_rate_year5 = models.DecimalField(
+    hourly_rate_year5 = CashField(
         max_digits=10, decimal_places=2, null=True, blank=True)
-    current_price = models.DecimalField(
+    current_price = CashField(
         db_index=True, max_digits=10, decimal_places=2, null=True, blank=True)
-    next_year_price = models.DecimalField(
+    next_year_price = CashField(
         db_index=True, max_digits=10, decimal_places=2, null=True, blank=True)
-    second_year_price = models.DecimalField(
+    second_year_price = CashField(
         db_index=True, max_digits=10, decimal_places=2, null=True, blank=True)
     contractor_site = models.CharField(
         db_index=True, max_length=128, null=True, blank=True)

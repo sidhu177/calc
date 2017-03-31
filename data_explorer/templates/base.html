@@ -38,8 +38,8 @@
     </script>
 
     {# For the list of files included in this built script, see gulpfile.js #}
-    <script src="{% static 'frontend/built/js/common/vendor.min.js' %}"></script>
-    <script src="{% static 'frontend/built/js/common/index.min.js' %}"></script>
+    <script src="{% static 'frontend/built/js/common.vendor.js' %}"></script>
+    <script src="{% static 'frontend/built/js/common.js' %}"></script>
 
     <![endif]>
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,700" rel="stylesheet">
@@ -75,9 +75,7 @@
       <![if gt IE 8]>
       <script {{ csp_nonce }}>
         if (typeof aight === 'object') {
-          d3.select('body')
-            .classed('ie', true)
-            .classed('ie' + aight.browser.ie, true);
+          document.body.className += ' ie ie' + aight.browser.ie;
         }
       </script>
       <![endif]>

@@ -23,7 +23,7 @@ class WebComponentLink extends window.HTMLAnchorElement {
         'has no SOURCE_FILENAME property!',
       );
     }
-    this.setAttribute('href', this.href + proto.SOURCE_FILENAME.slice(1));
+    this.setAttribute('href', this.href + proto.SOURCE_FILENAME);
   }
 }
 

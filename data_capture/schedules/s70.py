@@ -9,7 +9,8 @@ from django.template.loader import render_to_string
 
 from .base import (BasePriceList, min_price_validator,
                    hourly_rates_only_validator)
-from .spreadsheet_utils import generate_column_index_map, safe_cell_str_value
+from .spreadsheet_utils import (generate_column_index_map,
+                                safe_cell_str_value, ColumnTitle)
 from .coercers import (strip_non_numeric, extract_min_education,
                        extract_hour_unit_of_issue, extract_first_int)
 from contracts.models import EDUCATION_CHOICES
@@ -17,20 +18,47 @@ from contracts.models import EDUCATION_CHOICES
 
 DEFAULT_SHEET_NAME = '(3)Labor Categories'
 
+COLUMN_TITLES = {
+    'sin': ColumnTitle(
+        canonical_name=r'SIN(s) PROPOSED',
+        alternatives=[
+            re.compile(r'SIN.*')
+        ]
+    ),
+    'labor_category': ColumnTitle(
+        canonical_name=r'SERVICE PROPOSED (e.g. Job Title/Task)',
+        alternatives=['Labor Categories'],
+    ),
+    'education_level': ColumnTitle(
+        canonical_name=r'MINIMUM EDUCATION/ CERTIFICATION LEVEL',
+        alternatives=['MINIMUM EDUCATION']
+    ),
+    'min_years_experience': ColumnTitle(
+        canonical_name=r'MINIMUM YEARS OF EXPERIENCE',
+        alternatives=['Years of experience'],
+    ),
+    'unit_of_issue': ColumnTitle(
+        canonical_name=r'UNIT OF ISSUE (e.g. Hour, Task, Sq ft)'
+    ),
+    'price_including_iff': ColumnTitle(
+        canonical_name=r'PRICE OFFERED TO GSA (including IFF)'
+    ),
+}
+
 EXAMPLE_SHEET_ROWS = [
     [
-        r'SIN(s) PROPOSED',
-        r'SERVICE PROPOSED (e.g. Job Title/Task)',
-        r'MINIMUM EDUCATION/ CERTIFICATION LEVEL',
-        r'MINIMUM YEARS OF EXPERIENCE',
+        COLUMN_TITLES['sin'].canonical_name,
+        COLUMN_TITLES['labor_category'].canonical_name,
+        COLUMN_TITLES['education_level'].canonical_name,
+        COLUMN_TITLES['min_years_experience'].canonical_name,
         r'COMMERCIAL LIST PRICE (CPL) OR MARKET PRICES',
-        r'UNIT OF ISSUE (e.g. Hour, Task, Sq ft)',
+        COLUMN_TITLES['unit_of_issue'].canonical_name,
         r'MOST FAVORED CUSTOMER (MFC)',
         r'BEST  DISCOUNT OFFERED TO MFC (%)',
         r'MFC PRICE',
         r'GSA(%) DISCOUNT (exclusive of the .75% IFF)',
         r'PRICE OFFERED TO GSA (excluding IFF)',
-        r'PRICE OFFERED TO GSA (including IFF)',
+        COLUMN_TITLES['price_including_iff'].canonical_name,
         r'QUANTITY/ VOLUME DISCOUNT',
     ],
     [
@@ -50,15 +78,6 @@ EXAMPLE_SHEET_ROWS = [
     ]
 ]
 
-DEFAULT_FIELD_TITLE_MAP = {
-    'sin': 'SIN(s) PROPOSED',
-    'labor_category': 'SERVICE PROPOSED (e.g. Job Title/Task)',
-    'education_level': 'MINIMUM EDUCATION/ CERTIFICATION LEVEL',
-    'min_years_experience': 'MINIMUM YEARS OF EXPERIENCE',
-    'unit_of_issue': 'UNIT OF ISSUE (e.g. Hour, Task, Sq ft)',
-    'price_including_iff': 'PRICE OFFERED TO GSA (including IFF)',
-}
-
 # Text to indicate the definite end of the the price list table
 STOP_TEXT = r'Most Favored Customer'
 
@@ -66,14 +85,17 @@ logger = logging.getLogger(__name__)
 
 
 def find_header_row(sheet, row_threshold=50):
-    first_col_heading = EXAMPLE_SHEET_ROWS[0][0]
+    first_col_heading = COLUMN_TITLES['sin']
     row_limit = min(sheet.nrows, row_threshold)
 
     for rx in range(row_limit):
-        if sheet.cell_value(rx, 0) == first_col_heading:
+        val = sheet.cell_value(rx, 0)
+        if isinstance(val, str) and first_col_heading.matches(val):
             return rx
 
-    raise ValidationError('Could not find Labor Categories price table.')
+    raise ValidationError(
+        'Could not find the column {}.'.format(first_col_heading)
+    )
 
 
 def glean_labor_categories_from_file(f, sheet_name=DEFAULT_SHEET_NAME):
@@ -106,8 +128,7 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
 
     heading_row = sheet.row(rownum - 1)
 
-    col_idx_map = generate_column_index_map(heading_row,
-                                            DEFAULT_FIELD_TITLE_MAP)
+    col_idx_map = generate_column_index_map(heading_row, COLUMN_TITLES)
 
     # dict of property names to functions that will be used to coerce values
     # if a field is not in this map, it will just be retrieved (safely)

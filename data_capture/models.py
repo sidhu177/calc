@@ -5,7 +5,7 @@ from django.core.validators import (MinValueValidator, MaxValueValidator,
                                     RegexValidator)
 from django.utils import timezone
 
-from contracts.models import (Contract, EDUCATION_CHOICES,
+from contracts.models import (Contract, CashField, EDUCATION_CHOICES,
                               MIN_ESCALATION_RATE, MAX_ESCALATION_RATE)
 
 
@@ -207,7 +207,7 @@ class SubmittedPriceListRow(models.Model):
         choices=EDUCATION_CHOICES, max_length=5, null=True,
         blank=True)
     min_years_experience = models.IntegerField()
-    base_year_rate = models.DecimalField(max_digits=10, decimal_places=2)
+    base_year_rate = CashField(max_digits=10, decimal_places=2)
     sin = models.TextField(null=True, blank=True)
 
     is_muted = models.BooleanField(

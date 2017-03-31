@@ -84,19 +84,16 @@ class WebComponentHTMLParser(HTMLParser):
 @register.simple_tag
 def template_tag_library(name):
     from importlib import import_module
-    from django.template.base import get_templatetags_modules
+    from django.template.backends.django import get_installed_libraries
 
-    mod = None
+    libs = get_installed_libraries()
 
-    for modname in get_templatetags_modules():
-        try:
-            mod = import_module(f'{modname}.{name}')
-            break
-        except ModuleNotFoundError:
-            pass
+    print(libs)
 
-    if mod is None:
+    if name not in libs:
         raise ValueError(f'template tag library {name} not found')
+
+    mod = import_module(libs[name])
 
     if not mod.__file__.startswith(ROOT_DIR):
         raise ValueError(f'template tag library {name} is not in project')
@@ -126,8 +123,8 @@ def template_url(context, template_name):
     path = None
 
     for candidate in candidates:
-            if os.path.exists(candidate):
-                path = candidate
+            if os.path.exists(candidate.name):
+                path = candidate.name
                 break
 
     if path is None:

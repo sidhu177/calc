@@ -1,4 +1,4 @@
-/* global $, window, document, d3 */
+/* global $, window, document */
 
 import ReactDOM from 'react-dom';
 import React from 'react';

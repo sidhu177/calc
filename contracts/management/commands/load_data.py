@@ -2,7 +2,6 @@ import os
 import logging
 
 from django.core.management import BaseCommand
-from optparse import make_option
 from django.core.management import call_command
 
 from contracts.models import Contract, BulkUploadContractSource
@@ -13,13 +12,13 @@ class Command(BaseCommand):
 
     default_filename = 'contracts/docs/hourly_prices.csv'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        parser.add_argument(
             '-f', '--filename',
-            default=default_filename,
-            help='input filename (.csv, default {})'.format(default_filename)
-        ),
-    )
+            default=self.default_filename,
+            help='input filename (.csv, default {})'.format(
+                self.default_filename)
+        )
 
     def handle(self, *args, **options):
         log = logging.getLogger(__name__)

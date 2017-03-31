@@ -2,7 +2,7 @@ import re
 import abc
 from typing import Dict, Any, Optional
 from django.template.loader import render_to_string
-from django.core.validators import (  # type: ignore
+from django.core.validators import (
     MinValueValidator, RegexValidator)
 from django.http import HttpRequest
 from django.utils.safestring import SafeString, mark_safe
@@ -13,6 +13,7 @@ from ..models import SubmittedPriceList
 
 if False:
     from django.forms import Form  # NOQA
+    from typing import List  # NOQA
 
 min_price_validator = MinValueValidator(
     FEDERAL_MIN_CONTRACT_RATE,
@@ -20,7 +21,7 @@ min_price_validator = MinValueValidator(
             '(${0:.2f})'.format(FEDERAL_MIN_CONTRACT_RATE))
 
 
-hour_regex = re.compile(r'^hour(ly)?$', flags=re.IGNORECASE)
+hour_regex = re.compile(r'^hour(ly|s)?$', flags=re.IGNORECASE)
 
 hourly_rates_only_validator = RegexValidator(
     hour_regex, 'Value must be "Hour" or "Hourly"')

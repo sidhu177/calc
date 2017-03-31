@@ -1,7 +1,11 @@
-/* global d3 */
-
 import React from 'react';
 import { connect } from 'react-redux';
+
+import { select } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisLeft, axisBottom } from 'd3-axis';
+import { transition } from 'd3-transition';
+import { extent as _extent } from 'd3-array';
 
 import {
   templatize,
@@ -9,6 +13,15 @@ import {
   formatPrice,
   formatFriendlyPrice,
 } from '../util';
+
+const d3 = {
+  select,
+  scaleLinear,
+  axisLeft,
+  axisBottom,
+  transition,
+  extent: _extent,
+};
 
 const INLINE_STYLES = `/* styles here for download graph compatibility */
 
@@ -107,11 +120,11 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
 
   const extent = [data.minimum, data.maximum];
   const bins = data.wage_histogram;
-  const x = d3.scale.linear()
+  const x = d3.scaleLinear()
       .domain(extent)
       .range([left, right]);
   const countExtent = d3.extent(bins, d => d.count);
-  const heightScale = d3.scale.linear()
+  const heightScale = d3.scaleLinear()
       .domain([0].concat(countExtent))
       .range([0, 1, bottom - top]);
 
@@ -143,10 +156,8 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
         .attr('class', d => `chart-label ${d.type}`);
     stdDevLabels.append('line')
       .attr('class', 'label-rule')
-      .attr({
-        y1: -5,
-        y2: 5,
-      });
+      .attr('y1', -5)
+      .attr('y2', 5);
     const stdDevLabelsText = stdDevLabels.append('text')
       .attr('text-anchor', d => d.anchor)
       .attr('dx', (d, i) => 8 * (i ? 1 : -1));
@@ -285,7 +296,7 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
     });
 
   const t = showTransition
-    ? svg.transition().duration(500)
+    ? d3.transition().duration(500)
     : svg;
 
   const stdDevWidth = x(stdDevMax) - x(stdDevMin);
@@ -303,19 +314,21 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
 
   stdDev.select('.chart-label.min .stddev-text')
     .text(formatDollars(stdDevMin))
-    .attr({ x: 0, dy: 0 });
+    .attr('x', 0)
+    .attr('dy', 0);
 
   stdDev.select('.chart-label.min .stddev-text-label')
     .text('-1 std dev')
-    .attr({ x: -8, dy: '15px' });
+    .attr('x', -8)
+    .attr('dy', '15px');
 
   stdDev.select('.chart-label.max')
     .attr('transform', `translate(${[stdDevWidth, 0]})`);
 
   stdDev.select('.chart-label.max .stddev-text-label')
     .text('+1 std dev')
-    .attr({ x: 8, dy: '15px' });
-
+    .attr('x', 8)
+    .attr('dy', '15px');
 
   stdDev.select('.chart-label.max .stddev-text')
     .text(formatDollars(stdDevMax));
@@ -349,8 +362,7 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
   const ticks = bins.map(d => d.min)
     .concat([data.maximum]);
 
-  const xa = d3.svg.axis()
-    .orient('bottom')
+  const xa = d3.axisBottom()
     .scale(x)
     .tickValues(ticks)
     .tickFormat((d, i) => {
@@ -379,9 +391,8 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
     .text('Ceiling price (hourly rate)');
 
   const yd = d3.extent(heightScale.domain());
-  const ya = d3.svg.axis()
-    .orient('left')
-    .scale(d3.scale.linear()
+  const ya = d3.axisLeft()
+    .scale(d3.scaleLinear()
       .domain(yd)
       .range([bottom, top]))
     .tickValues(yd);

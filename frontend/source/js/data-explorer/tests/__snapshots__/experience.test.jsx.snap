@@ -5,8 +5,31 @@ exports[`<Experience> matches snapshot 1`] = `
     <legend>
       Experience:
     </legend>
-    <div
-      className="slider" />
+    <ComponentEnhancer(Range)
+      allowCross={false}
+      className="experience-slider"
+      count={1}
+      disabled={false}
+      dots={false}
+      handle={[Function]}
+      id="zzz_range"
+      included={true}
+      marks={Object {}}
+      max={45}
+      min={0}
+      onAfterChange={[Function]}
+      onBeforeChange={[Function]}
+      onChange={[Function]}
+      prefixCls="rc-slider"
+      pushable={false}
+      step={1}
+      value={
+        Array [
+          5,
+          10,
+        ]
+      }
+      vertical={false} />
     <div
       className="experience_range">
       <label

@@ -3,6 +3,8 @@ from unittest import TestCase
 import json
 import yaml
 
+from semantic_version import Version
+from django.conf import settings
 
 MY_DIR = os.path.abspath(os.path.dirname(__file__))
 ROOT_DIR = os.path.normpath(os.path.join(MY_DIR, '..', '..'))
@@ -10,27 +12,6 @@ ROOT_DIR = os.path.normpath(os.path.join(MY_DIR, '..', '..'))
 
 def path(*x):
     return os.path.join(ROOT_DIR, *x)
-
-
-class Version:
-    '''
-    Just a helper that makes it easy to do things with version numbers.
-
-        >>> v = Version('1.2.3')
-        >>> str(v)
-        '1.2.3'
-        >>> float(v)
-        1.2
-    '''
-
-    def __init__(self, version):
-        self.parts = version.split('.')
-
-    def __str__(self):
-        return '.'.join(self.parts)
-
-    def __float__(self):
-        return float('.'.join(self.parts[:2]))
 
 
 class PythonVersionTests(TestCase):
@@ -54,11 +35,35 @@ class PythonVersionTests(TestCase):
     def test_travis_yml(self):
         with open(path('.travis.yml')) as f:
             data = yaml.safe_load(f)
-            self.assertEqual(data['python'], [float(self.version)])
+            # In Travis we can only specify down to the minor number
+            self.assertEqual(str(data['python'][0]),
+                             f"{self.version.major}.{self.version.minor}")
 
     def test_docs_setup_md(self):
         with open(path('docs', 'setup.md')) as f:
             self.assertIn(f'Python {self.version}', f.read())
+
+
+class PostgresVersionTests(TestCase):
+
+    version = Version(settings.POSTGRES_VERSION)
+
+    def test_docs_setup_md(self):
+        with open(path('docs', 'setup.md')) as f:
+            self.assertIn(
+                f'Postgres {self.version.major}.{self.version.minor}',
+                f.read())
+
+    def test_docker_compose_yml(self):
+        with open(path('docker-compose.yml')) as f:
+            self.assertIn(f"image: postgres:{self.version}", f.read())
+
+    def test_travis_yml(self):
+        with open(path('.travis.yml')) as f:
+            data = yaml.safe_load(f)
+            # In Travis we can only specify down to the minor number
+            self.assertEqual(str(data['addons']['postgresql']),
+                             f"{self.version.major}.{self.version.minor}")
 
 
 class NodeVersionTests(TestCase):
@@ -67,7 +72,7 @@ class NodeVersionTests(TestCase):
     the same Node version.
     '''
 
-    version = Version('6.0')
+    version = Version('6.0', partial=True)
 
     def test_package_json(self):
         with open(path('package.json')) as f:

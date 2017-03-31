@@ -135,10 +135,18 @@ select[multiple="multiple"] {
 
 .submit-row {
   text-align: left;
-}
-
-.submit-row input[type="submit"] {
-  display: inline;
+  a.deletelink {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: #ba2121 !important;
+    background: none !important;
+  }
+  input[type="submit"] {
+    display: inline;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 /* Styling for ul/lis with action links */
@@ -203,15 +211,15 @@ thead a:focus {
 }
 
 .addlink {
-    background: url(/static/admin/img/icon_addlink.gif) 0 8px no-repeat;
+    background: url(/static/admin/img/icon-addlink.svg) 0 4px no-repeat;
   }
 
 .changelink {
-    background: url(/static/admin/img/icon_changelink.gif) 0 8px no-repeat;
+    background: url(/static/admin/img/icon-changelink.svg) 0 4px no-repeat;
 }
 
 .deletelink {
-    background: url(/static/admin/img/icon_deletelink.gif) 0 8px no-repeat;
+    background: url(/static/admin/img/icon-deletelink.svg) 0 4px no-repeat;
 }
 
 .deletelink {
@@ -292,6 +300,8 @@ thead a:focus {
   width: 100%;
   .selector .selector-available input {
     width: 100%;
+    margin-left: 0;
+    margin-bottom: 0.8rem;
   }
   .selector .selector-filter {
     padding: 0;
