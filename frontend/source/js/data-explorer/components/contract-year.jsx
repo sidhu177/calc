@@ -75,7 +75,7 @@ export function ContractYear({ idPrefix, contractYear, setContractYear }) {
                 e.preventDefault();
               }}
             >
-              What's this?
+              What&apos;s this?
             </a>
           </Tooltip>
         </span>

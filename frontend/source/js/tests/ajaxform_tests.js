@@ -215,7 +215,7 @@ advancedTest("upgraded form has falsy .isDegraded", (assert, s) => {
 });
 
 advancedTest(
-  "custom submit btn info only included when " + "in active focus",
+  "custom submit btn info only included when in active focus",
   (assert, s) => {
     $(s.ajaxform).on("submit", () => {
       const formData = server.requests[0].requestBody;

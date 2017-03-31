@@ -16,7 +16,7 @@ export function Schedule({ idPrefix, schedule, setSchedule }) {
     <div className="filter filter-schedule">
       <label htmlFor={id}>SIN / Schedule:</label>
       <a href="/about#schedules" className="filter-more-info">
-        What's this?
+        What&apos;s this?
       </a>
       <select
         id={id}
