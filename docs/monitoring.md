@@ -1,5 +1,7 @@
 ## Monitoring
 
+### Healthcheck
+
 CALC has an endpoint at `/healthcheck/` which always
 returns a `200 OK` response of type `application/json`. The
 returned object has the following keys:
@@ -36,4 +38,12 @@ returned object has the following keys:
 For more details on the `/healthcheck/` endpoint, see
 [hourglass/healthcheck.py](../hourglass/healthcheck.py).
 
+### Production tests
+
+CALC has a suite of tests in [production_tests](../production_tests/) for
+checking that the production site is properly configured.
+
+These tests are run as part of our daily [Travis cron][travis-cron] build.
+
 [rq]: http://python-rq.org/
+[travis-cron]: https://docs.travis-ci.com/user/cron-jobs/
