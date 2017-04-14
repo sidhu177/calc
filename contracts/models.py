@@ -312,7 +312,7 @@ class Contract(models.Model):
 
         # Note also that any logic changes to this code should
         # eventually be followed-up with
-        # `manage.py update_search_field contracts`. Otherwise,
+        # `manage.py update_search_field contracts Contract`. Otherwise,
         # all pre-existing contracts will still have search
         # index information corresponding to the old logic.
 
