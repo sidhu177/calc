@@ -1,0 +1,164 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/calc
+    docker:
+      - image: circleci/python:3.6
+        environment:
+          CI_NODE_VERSION: 6.5.0
+          NPM_CONFIG_ENGINE_STRICT: true
+          PHANTOMJS_TIMEOUT: 15
+          SKIP_STATIC_ASSET_BUILDING: yup
+          DEBUG: yup
+          DATABASE_URL: postgres://postgres@localhost/hourglass
+
+          # Some of our integration tests either take a really long time to run or
+          # are very error-prone via Selenium, so prefer RoboBrowser for now.
+          TEST_WITH_ROBOBROWSER: yup
+
+          # These environment variables affect the running of Webdriver/Selenium
+          # tests. Note that if we're not in a trusted environment (e.g. a PR
+          # is being issued from an untrusted fork), we will default to using
+          # PhantomJS locally, rather than a real-world browser via Sauce Labs.
+          DJANGO_LIVE_TEST_SERVER_ADDRESS: 127.0.0.1:8000
+
+          # TODO: Add this back in once we have time to get Sauce running in Circle
+          # WD_TESTING_BROWSER: "internet explorer"
+          # WD_TESTING_BROWSER_VERSION: 11.103
+          # WD_JOB_VISIBILITY: public
+          # WD_SOCKET_TIMEOUT: 60
+
+          SAUCE_USERNAME: atulvarma
+          # SAUCE_ACCESS_KEY is set as a private env var in the Circle dashboard
+      - image: circleci/postgres:9.5
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: hourglass
+      - image: redis:3.0.7-alpine
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-py-cache-{{ .Branch }}-{{ checksum "requirements-dev.txt" }}
+      - run:
+          name: Activate venv and install requirements
+          command: |
+            python3 -m venv ~/venv
+
+            echo ". ~/venv/bin/activate" >> $BASH_ENV
+            source $BASH_ENV
+
+            pip install -r requirements-dev.txt
+      - save_cache:
+          name: Save python deps cache
+          key: v1-py-cache-{{ .Branch }}-{{ checksum "requirements-dev.txt" }}
+          paths:
+            - ~/venv
+
+      - run:
+          name: Install nvm and node @ CI_NODE_VERSION
+          command: |
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+            echo ". ~/.nvm/nvm.sh" >> $BASH_ENV
+            source $BASH_ENV
+            nvm install $CI_NODE_VERSION
+
+      - run:
+          name: Install yarn and gulp
+          command: |
+            npm install -g yarn gulp-cli
+
+
+      - restore_cache:
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install node dependencies
+          command: |
+            yarn --pure-lockfile
+      - save_cache:
+          name: Save node deps cache
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+            - ~/.yarn-cache
+
+      - restore_cache:
+          key: v1-phantomjs-2-1-1
+      - run:
+          name: Install phantomjs
+          command: |
+            [ -f /tmp/phantomjs ] || curl --output /tmp/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
+            sudo chmod ugo+x /tmp/phantomjs
+            sudo ln -sf /tmp/phantomjs /usr/local/bin/phantomjs
+      - save_cache:
+          key: v1-phantomjs-2-1-1
+          paths:
+            - /tmp/phantomjs
+
+      - run:
+          name: Display versions
+          command: |
+            echo $(node --version)
+            echo $(yarn --version)
+            echo $(phantomjs --version)
+            echo $(npm --version)
+            echo $(pwd)
+      - run:
+          name: Run linters and static analysis
+          command: |
+            python manage.py ultratest flake8 eslint mypy bandit
+      - run:
+          name: Build front end and run front end tests
+          command: |
+            yarn gulp -- build
+            yarn test
+
+      - run:
+          name: CodeClimate before-build
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+
+      - run:
+          name: Run python tests
+          command: |
+            # Note that this MUST come after building the front end assets
+            # For details on why we're ignoring selenium tests, see https://github.com/18F/calc/issues/330
+            py.test --ignore=frontend/tests/test_selenium.py --cov=. --cov-report xml:./coverage.xml
+
+      - run:
+          name: CodeClimate after-build
+          # Attempt to submit a report, but don't fail the build if this fails (`|| true`)
+          command: ./cc-test-reporter after-build -t coverage.py --exit-code $? || true
+
+      # TODO: This should be added back into the CI build once
+      # we have time to get Sauce working in CircleCI
+      # - run:
+      #     name: Run tests via Sauce
+      #     command: |
+      #       # For details on why we're ignoring selenium tests, see https://github.com/18F/calc/issues/330
+      #       python frontend/tests/sauce_connect.py py.test --ignore=frontend/tests/test_selenium.py --cov
+
+      # TODO: Run py.test production_tests in a cron-style nightly build
+      # Cron-style builds are not yet supported in CircleCI
+      #  if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then py.test production_tests; fi
+
+      - deploy:
+          name: Deploy to dev
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              DEPLOY_ENV=dev ./.circleci/deploy-circle.sh
+            fi
+      - deploy:
+          name: Deploy to staging
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
+            fi
+      - deploy:
+          name: Deploy to prod
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ] && [ "${CIRCLE_TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]; then
+              DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
+            fi

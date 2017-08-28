@@ -40,7 +40,7 @@ To release version 0.0.4 of CALC:
     python manage.py unreleased_changelog | pbcopy
     ```
 
-4.  Make sure that all automated QA services (Travis CI, etc) think
+4.  Make sure that all automated QA services (CircleCI, etc) think
     the PR looks good.
 
 5.  Wait for the stakeholders to sign-off on the release.
@@ -64,14 +64,14 @@ To release version 0.0.4 of CALC:
     ```
 
 8.  Merge the PR into `master` via the **Create a merge commit** merge
-    strategy (i.e., do *not* squash or rebase). Once Travis CI is finished,
+    strategy (i.e., do *not* squash or rebase). Once CircleCI is finished,
     the site will be deployed to staging.
 
 9.  Visit the [staging instance][staging] and make sure all is functioning as
     expected.
 
 10. Tag the release and push it to the official repository, which will trigger
-    Travis CI to deploy the site to [production][production]:
+    CircleCI to deploy the site to [production][production]:
 
     ```
     git tag -a v0.0.4 -F tag-message-v0.0.4.txt

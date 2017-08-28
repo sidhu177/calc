@@ -88,8 +88,6 @@ def template_tag_library(name):
 
     libs = get_installed_libraries()
 
-    print(libs)
-
     if name not in libs:
         raise ValueError(f'template tag library {name} not found')
 

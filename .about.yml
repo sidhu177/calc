@@ -37,10 +37,10 @@ stack:
 #   url: URL for detailed information
 #   badge: URL for the status badge
 services:
-- name: Travis CI
+- name: CircleCI
   category: CI
-  url: https://travis-ci.org/18F/calc
-  badge: https://travis-ci.org/18F/calc.svg
+  url: https://circleci.com/gh/18F/calc/
+  badge: https://circleci.com/gh/18F/calc.svg?style=svg
 - name: CodeClimate
   category: Code Review
   url: https://codeclimate.com/github/18F/calc

@@ -82,7 +82,7 @@ def _get_webdriver(name):
         driver = webdriver.PhantomJS()
         driver.command_executor.set_timeout(PHANTOMJS_TIMEOUT)
         return driver
-    raise 'No such webdriver: "%s"' % name
+    raise Exception('No such webdriver: "%s"' % name)
 
 
 class SeleniumTestCase(StaticLiveServerTestCase):

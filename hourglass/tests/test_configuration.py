@@ -20,7 +20,7 @@ class PythonVersionTests(TestCase):
     same Python version.
     '''
 
-    version = Version('3.6.0')
+    version = Version('3.6.2')
 
     def test_runtime_txt(self):
         with open(path('runtime.txt')) as f:
@@ -32,12 +32,13 @@ class PythonVersionTests(TestCase):
             self.assertIn('FROM python:{}'.format(self.version),
                           f.read())
 
-    def test_travis_yml(self):
-        with open(path('.travis.yml')) as f:
+    def test_circle_yml(self):
+        with open(path('.circleci/config.yml')) as f:
             data = yaml.safe_load(f)
-            # In Travis we can only specify down to the minor number
-            self.assertEqual(str(data['python'][0]),
-                             f"{self.version.major}.{self.version.minor}")
+            # In CircleCI we can only specify down to the minor number
+            self.assertEqual(
+                str(data['jobs']['build']['docker'][0]['image']),
+                f"circleci/python:{self.version.major}.{self.version.minor}")
 
     def test_docs_setup_md(self):
         with open(path('docs', 'setup.md')) as f:
@@ -58,12 +59,13 @@ class PostgresVersionTests(TestCase):
         with open(path('docker-compose.yml')) as f:
             self.assertIn(f"image: postgres:{self.version}", f.read())
 
-    def test_travis_yml(self):
-        with open(path('.travis.yml')) as f:
+    def test_circle_yml(self):
+        with open(path('.circleci/config.yml')) as f:
             data = yaml.safe_load(f)
-            # In Travis we can only specify down to the minor number
-            self.assertEqual(str(data['addons']['postgresql']),
-                             f"{self.version.major}.{self.version.minor}")
+            # In Circle we can only specify down to the minor number
+            self.assertEqual(
+                str(data['jobs']['build']['docker'][1]['image']),
+                f"circleci/postgres:{self.version.major}.{self.version.minor}")
 
 
 class NodeVersionTests(TestCase):

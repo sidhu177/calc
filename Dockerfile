@@ -1,4 +1,4 @@
-FROM python:3.6.0
+FROM python:3.6.2
 
 ENV PHANTOMJS_VERSION 1.9.7
 

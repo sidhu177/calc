@@ -74,10 +74,10 @@ satisfies:
   control_key: CM-3   # Configuration Change Control
   narrative:
     - text: >
-        In addition to cloud.gov controls, all code is reviewed by CALC software developers on GitHub before being merged into the "master" branch. These changes are tested automatically via Travis CI (which runs unit, integration tests, and static analysis) as well as manually for visual regressions. Proposed changes have appropriate justification (describing problems resolved or referencing further details in an issue tracker) in either their commit history or as part of the GitHub Pull Request. Proposed changes which fail automated tests are generally not merged. Only the tested "master" branch code is deployed to production when it is specifically tagged with a release-format git tag.
+        In addition to cloud.gov controls, all code is reviewed by CALC software developers on GitHub before being merged into the "master" branch. These changes are tested automatically via CircleCI (which runs unit, integration tests, and static analysis) as well as manually for visual regressions. Proposed changes have appropriate justification (describing problems resolved or referencing further details in an issue tracker) in either their commit history or as part of the GitHub Pull Request. Proposed changes which fail automated tests are generally not merged. Only the tested "master" branch code is deployed to production when it is specifically tagged with a release-format git tag.
   references:
     - verification_key: github
-    - verification_key: travis
+    - verification_key: circle
 - standard_key: NIST-800-53
   control_key: CM-6   # Configuration Settings
   narrative:
@@ -121,7 +121,7 @@ satisfies:
   control_key: RA-5   # Vulnerability Scanning
   narrative:
     - text: >
-        In addition to cloud.gov controls, the application layer is scanned with both static and dynamic tooling. Before a pull request is merged, all custom code is automatically analyzed by "flake8" (a linting tool to catch syntactic errors), "bandit" (a security-focused static analysis tool), and a handful of custom, security-centric unit tests. These analyses and tests are run as part the TravisCI builds for each pull request. Code which does not pass tests is generally not merged. We also employ Gemnasium to track our dependencies and Code Climate to warn of potentially concerning style. Badges reflecting the status of the "develop" branch are posted at the top of the code repository's README.md file.
+        In addition to cloud.gov controls, the application layer is scanned with both static and dynamic tooling. Before a pull request is merged, all custom code is automatically analyzed by "flake8" (a linting tool to catch syntactic errors), "bandit" (a security-focused static analysis tool), and a handful of custom, security-centric unit tests. These analyses and tests are run as part the CircleCI builds for each pull request. Code which does not pass tests is generally not merged. We also employ Gemnasium to track our dependencies and Code Climate to warn of potentially concerning style. Badges reflecting the status of the "develop" branch are posted at the top of the code repository's README.md file.
 
         For static analysis, we've addressed all critical issues raised by evaluating the application with OWASP ZAP.
   references:
@@ -130,7 +130,7 @@ satisfies:
     - verification_key: gemnasium
     - verification_key: code-climate
     - verification_key: owasp-zap
-    - verification_key: travis
+    - verification_key: circle
 - standard_key: NIST-800-53
   control_key: SA-11 (1)   # Developer Security Testing and Evaluation
                            # Static Code Analysis
@@ -165,9 +165,9 @@ satisfies:
   control_key: SI-2   # Flaw Remediation
   narrative:
     - text: >
-        At the application layer (see cloud.gov controls for lower), all custom code passes through a set of automated unit and integration tests via Travis CI. Library dependencies are verified up to date via Gemnasium. Production errors are captured via New Relic and emailed to relevant parties. Further, code is first deployed (automatically) to our dev environment after each PR is merged, and to our staging environment before any production deployments, so we may discover errors before appearing in production.
+        At the application layer (see cloud.gov controls for lower), all custom code passes through a set of automated unit and integration tests via CircleCI. Library dependencies are verified up to date via Gemnasium. Production errors are captured via New Relic and emailed to relevant parties. Further, code is first deployed (automatically) to our dev environment after each PR is merged, and to our staging environment before any production deployments, so we may discover errors before appearing in production.
   references:
-    - verification_key: travis
+    - verification_key: circle
     - verification_key: new-relic
     - verification_key: gemnasium
 - standard_key: NIST-800-53
@@ -184,9 +184,9 @@ satisfies:
     - verification_key: defusedxml
     - verification_key: react-jsx
 verifications:
-- key: travis
-  name: Repository's Travis CI
-  path: https://travis-ci.org/18F/calc
+- key: circle
+  name: Repository's Cricle CI
+  path: https://circleci.com/gh/18F/calc/
   type: URL
 - key: code-climate
   name: Project's Code Climate Results

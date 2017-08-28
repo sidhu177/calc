@@ -9,7 +9,7 @@ you may want to check out our alternative [Docker instructions](docker.md).
 You'll need the following tools and services installed to run CALC
 locally:
 
-* [Python 3.6.0](https://www.python.org/)
+* [Python 3.6.2](https://www.python.org/)
 * [Node 6.0](https://nodejs.org/)
 * [yarn](https://yarnpkg.com)
   * Install globally via `npm install -g yarn`

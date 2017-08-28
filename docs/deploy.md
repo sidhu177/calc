@@ -125,8 +125,8 @@ to supply the `NEW_RELIC_LICENSE_KEY` as part of each deployment's
 ### Staging server
 
 The staging server updates automatically when changes are merged into the
-`develop` branch. Check out the `deploy` section of
-[.travis.yml](../.travis.yml) for details and settings.
+`develop` branch. Check out the `deploy` sections of
+the [CircleCI config](../.circleci/config.yml) for details and settings.
 
 Should you need to, you can push directly to calc-dev.app.cloud.gov with:
 
@@ -138,7 +138,7 @@ cf push -f manifests/manifest-staging.yml
 ### Production servers
 
 Production deploys are a somewhat manual process in that they are not done
-from CI. However, just like in our Travis deployments to staging, we use the
+from CI. However, just like in our CircleCI deployments to staging, we use the
 Cloud Foundry [autopilot plugin](https://github.com/contraband/autopilot).
 
 To deploy, first make sure you are targeting the prod space:

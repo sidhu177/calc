@@ -9,7 +9,7 @@ from .. import jobs
 
 
 def process_worker_jobs():
-    # We need to do this while testing to avoid strange errors on Travis.
+    # We need to do this while testing to avoid strange errors on Circle.
     #
     # See:
     #
