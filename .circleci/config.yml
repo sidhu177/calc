@@ -2,6 +2,12 @@ version: 2
 jobs:
   build_and_test:
     working_directory: ~/calc
+    filters:
+      # Due to how tags work in CircleCI we need to tell this job
+      # to run on any tag
+      # ref: https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+      tags:
+        only: /.*/
     docker:
       - image: circleci/python:3.6
         environment:
@@ -151,8 +157,7 @@ jobs:
     steps:
       - run:
           name: Deploy to dev
-          command: echo "deploying to dev"
-          # command: DEPLOY_ENV=dev ./.circleci/deploy-circle.sh
+          command: DEPLOY_ENV=dev ./.circleci/deploy-circle.sh
 
   deploy_staging:
     machine:
@@ -161,8 +166,7 @@ jobs:
     steps:
       - run:
           name: Deploy to staging
-          command: echo "deploying to staging"
-          # command: DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
+          command: DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
 
   deploy_prod:
     machine:
@@ -171,14 +175,31 @@ jobs:
     steps:
       - run:
           name: Deploy to prod
-          command: echo "deploying to prod"
-          # command: DEPLOY_ENV=prod ./.circleci/deploy-circle.sh
+          command: DEPLOY_ENV=prod ./.circleci/deploy-circle.sh
+
+  deploy_test: # TODO: delete this
+    machine:
+        enabled: true
+    working_directory: ~/calc
+    steps:
+      - run:
+          name: Deploy tag test
+          command: echo "got to the deploy step"
+      - run:
+          name: Deploy to dev
+          command: DEPLOY_ENV=dev ./.circleci/deploy-circle.sh
 
 workflows:
   version: 2
   build-and-deploy:
     jobs:
       - build_and_test
+      - deploy_test: # TODO: delete this
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: fix-circle-prod-builds
       - deploy_dev:
           requires:
             - build_and_test
@@ -196,6 +217,8 @@ workflows:
             - build_and_test
           filters:
             branches:
-              only: master
+              # Don't run this for any branch name, but ...
+              ignore: /.*/
             tags:
+              # ... only when there is a tag that looks like "v#.#.#"
               only: /^v[0-9]+\.[0-9]+\.[0-9]+$/

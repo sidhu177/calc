@@ -37,7 +37,7 @@ class PythonVersionTests(TestCase):
             data = yaml.safe_load(f)
             # In CircleCI we can only specify down to the minor number
             self.assertEqual(
-                str(data['jobs']['build']['docker'][0]['image']),
+                str(data['jobs']['build_and_test']['docker'][0]['image']),
                 f"circleci/python:{self.version.major}.{self.version.minor}")
 
     def test_docs_setup_md(self):
@@ -64,7 +64,7 @@ class PostgresVersionTests(TestCase):
             data = yaml.safe_load(f)
             # In Circle we can only specify down to the minor number
             self.assertEqual(
-                str(data['jobs']['build']['docker'][1]['image']),
+                str(data['jobs']['build_and_test']['docker'][1]['image']),
                 f"circleci/postgres:{self.version.major}.{self.version.minor}")
 
 
