@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build_and_test:
     working_directory: ~/calc
     docker:
       - image: circleci/python:3.6
@@ -144,21 +144,58 @@ jobs:
       # Cron-style builds are not yet supported in CircleCI
       #  if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then py.test production_tests; fi
 
-      - deploy:
+  deploy_dev:
+    machine:
+        enabled: true
+    working_directory: ~/calc
+    steps:
+      - run:
           name: Deploy to dev
-          command: |
-            if [[ "${CIRCLE_BRANCH}" == "develop" ]]; then
-              DEPLOY_ENV=dev ./.circleci/deploy-circle.sh
-            fi
-      - deploy:
+          command: echo "deploying to dev"
+          # command: DEPLOY_ENV=dev ./.circleci/deploy-circle.sh
+
+  deploy_staging:
+    machine:
+        enabled: true
+    working_directory: ~/calc
+    steps:
+      - run:
           name: Deploy to staging
-          command: |
-            if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-              DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
-            fi
-      - deploy:
+          command: echo "deploying to staging"
+          # command: DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
+
+  deploy_prod:
+    machine:
+        enabled: true
+    working_directory: ~/calc
+    steps:
+      - run:
           name: Deploy to prod
-          command: |
-            if [[ "${CIRCLE_BRANCH}" == "master" ]] && [[ "${CIRCLE_TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              DEPLOY_ENV=staging ./.circleci/deploy-circle.sh
-            fi
+          command: echo "deploying to prod"
+          # command: DEPLOY_ENV=prod ./.circleci/deploy-circle.sh
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build_and_test
+      - deploy_dev:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: develop
+      - deploy_staging:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: master
+      - deploy_prod:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
