@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django_rq import job
+from memory_profiler import profile
 
 from . import email
 from .r10_spreadsheet_converter import Region10SpreadsheetConverter
@@ -15,6 +16,7 @@ contracts_logger = logging.getLogger('contracts')
 
 
 @transaction.atomic
+@profile
 def _process_bulk_upload(upload_source):
     file = ContentFile(upload_source.original_file)
     converter = Region10SpreadsheetConverter(file)
