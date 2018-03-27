@@ -1,5 +1,5 @@
 from django import template, forms
-from .. import date
+from uswds_forms import UswdsDateWidget
 
 
 register = template.Library()
@@ -9,7 +9,8 @@ register = template.Library()
 # like to use a <legend> element with these, instead of a <label>, so
 # that screen-readers contextualize them properly.
 LEGEND_WIDGETS = (
-    date.SplitDateWidget,
+    UswdsDateWidget,
+    forms.CheckboxSelectMultiple,
     forms.RadioSelect
 )
 

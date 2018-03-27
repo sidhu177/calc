@@ -49,7 +49,7 @@ def _process_bulk_upload(upload_source):
     contracts_logger.info("Updating full-text search indexes.")
 
     # Update search field on Contract models
-    Contract._fts_manager.update_search_field()
+    Contract.objects.update_search_index()
 
     # Update the upload_source
     upload_source.has_been_loaded = True

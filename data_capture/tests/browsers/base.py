@@ -1,7 +1,6 @@
 import abc
 
-
-from frontend.date import SplitDateWidget
+from uswds_forms import UswdsDateWidget
 
 
 class AbstractBrowserForm(abc.ABC):
@@ -24,7 +23,7 @@ class AbstractBrowserForm(abc.ABC):
         Given a split date widget's name, set its individual fields.
         '''
 
-        names = SplitDateWidget.get_field_names(name)
+        names = UswdsDateWidget.get_field_names(name)
 
         self.set_text(names.year, str(year))
         self.set_text(names.month, str(month))

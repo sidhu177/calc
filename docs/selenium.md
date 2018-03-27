@@ -29,23 +29,12 @@ environment variables, unless otherwise noted:
 The following can also be optionally defined:
 
 * `WD_TESTING_PLATFORM` is the operating system the browser should
-  be running on. If using Sauce Labs, their [platform configurator][]
-  may be useful here.
+  be running on.
 
 * `WD_TESTING_BROWSER_VERSION` is the browser version to test with.
 
-* `WD_TUNNEL_ID` specifies an optional [Sauce Connect tunnel id][] to use.
-
 * `WD_SOCKET_TIMEOUT` specifies the default socket timeout to use for
   requests before giving up, in seconds.
-
-* `WD_JOB_VISIBILITY` is the [job visibility][] to use, if using
-  Sauce Labs.
-
-* `SAUCE_USERNAME` is the Sauce Labs username to connect with, and
-  `SAUCE_ACCESS_KEY` is the access key. If these are provided, and
-  `WD_HUB_URL` isn't, its value is automatically set to point to
-  `ondemand.saucelabs.com` with the username and access key.
 
 ### Example: Docker on OS X
 
@@ -138,9 +127,6 @@ extra configuration:
 
 Now, follow the earlier example's instructions from step (2) onward.
 
-[job visibility]: https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-JobVisibility
-[platform configurator]: https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-[Sauce connect tunnel id]: https://wiki.saucelabs.com/display/DOCS/Using+Multiple+Sauce+Connect+Tunnels
 [Selenium hub]: https://seleniumhq.github.io/docs/grid.html#what_is_a_hub_and_node
 [Selenium Standalone Server]: http://www.seleniumhq.org/download/
 [ChromeDriver]: https://sites.google.com/a/chromium.org/chromedriver/

@@ -1,42 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<Highlights> matches snapshot 1`] = `
 <div
-  className="highlights-container row">
+  className="highlights-container row"
+>
   <div
-    className="price-block">
+    className="price-block"
+  >
     <div
-      className="row">
+      className="row"
+    >
       <div
-        className="standard-deviation-block">
+        className="standard-deviation-block"
+      >
         <h5
-          className="standard-deviation-title">
+          className="standard-deviation-title"
+        >
           Std deviation -1
         </h5>
         <h5
-          className="sd-highlight">
+          className="sd-highlight"
+        >
           $
           1
         </h5>
       </div>
       <div
-        className="avg-price-block">
+        className="avg-price-block"
+      >
         <h5
-          className="avg-price-title">
+          className="avg-price-title"
+        >
           Average
         </h5>
         <h5
-          className="avg-price-highlight">
+          className="avg-price-highlight"
+        >
           $
           2
         </h5>
       </div>
       <div
-        className="standard-deviation-block">
+        className="standard-deviation-block"
+      >
         <h5
-          className="standard-deviation-title">
+          className="standard-deviation-title"
+        >
           Std deviation +1
         </h5>
         <h5
-          className="sd-highlight">
+          className="sd-highlight"
+        >
           $
           3
         </h5>
@@ -49,13 +63,16 @@ exports[`<Highlights> matches snapshot 1`] = `
       Object {
         "display": "block",
       }
-    }>
+    }
+  >
     <h5
-      className="proposed-price-title">
+      className="proposed-price-title"
+    >
       Proposed price
     </h5>
     <h5
-      className="proposed-price-highlight">
+      className="proposed-price-highlight"
+    >
       $
       5
     </h5>

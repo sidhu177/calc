@@ -210,11 +210,7 @@ class SubmittedPriceList(models.Model):
         return get_class(self.schedule).title
 
     def get_business_size_string(self):
-        # TODO: Based on contracts/docs/s70/s70_data.csv, it seems
-        # business size is either 'S' or 'O'. Assuming here that
         # 'S' means 'Small Business' and 'O' means 'Other'
-        # but WE REALLY, REALLY NEED TO VERIFY THIS.
-
         if self.is_small_business:
             return 'S'
         return 'O'

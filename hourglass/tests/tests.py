@@ -7,28 +7,14 @@ from django.test import TestCase as DjangoTestCase
 from django.test import override_settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.http import HttpResponse
-from django.conf.urls import url
 from django.conf import settings
 from semantic_version import Version
 
 from .. import healthcheck, __version__
-from ..urls import urlpatterns
-from ..decorators import staff_login_required
 from ..settings_utils import (load_cups_from_vcap_services,
                               load_redis_url_from_vcap_services,
                               get_whitelisted_ips,
                               is_running_tests)
-
-
-@staff_login_required
-def staff_only_view(request):
-    return HttpResponse('ok')
-
-
-urlpatterns += [
-    url(r'^staff_only_view/$', staff_only_view, name='staff_only_view'),
-]
 
 
 class ComplianceTests(DjangoTestCase):
@@ -220,7 +206,7 @@ class RedisUrlTests(unittest.TestCase):
 
     def test_noop_when_name_not_in_vcap(self):
         env = make_vcap_services_env({
-            'redis28': [{
+            'redis32': [{
                 'name': 'a-different-name',
                 'credentials': {
                     'hostname': 'the_host',
@@ -234,7 +220,7 @@ class RedisUrlTests(unittest.TestCase):
 
     def test_redis_url_is_loaded(self):
         env = make_vcap_services_env({
-            'redis28': [{
+            'redis32': [{
                 'name': 'redis-service',
                 'credentials': {
                     'hostname': 'the_host',
@@ -320,43 +306,6 @@ class IsRunningTestsTests(unittest.TestCase):
 
     def test_returns_true_when_running_py_test(self):
         self.assertTrue(is_running_tests(['/usr/local/bin/py.test']))
-
-
-@override_settings(
-    ROOT_URLCONF=__name__,
-    # This will make tests run faster.
-    PASSWORD_HASHERS=['django.contrib.auth.hashers.MD5PasswordHasher'],
-    # Ignore our custom auth backend so we can log the user in via
-    # Django 1.8's login helpers.
-    AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend']
-)
-class StaffLoginRequiredTests(DjangoTestCase):
-
-    def login(self, is_staff=False):
-        user = User.objects.create_user(username='foo',  # nosec
-                                        password='bar')
-        if is_staff:
-            user.is_staff = True
-            user.save()
-        assert self.client.login(username='foo', password='bar')  # nosec
-        return user
-
-    def test_redirects_to_login(self):
-        res = self.client.get('/staff_only_view/')
-        self.assertEqual(302, res.status_code)
-        self.assertTrue(
-            res['Location'].startswith('/auth/login'))
-
-    def test_staff_user_is_permitted(self):
-        self.login(is_staff=True)
-        res = self.client.get('/staff_only_view/')
-        self.assertEqual(200, res.status_code)
-        self.assertEqual(b'ok', res.content)
-
-    def test_non_staff_user_is_denied(self):
-        self.login(is_staff=False)
-        res = self.client.get('/staff_only_view/')
-        self.assertEqual(403, res.status_code)
 
 
 class CachingTests(DjangoTestCase):

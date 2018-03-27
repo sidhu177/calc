@@ -1,8 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<Site> matches snapshot 1`] = `
 <div
-  className="filter filter-site">
+  className="filter filter-site"
+>
   <label
-    htmlFor="zzz_site">
+    htmlFor="zzz_site"
+  >
     Worksite:
   </label>
   <select
@@ -10,21 +14,26 @@ exports[`<Site> matches snapshot 1`] = `
     id="zzz_site"
     name="site"
     onChange={[Function]}
-    value="contractor">
+    value="contractor"
+  >
     <option
-      value="">
+      value=""
+    >
       (all)
     </option>
     <option
-      value="customer">
+      value="customer"
+    >
       customer
     </option>
     <option
-      value="contractor">
+      value="contractor"
+    >
       contractor
     </option>
     <option
-      value="both">
+      value="both"
+    >
       both
     </option>
   </select>

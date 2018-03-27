@@ -34,11 +34,13 @@
     "gulp-clean-css": "2.3.2",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^3.0.1",
+    "gulp-if": "^2.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "1.6.0",
+    "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.7",
-    "jest": "^18.0.0",
+    "jest": "^22.0.0",
     "jquery": "3.2.1",
     "rc-slider": "^6.1.2",
     "react": "^15.4.1",
@@ -74,5 +76,14 @@
   "engines": {
     "node": ">=6.0 <7.0",
     "npm": ">=3.8.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov",
+      "text",
+      "html"
+    ],
+    "coverageDirectory": "./coverage/jest/"
   }
 }

@@ -2,7 +2,7 @@ version: '2'
 services:
   app:
     volumes:
-      - .:/calc
+      - .:/calc:delegated
     command: python manage.py runserver 0.0.0.0:${DOCKER_EXPOSED_PORT}
     environment:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
@@ -13,18 +13,18 @@ services:
       file: docker-services.yml
       service: base_app
     volumes:
-      - .:/calc
+      - .:/calc:delegated
     command: gulp
   rq_worker:
     volumes:
-      - .:/calc
+      - .:/calc:delegated
     environment:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
     links:
       - mailcatcher
   rq_scheduler:
     volumes:
-      - .:/calc
+      - .:/calc:delegated
     environment:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
     links:

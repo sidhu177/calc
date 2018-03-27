@@ -1,12 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<EducationLevel> matches snapshot 1`] = `
 <div>
   <label
-    htmlFor="zzz_education_level">
+    htmlFor="zzz_education_level"
+  >
     Education level:
   </label>
   <dl
     className="dropdown"
-    id="zzz_education_level">
+    id="zzz_education_level"
+  >
     <dt>
       <a
         aria-expanded="true"
@@ -14,15 +18,19 @@ exports[`<EducationLevel> matches snapshot 1`] = `
         href=""
         onClick={[Function]}
         onKeyDown={[Function]}
-        role="button">
+        role="button"
+      >
         <div
-          className="multiSel">
+          className="multiSel"
+        >
           <span
-            title="Masters Degree">
+            title="Masters Degree"
+          >
             Masters Degree
           </span>
           <span
-            title="Ph.D">
+            title="Ph.D"
+          >
             Ph.D
           </span>
         </div>
@@ -30,41 +38,49 @@ exports[`<EducationLevel> matches snapshot 1`] = `
     </dt>
     <dd>
       <div
-        className="multiSelect">
+        className="multiSelect"
+      >
         <fieldset>
           <legend
-            className="sr-only">
+            className="sr-only"
+          >
             Education level:
           </legend>
           <SlideyPanel
             $={[Function]}
             component="ul"
-            expanded={true}>
+            expanded={true}
+          >
             <EducationLevelItem
               checked={false}
               id="zzz_HS"
               onCheckboxClick={[Function]}
-              value="HS" />
+              value="HS"
+            />
             <EducationLevelItem
               checked={false}
               id="zzz_AA"
               onCheckboxClick={[Function]}
-              value="AA" />
+              value="AA"
+            />
             <EducationLevelItem
               checked={false}
               id="zzz_BA"
               onCheckboxClick={[Function]}
-              value="BA" />
+              value="BA"
+            />
             <EducationLevelItem
               checked={true}
               id="zzz_MA"
               onCheckboxClick={[Function]}
-              value="MA" />
+              value="MA"
+            />
             <EducationLevelItem
               checked={true}
               id="zzz_PHD"
               onCheckboxClick={[Function]}
-              value="PHD" />
+              value="PHD"
+            />
           </SlideyPanel>
         </fieldset>
       </div>

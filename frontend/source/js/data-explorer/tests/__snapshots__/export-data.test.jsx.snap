@@ -1,8 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<ExportData> matches snapshot 1`] = `
 <a
   className="button button-primary export-data"
   href="undefinedrates/csv/?hi=james"
-  title="Click to export your search results to an Excel file (CSV)">
+  title="Click to export your search results to an Excel file (CSV)"
+>
   ⬇ Export Data (CSV)
 </a>
 `;

@@ -1,59 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<Schedule> matches snapshot 1`] = `
 <div
-  className="filter filter-schedule">
+  className="filter filter-schedule"
+>
   <label
-    htmlFor="zzz_schedule">
+    htmlFor="zzz_schedule"
+  >
     SIN / Schedule:
   </label>
   <a
     className="filter-more-info"
-    href="/about#schedules">
-    What\'s this?
+    href="/about#schedules"
+  >
+    What's this?
   </a>
   <select
     className=""
     id="zzz_schedule"
     name="schedule"
     onChange={[Function]}
-    value="">
+    value=""
+  >
     <option
-      value="">
+      value=""
+    >
       (all)
     </option>
     <option
-      value="Environmental">
+      value="Environmental"
+    >
       899 - Legacy Environmental
     </option>
     <option
-      value="Logistics">
+      value="Logistics"
+    >
       87405 - Legacy Logistics
     </option>
     <option
-      value="MOBIS">
+      value="MOBIS"
+    >
       874 - Legacy MOBIS
     </option>
     <option
-      value="PES">
+      value="PES"
+    >
       871 - Legacy PES
     </option>
     <option
-      value="Language Services">
+      value="Language Services"
+    >
       73802 - Legacy Language
     </option>
     <option
-      value="AIMS">
+      value="AIMS"
+    >
       541 - Legacy AIMS
     </option>
     <option
-      value="FABS">
+      value="FABS"
+    >
       520 - Legacy FABS
     </option>
     <option
-      value="IT Schedule 70">
+      value="IT Schedule 70"
+    >
       132 - IT 70
     </option>
     <option
-      value="Consolidated">
+      value="Consolidated"
+    >
       Consolidated
     </option>
   </select>

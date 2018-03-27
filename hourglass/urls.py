@@ -2,17 +2,16 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from uaa_client.decorators import staff_login_required
 
 import data_explorer.views
-from .decorators import staff_login_required
 from .healthcheck import healthcheck
 from .robots import robots_txt
 from .changelog import django_view as view_changelog
 
-# Wrap the admin site login with our staff_login_required decorator,
-# which will raise a PermissionDenied exception if a logged-in, but non-staff
-# user attempts to access the login page.
-# ref: http://stackoverflow.com/a/38520951
+# Wrap the admin site login with the staff_login_required
+# decorator, which will raise a PermissionDenied exception if a
+# logged-in, but non-staff user attempts to access the login page.
 admin.site.login = staff_login_required(admin.site.login)
 
 urlpatterns = [

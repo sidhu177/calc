@@ -61,6 +61,25 @@ only production dependencies will be installed.
 
 ### Services
 
+#### Identity Provider Service
+
+CALC uses an [Identity Provider Service][IPS] to register with cloud.gov's User Account and Authentication (UAA)
+server (see [Auth](auth.md) for more details).
+
+A service and associated service key are needed for each cloud.gov space.
+As an example, for the `dev` space, the commands to create the service and get its keys are:
+
+```sh
+cf create-service cloud-gov-identity-provider oauth-client calc-dev-uaa-client
+cf create-service-key calc-dev-uaa-client calc-dev-uaa-client-service-key -c '{"redirect_uri": ["https://calc-dev.app.cloud.gov"]}'
+cf service-key calc-dev-uaa-client calc-dev-uaa-client-service-key
+```
+
+The `cf service-key` command above will output a username and password pair that corresponds to the `UAA_CLIENT_ID` and `UAA_CLIENT_SECRET`
+environment variables that will be used when setting up CALC's User Provided Service, described in the next section.
+
+See the [Identity Provider Service docs][IPS] for up-to-date information on its use.
+
 #### User Provided Service (UPS)
 
 For cloud.gov deployments, this project makes use of a [User Provided Service (UPS)][UPS] to get its configuration
@@ -108,10 +127,14 @@ cf bind-service <APP_INSTANCE> calc-db
 CALC uses Redis along with [rq](http://python-rq.org/) for scheduling and processing
 asynchronous tasks.
 
+For production, use the `standard-ha` (high availability) plan. For non-production uses, use the `standard` plan.
+
 ```sh
-cf create-service redis28 standard calc-redis
-cf bind-service <APP_INSTANCE> calc-redis
+cf create-service redis32 standard-ha calc-redis32
+cf bind-service <APP_INSTANCE> calc-redis32
 ```
+
+For more information on cloud.gov's Redis service, see its [docs](https://cloud.gov/docs/services/redis/).
 
 ### New Relic environment variables
 
@@ -290,6 +313,7 @@ test it against a different URL, you can do so with the `--origin`
 command-line option.
 
 [UPS]: https://docs.cloudfoundry.org/devguide/services/user-provided.html
+[IPS]: https://cloud.gov/docs/services/cloud-gov-identity-provider/
 [`README.md`]: https://github.com/18F/calc#readme
 [api.data.gov User Manual]: https://github.com/18F/api.data.gov/wiki/User-Manual:-Agencies
 [Securing your API backend]: https://github.com/18F/api.data.gov/wiki/User-Manual:-Agencies#securing-your-api-backend

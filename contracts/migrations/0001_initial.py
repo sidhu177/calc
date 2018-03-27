@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import djorm_pgfulltext.fields
+from django.contrib.postgres.search import SearchVectorField
 
 
 class Migration(migrations.Migration):
@@ -41,9 +41,7 @@ class Migration(migrations.Migration):
                     blank=True, max_digits=5, null=True, decimal_places=2)),
                 ('contractor_site', models.CharField(
                     blank=True, max_length=128, null=True)),
-                ('search_index', djorm_pgfulltext.fields.VectorField(
-                    serialize=False, default='', null=True, editable=False,
-                    db_index=True)),
+                ('search_index', SearchVectorField(default='', db_index=True, editable=False)),
             ],
             options={
             },

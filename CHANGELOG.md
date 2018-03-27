@@ -7,6 +7,15 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [2.8.4][] - 2018-03-20
+
+### Changed
+
+- Use the latest version of Python 3.6.x in deployed applications (#1631).
+- Fixed a bug that impacted the sending of emails from worker applications (#1599).
+- Updated Code Climate config to match that services new format (#1629).
+- Updated README with information about waiting for automated deploys to finish (#1598).
+
 ## [2.8.3][] - 2017-10-05
 
 ### Changed
@@ -295,7 +304,8 @@ to [Semantic Versioning](http://semver.org/).
 - refining header wording
 - replace drop down for education with multi select
 
-[unreleased]: https://github.com/18F/calc/compare/v2.8.3...HEAD
+[unreleased]: https://github.com/18F/calc/compare/v2.8.4...HEAD
+[2.8.4]: https://github.com/18F/calc/compare/v2.8.3...v2.8.4
 [2.8.3]: https://github.com/18F/calc/compare/v2.8.2...v2.8.3
 [2.8.2]: https://github.com/18F/calc/compare/v2.8.1...v2.8.2
 [2.8.1]: https://github.com/18F/calc/compare/v2.8.0...v2.8.1

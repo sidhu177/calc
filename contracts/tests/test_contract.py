@@ -3,6 +3,7 @@ from unittest.mock import patch
 from decimal import Decimal
 from itertools import cycle
 
+from django.db import connection
 from django.test import TestCase, SimpleTestCase
 from contracts.mommy_recipes import get_contract_recipe
 
@@ -441,3 +442,23 @@ class NormalizedContractSearchTestCase(BaseContractSearchTestCase):
             'Jr. Language Interpreter',
             'Junior Language Interpreter',
         ])
+
+
+class SearchIndexTests(TestCase):
+    GET_SCHEMA_SQL = """
+    SELECT column_name, data_type, column_default, is_nullable
+      FROM information_schema.columns
+      WHERE table_name = 'contracts_contract'
+        AND column_name = 'search_index'
+    """
+
+    def test_schema_is_what_we_expect(self):
+        with connection.cursor() as cursor:
+            cursor.execute(self.GET_SCHEMA_SQL)
+            row = cursor.fetchone()
+            self.assertEqual(row, (
+                'search_index',
+                'tsvector',
+                None,
+                'NO',
+            ))

@@ -44,7 +44,7 @@ def get_whitelisted_ips(env: Environ=os.environ) -> Optional[List[str]]:
 def load_redis_url_from_vcap_services(name: str,
                                       env: Environ=os.environ) -> None:
     '''
-    Detects if a redis28 service instance with the given name
+    Detects if a redis32 service instance with the given name
     is present in VCAP_SERVICES.
     If it is, then it creates a URL for the instance and sets env['REDIS_URL']
     to that URL. If not, it just returns and does nothing.
@@ -55,7 +55,7 @@ def load_redis_url_from_vcap_services(name: str,
 
     vcap = json.loads(env['VCAP_SERVICES'])
 
-    for entry in vcap.get('redis28', []):
+    for entry in vcap.get('redis32', []):
         if entry['name'] == name:
             creds = entry['credentials']
             url = 'redis://:{password}@{hostname}:{port}'.format(
@@ -77,7 +77,7 @@ def is_running_tests(argv: List[str]=sys.argv) -> bool:
 
     if basename == 'manage.py' and first_arg == 'test':
         return True
-    if basename == 'py.test':
+    if basename == 'py.test' or basename == 'pytest':
         return True
 
     return False

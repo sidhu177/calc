@@ -1,8 +1,7 @@
 from django import forms
 from django.shortcuts import render
 from django.contrib import messages
-
-from frontend.widgets import UswdsRadioSelect, UswdsCheckbox
+from uswds_forms import UswdsRadioSelect, UswdsCheckboxSelectMultiple
 
 
 class ExampleForm(forms.Form):
@@ -15,7 +14,7 @@ class ExampleForm(forms.Form):
     )
 
     checkboxes = forms.MultipleChoiceField(
-        widget=UswdsCheckbox,
+        widget=UswdsCheckboxSelectMultiple,
         choices=(
             ('a', 'Choice A'),
             ('b', 'Choice B'),

@@ -123,6 +123,4 @@ class Schedule70Loader(object):
             logger.info('updating search field')
             call_command(
                 'update_search_field',
-                cls.model._meta.app_label,
-                cls.model._meta.model_name
             )

@@ -1,13 +1,14 @@
 ---
-services:
+services: &services
 - calc-db
 - calc-env
-- calc-redis
+- calc-redis32
 applications:
 - name: calc-staging
   instances: 1
   memory: 1G
   disk_quota: 1024M
+  services: *services
   routes:
     - route: calc-staging.app.cloud.gov
   buildpack: python_buildpack
@@ -24,6 +25,7 @@ applications:
   health-check-type: none
   instances: 1
   memory: 512M
+  services: *services
   buildpack: python_buildpack
   command: python manage.py rqworker default
   stack: cflinuxfs2
@@ -33,6 +35,7 @@ applications:
   health-check-type: none
   instances: 1
   memory: 256M
+  services: *services
   buildpack: python_buildpack
   command: python manage.py rqscheduler
   stack: cflinuxfs2

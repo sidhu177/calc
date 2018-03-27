@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<EducationLevelItem> matches snapshot 1`] = `
 <li>
   <input
@@ -6,9 +8,11 @@ exports[`<EducationLevelItem> matches snapshot 1`] = `
     name="education"
     onChange={[Function]}
     type="checkbox"
-    value="AA" />
+    value="AA"
+  />
   <label
-    htmlFor="zzz-item">
+    htmlFor="zzz-item"
+  >
     Associates
   </label>
 </li>

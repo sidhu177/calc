@@ -18,6 +18,8 @@ const rename = require('gulp-rename');
 const eslint = require('gulp-eslint');
 const gutil = require('gulp-util');
 const del = require('del');
+const uglify = require('gulp-uglify');
+const gulpif = require('gulp-if');
 const bourbonNeatPaths = require('bourbon-neat').includePaths;
 const named = require('vinyl-named');
 
@@ -33,6 +35,7 @@ const dirs = {
     style: 'frontend/source/sass/',
     scripts: 'frontend/source/js/',
     sphinx: 'docs/',
+    root: './',
   },
   dest: {
     style: {
@@ -46,6 +49,7 @@ const paths = {
   sass: '**/*.scss',
   js: '**/*.@(js|jsx)',
   sphinx: '*.@(md|py|rst)',
+  changelog: 'CHANGELOG.md',
 };
 
 const bundles = {
@@ -72,6 +76,15 @@ const bundles = {
   // Test scripts
   tests: {},
 };
+
+function concatAndMapSources(name, sources, dest) {
+  return gulp.src(sources)
+    .pipe(sourcemaps.init())
+    .pipe(concat(name))
+    .pipe(gulpif(isProd, uglify()))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(dest));
+}
 
 const vendoredBundles = [];
 
@@ -120,7 +133,10 @@ gulp.task('build', ['sass', 'js', 'sphinx']);
 
 // watch files for changes
 gulp.task('watch', ['set-watching', 'sass', 'js', 'sphinx'], () => {
-  gulp.watch(path.join(dirs.src.sphinx, paths.sphinx), ['sphinx']);
+  gulp.watch([
+    path.join(dirs.src.sphinx, paths.sphinx),
+    path.join(dirs.src.root, paths.changelog),
+  ], ['sphinx']);
   gulp.watch(path.join(dirs.src.style, paths.sass), ['sass']);
 
   if (!('ESLINT_CHILL_OUT' in process.env)) {
@@ -158,14 +174,6 @@ gulp.task('sass', () => gulp.src(path.join(dirs.src.style, paths.sass))
 gulp.task('js', ['lint', 'js:vendor', 'js:webpack']);
 
 gulp.task('js:vendor', vendoredBundles);
-
-function concatAndMapSources(name, sources, dest) {
-  return gulp.src(sources)
-    .pipe(sourcemaps.init())
-      .pipe(concat(name))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(dest));
-}
 
 // boolean flag to indicate to webpack that it should set up its watching
 let isWatching = false;

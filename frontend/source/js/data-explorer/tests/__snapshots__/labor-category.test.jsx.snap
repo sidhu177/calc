@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<LaborCategory> matches snapshot 1`] = `
 <div>
   <input
@@ -9,10 +11,12 @@ exports[`<LaborCategory> matches snapshot 1`] = `
     onKeyDown={[Function]}
     placeholder="Type a labor category"
     type="text"
-    value="" />
+    value=""
+  />
   <label
     className="sr-only"
-    htmlFor="zzz_labor_category">
+    htmlFor="zzz_labor_category"
+  >
     Type a labor category
   </label>
 </div>

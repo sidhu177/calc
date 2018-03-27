@@ -1,11 +1,10 @@
 from django import forms
 from django.shortcuts import render
-
-from frontend.date import SplitDateField
+from uswds_forms import UswdsDateField
 
 
 class ExampleForm(forms.Form):
-    date = SplitDateField()
+    date = UswdsDateField()
 
 
 def create_template_context(form=None, is_valid=False):

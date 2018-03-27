@@ -52,7 +52,6 @@ class Command(BaseCommand):
         Contract.objects.bulk_create(contracts)
 
         log.info("Updating search index")
-        call_command('update_search_field',
-                     Contract._meta.app_label, Contract._meta.model_name)
+        call_command('update_search_field')
 
         log.info("End load_data task")

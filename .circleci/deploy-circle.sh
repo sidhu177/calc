@@ -30,6 +30,9 @@ API="https://api.fr.cloud.gov"
 ORG="fas-calc"
 
 APP_NAME="calc-$DEPLOY_ENV"
+WORKER_APP_NAME="calc-rqworker"
+SCHEDULER_APP_NAME="calc-rqscheduler"
+
 MANIFEST="manifests/manifest-$DEPLOY_ENV.yml"
 
 # make a production build
@@ -52,3 +55,9 @@ cf login -a $API -u $DEPLOY_USER -p $DEPLOY_PASS -o $ORG -s $SPACE
 cf scale -i 1 $APP_NAME
 
 cf zero-downtime-push $APP_NAME -f $MANIFEST
+
+# use a regular `cf push` for the worker and scheduler apps
+# because we don't want multiple instances processing the queue
+# while a deployment is happening
+cf push $WORKER_APP_NAME -f $MANIFEST
+cf push $SCHEDULER_APP_NAME -f $MANIFEST

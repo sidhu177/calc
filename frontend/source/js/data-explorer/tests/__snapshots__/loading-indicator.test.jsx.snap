@@ -1,16 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<LoadingIndicator> matches snapshot 1`] = `
 <div>
   <div
     aria-live="polite"
     className="sr-only"
-    role="status">
+    role="status"
+  >
     Results loaded.
   </div>
   <div
     aria-hidden="true"
-    className="loading-indicator">
+    className="loading-indicator"
+  >
     <p
-      className="message">
+      className="message"
+    >
       Loading results...
     </p>
   </div>

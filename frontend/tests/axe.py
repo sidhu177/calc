@@ -43,26 +43,31 @@ def run_and_validate(webdriver):
     stdout.
     '''
 
+    options = {
+        "rules": {},
+    }
+
+    for rule_name in IGNORED_VIOLATIONS:
+        options['rules'][rule_name] = {'enabled': False}
+
     result = webdriver.execute_async_script(
         get_axe_js() +
         r'''
+        var options = arguments[0];
         var callback = arguments[arguments.length - 1];
-        axe.run(function(err, results) {
+        axe.run(options, function(err, results) {
           callback({
             error: err && err.toString(),
             results: results
           });
         });
-        ''')
+        ''', options)
 
     error = result['error']
     if error is not None:
         raise Exception(f'axe.run() failed: {error}')
 
-    violations = [
-        v for v in result['results']['violations']
-        if v['id'] not in IGNORED_VIOLATIONS
-    ]
+    violations = result['results']['violations']
     if violations:
         pprint.pprint(violations)
         print("For more details, please install the aXe browser extension.")

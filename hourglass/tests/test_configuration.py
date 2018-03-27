@@ -20,29 +20,31 @@ class PythonVersionTests(TestCase):
     same Python version.
     '''
 
-    version = Version('3.6.2')
+    # We only need to use down to the minor version specifier.
+    python_version = '3.6'
 
     def test_runtime_txt(self):
         with open(path('runtime.txt')) as f:
-            self.assertEqual(f.read().strip(),
-                             'python-{}'.format(self.version))
+            self.assertEqual(
+                f.read().strip(),
+                f'python-{self.python_version}.x')
 
     def test_dockerfile(self):
         with open(path('Dockerfile')) as f:
-            self.assertIn('FROM python:{}'.format(self.version),
-                          f.read())
+            # We specify the patch version in our Dockerfile, but this
+            # test will just check down to the minor version level
+            self.assertIn(f'FROM python:{self.python_version}', f.read())
 
     def test_circle_yml(self):
         with open(path('.circleci/config.yml')) as f:
             data = yaml.safe_load(f)
-            # In CircleCI we can only specify down to the minor number
             self.assertEqual(
                 str(data['jobs']['build']['docker'][0]['image']),
-                f"circleci/python:{self.version.major}.{self.version.minor}")
+                f'circleci/python:{self.python_version}')
 
     def test_docs_setup_md(self):
         with open(path('docs', 'setup.md')) as f:
-            self.assertIn(f'Python {self.version}', f.read())
+            self.assertIn(f'Python {self.python_version}', f.read())
 
 
 class PostgresVersionTests(TestCase):

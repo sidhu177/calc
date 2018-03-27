@@ -8,6 +8,7 @@ SPHINXPROJ    = CALC
 SOURCEDIR     = .
 BUILDDIR      = _build
 DJANGODIR     = static
+ROOTDIR       = ..
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -23,6 +24,8 @@ html: Makefile
 # it's easier for now (especially since our docs build really fast) to
 # wipe out the build directory between rebuilds.
 	rm -rf $(BUILDDIR)
+
+	cp $(ROOTDIR)/CHANGELOG.md $(SOURCEDIR)/changelog.md
 
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 

@@ -1,15 +1,6 @@
 ---
-languages:
-  JavaScript: true
-  Python: true
-exclude_paths:
-- "frontend/tests/*"
-- "frontend/source/js/vendor/*"
-- "frontend/source/style/libs/*"
-- "styleguide/static/styleguide/vendor/*"
-- "**/migrations/*"
-- "**/vendor/*"
-engines:
+version: 2
+plugins:
   eslint:
     enabled: true
     channel: "eslint-3"
@@ -18,11 +9,17 @@ engines:
         enabled: false
       import/extensions:
         enabled: false
-    extensions:
-    - .js
-    - .jsx
+    config:
+      extensions:
+      - .js
+      - .jsx
   pep8:
     enabled: true
-ratings:
-  paths:
-  - "**.py"
+
+exclude_patterns:
+- "frontend/source/js/vendor/*"
+- "frontend/source/style/libs/*"
+- "styleguide/static/styleguide/vendor/*"
+- "**/migrations/*"
+- "**/vendor/*"
+- "**/tests/*"

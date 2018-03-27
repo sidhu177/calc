@@ -1,25 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<Description> matches snapshot 1`] = `
 <p
-  className="">
+  className=""
+>
   Showing 101 of 
   <span
-    className="total">
+    className="total"
+  >
     5,000
   </span>
    results with 
   <span
-    className="filters">
+    className="filters"
+  >
     <DescriptionFilter
       extraClassName={null}
-      label={null}>
+      label={null}
+    >
       Systems Analyst
     </DescriptionFilter>
     <DescriptionFilter
       extraClassName="education-filter"
-      label="education level" />
+      label="education level"
+    />
     <DescriptionFilter
       extraClassName={null}
-      label="experience">
+      label="experience"
+    >
       5
        - 
       10
@@ -27,17 +35,20 @@ exports[`<Description> matches snapshot 1`] = `
     </DescriptionFilter>
     <DescriptionFilter
       extraClassName={null}
-      label="worksite">
+      label="worksite"
+    >
       both
     </DescriptionFilter>
     <DescriptionFilter
       extraClassName={null}
-      label="business size">
+      label="business size"
+    >
       small business
     </DescriptionFilter>
     <DescriptionFilter
       extraClassName={null}
-      label="schedule">
+      label="schedule"
+    >
       132 - IT 70
     </DescriptionFilter>
   </span>

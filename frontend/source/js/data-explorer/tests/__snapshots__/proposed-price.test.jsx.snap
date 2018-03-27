@@ -1,9 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<ProposedPrice> matches snapshot 1`] = `
 <div
-  className="proposed-price">
+  className="proposed-price"
+>
   <label
     className="sr-only"
-    htmlFor="zzz_proposed-price">
+    htmlFor="zzz_proposed-price"
+  >
     Proposed price
   </label>
   <input
@@ -13,10 +17,12 @@ exports[`<ProposedPrice> matches snapshot 1`] = `
     onChange={[Function]}
     placeholder="Proposed price"
     type="text"
-    value={120.49} />
+    value={120.49}
+  />
   <button
     className="button-primary go"
-    onClick={[Function]}>
+    type="button"
+  >
     Go
   </button>
 </div>

@@ -18,7 +18,7 @@ services:
       - POSTGRES_DB=calc
       - POSTGRES_USER=calc_user
   redis:
-    image: redis:3.0.7-alpine
+    image: redis:3.2-alpine
   rq_worker:
     extends:
       file: docker-services.yml

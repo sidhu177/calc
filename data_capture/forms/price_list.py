@@ -1,11 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from uswds_forms import UswdsRadioSelect, UswdsDateField
 
 from ..models import SubmittedPriceList
 from ..schedules import registry
 from frontend.upload import UploadWidget
-from frontend.widgets import UswdsRadioSelect
-from frontend.date import SplitDateField
 from contracts.models import MIN_ESCALATION_RATE, MAX_ESCALATION_RATE
 
 
@@ -99,10 +98,10 @@ class Step2Form(forms.ModelForm):
         choices=SubmittedPriceList.CONTRACTOR_SITE_CHOICES,
         widget=UswdsRadioSelect,
     )
-    contract_start = SplitDateField(
+    contract_start = UswdsDateField(
         label='Contract or current option period start'
     )
-    contract_end = SplitDateField(
+    contract_end = UswdsDateField(
         label='Contract or current option period end'
     )
     escalation_rate = EscalationRateField()
@@ -194,10 +193,10 @@ class PriceListDetailsForm(forms.ModelForm):
         choices=SubmittedPriceList.CONTRACTOR_SITE_CHOICES,
         widget=UswdsRadioSelect,
     )
-    contract_start = SplitDateField(
+    contract_start = UswdsDateField(
         label='Contract or current option period start'
     )
-    contract_end = SplitDateField(
+    contract_end = UswdsDateField(
         label='Contract or current option period end'
     )
     escalation_rate = EscalationRateField()

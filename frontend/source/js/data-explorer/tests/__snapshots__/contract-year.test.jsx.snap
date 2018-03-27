@@ -1,35 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<ContractYear> matches snapshot 1`] = `
 <div
-  className="filter contract-year">
+  className="filter contract-year"
+>
   <fieldset
-    className="fieldset-inputs">
+    className="fieldset-inputs"
+  >
     <legend>
       Contract year:
     </legend>
     <span
-      className="filter-more-info">
+      className="filter-more-info"
+    >
       <Tooltip
         show={false}
-        text="All five years of pricing are available in the export.">
+        text="All five years of pricing are available in the export."
+      >
         <a
           aria-label="All five years of pricing are available in the export."
           href=""
-          onClick={[Function]}>
-          What\'s this?
+          onClick={[Function]}
+        >
+          What's this?
         </a>
       </Tooltip>
     </span>
     <h3
-      className="sr-only">
+      className="sr-only"
+    >
       Contract Year
     </h3>
     <ul
-      className="contract-year-block">
+      className="contract-year-block"
+    >
       <li
-        className="contract-list-item">
+        className="contract-list-item"
+      >
         <label
           className="radio"
-          htmlFor="zzz_current-year">
+          htmlFor="zzz_current-year"
+        >
           <input
             checked={true}
             id="zzz_current-year"
@@ -37,24 +48,29 @@ exports[`<ContractYear> matches snapshot 1`] = `
             onChange={[Function]}
             tabIndex="0"
             type="radio"
-            value="current" />
+            value="current"
+          />
           <span
             aria-hidden="true"
             className="contract-current-year-span checkbox-focus"
-            tabIndex="-1">
+            tabIndex="-1"
+          >
             Current
           </span>
           <span
-            className="sr-only">
+            className="sr-only"
+          >
             Current year
           </span>
         </label>
       </li>
       <li
-        className="contract-list-item">
+        className="contract-list-item"
+      >
         <label
           className="radio"
-          htmlFor="zzz_one-year-out">
+          htmlFor="zzz_one-year-out"
+        >
           <input
             checked={false}
             id="zzz_one-year-out"
@@ -62,24 +78,29 @@ exports[`<ContractYear> matches snapshot 1`] = `
             onChange={[Function]}
             tabIndex="0"
             type="radio"
-            value="1" />
+            value="1"
+          />
           <span
             aria-hidden="true"
             className="checkbox-focus"
-            tabIndex="-1">
+            tabIndex="-1"
+          >
             +1
           </span>
           <span
-            className="sr-only">
+            className="sr-only"
+          >
             One year out
           </span>
         </label>
       </li>
       <li
-        className="contract-list-item">
+        className="contract-list-item"
+      >
         <label
           className="radio"
-          htmlFor="zzz_two-years-out">
+          htmlFor="zzz_two-years-out"
+        >
           <input
             checked={false}
             id="zzz_two-years-out"
@@ -87,15 +108,18 @@ exports[`<ContractYear> matches snapshot 1`] = `
             onChange={[Function]}
             tabIndex="0"
             type="radio"
-            value="2" />
+            value="2"
+          />
           <span
             aria-hidden="true"
             className="contract-last-year-span checkbox-focus"
-            tabIndex="-1">
+            tabIndex="-1"
+          >
             +2
           </span>
           <span
-            className="sr-only">
+            className="sr-only"
+          >
             Two years out
           </span>
         </label>

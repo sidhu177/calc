@@ -12,7 +12,7 @@ def get_degraded_upload_widget():
     class MyForm(forms.Form):
         file = forms.FileField(widget=UploadWidget(degraded=True))
 
-    return MyForm()['file']
+    return MyForm(auto_id='degraded_upload_widget_%s')['file']
 
 
 def get_existing_filename_upload_form():

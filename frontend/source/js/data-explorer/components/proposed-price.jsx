@@ -4,18 +4,14 @@ import { connect } from 'react-redux';
 import { setProposedPrice } from '../actions';
 
 export class ProposedPrice extends React.Component {
-  static handleGoClick(e) {
-    // Don't do anything for now; the legacy front-end caused the
-    // proposed price to be displayed on this histogram when this was
-    // clicked, but since we do that on a per-keystroke basis, there's
-    // no need to do it here. At the same time, though, we're concerned
-    // that removing the "Go" button could make things even more confusing
-    // than they already are, so for now we'll do a no-op.
-    //
-    // Note also that we *do* need to prevent the default behavior here, or
-    // else the form will be submitted.
-    e.preventDefault();
-  }
+  // Note that the 'Go' button in this component does not
+  // actually do anything.
+  // In the legacy Data Explorer code, clicking the Go button
+  // would show the proposed price on the histogram, but we now
+  // do that on a per-keystroke basis.
+  // We were concerned that removing the 'Go' button could make
+  // things even more confusing than they already are, so for now
+  // we'll do a no-op.
 
   constructor(props) {
     super(props);
@@ -84,8 +80,8 @@ export class ProposedPrice extends React.Component {
           onChange={this.handleChange}
         />
         <button
+          type="button"
           className="button-primary go"
-          onClick={ProposedPrice.handleGoClick}
         >Go</button>
       </div>
     );

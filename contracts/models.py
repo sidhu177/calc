@@ -5,8 +5,9 @@ from decimal import Decimal
 
 from django.db import models, connection
 from django.contrib.auth.models import User
-from djorm_pgfulltext.models import SearchManager, SearchQuerySet
-from djorm_pgfulltext.fields import VectorField
+from django.db.models.expressions import Value
+from django.contrib.postgres.search import SearchVectorField, SearchVector
+
 
 EDUCATION_CHOICES = (
     ('HS', 'High School'),
@@ -73,10 +74,7 @@ def convert_to_tsquery_union(queries):
     return " | ".join(queries)
 
 
-class CurrentContractManager(SearchManager):
-    # need to subclass the SearchManager we were using for postgres full text
-    # search instead of default
-
+class CurrentContractManager(models.Manager):
     def bulk_update_normalized_labor_categories(self):
         '''
         Iterate through all Contract models and update their
@@ -118,22 +116,45 @@ class CurrentContractManager(SearchManager):
     def multi_phrase_search(self, *args, **kwargs):
         return self.get_queryset().multi_phrase_search(*args, **kwargs)
 
+    def search(self, *args, **kwargs):
+        return self.get_queryset().search(*args, **kwargs)
+
+    def update_search_index(self):
+        return self.update(
+            search_index=SearchVector('_normalized_labor_category'))
+
     def get_queryset(self):
         return ContractsQuerySet(self.model, using=self._db)\
             .filter(current_price__gt=0)\
             .exclude(current_price__isnull=True)
 
 
-class ContractsQuerySet(SearchQuerySet):
+class MultiPhraseSearchQuery(Value):
+    def as_sql(self, compiler, connection):
+        queries = self.value
 
-    def multi_phrase_search(self, queries):
         if isinstance(queries, str):
             queries = [queries]
         queries = [
             Contract.normalize_labor_category(q)
             for q in queries
         ]
-        return self.search(convert_to_tsquery_union(queries), raw=True)
+        tsquery = convert_to_tsquery_union(queries)
+
+        return f"to_tsquery('pg_catalog.english', %s)", [tsquery]
+
+
+class ContractsQuerySet(models.QuerySet):
+
+    def multi_phrase_search(self, queries):
+        return self.search(MultiPhraseSearchQuery(queries))
+
+    def search(self, query):
+        return self.filter(search_index=query)
+
+    def update_search_index(self):
+        return self.update(
+            search_index=SearchVector('_normalized_labor_category'))
 
     def order_by(self, *args, **kwargs):
         edu_sort_sql = """
@@ -273,7 +294,7 @@ class Contract(models.Model):
 
     _normalized_labor_category = models.TextField(db_index=True, blank=True)
 
-    search_index = VectorField()
+    search_index = SearchVectorField(default='', db_index=True, editable=False)
 
     upload_source = models.ForeignKey(
         BulkUploadContractSource,
@@ -284,12 +305,7 @@ class Contract(models.Model):
 
     # use a manager that filters by current contracts with a valid
     # current_price
-    objects = CurrentContractManager(
-        fields=('_normalized_labor_category',),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True
-    )
+    objects = CurrentContractManager()
 
     def get_readable_business_size(self):
         if 's' in self.business_size.lower():
@@ -312,7 +328,7 @@ class Contract(models.Model):
 
         # Note also that any logic changes to this code should
         # eventually be followed-up with
-        # `manage.py update_search_field contracts Contract`. Otherwise,
+        # `manage.py update_search_field`. Otherwise,
         # all pre-existing contracts will still have search
         # index information corresponding to the old logic.
 

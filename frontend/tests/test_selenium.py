@@ -6,8 +6,6 @@ See https://travis-ci.org/18F/calc/builds/77211412.
 The original author of the tests and I could not solve this problem. I've
 watched the timeouts happen on specific tests by increasing nose's verbosity,
 and I have seen them on these tests:
-test_no_filter_shows_all_sizes_of_business
-test_filter_to_only_large_businesses
 test_schedule_column_is_open_by_default
 test_contract_link
 
@@ -33,43 +31,13 @@ from . import axe
 from .utils import build_static_assets
 
 
-WD_IS_USING_SAUCE_LABS = False
 WD_HUB_URL = os.environ.get('WD_HUB_URL')
 WD_TESTING_URL = os.environ.get('WD_TESTING_URL')
 WD_TESTING_BROWSER = os.environ.get('WD_TESTING_BROWSER',
                                     'phantomjs')
-WD_TUNNEL_ID = os.environ.get('WD_TUNNEL_ID')
 WD_SOCKET_TIMEOUT = int(os.environ.get('WD_SOCKET_TIMEOUT', '5'))
 PHANTOMJS_TIMEOUT = int(os.environ.get('PHANTOMJS_TIMEOUT', '3'))
 WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS = 10
-
-
-if os.environ.get('TRAVIS') == 'true':
-    if os.environ.get('TRAVIS_SECURE_ENV_VARS') == 'true' and \
-            'SAUCE_USERNAME' in os.environ \
-            and 'SAUCE_ACCESS_KEY' in os.environ:
-        # We're running in a trusted environment, so use Sauce Labs
-        # if it's available.
-        WD_TUNNEL_ID = os.environ['TRAVIS_JOB_NUMBER']
-        WD_TESTING_URL = 'http://{}'.format(
-            os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS']
-        )
-    else:
-        # We're running against an untrusted PR from another repository,
-        # so default to using PhantomJS locally.
-        WD_TESTING_BROWSER = 'phantomjs'
-        WD_TESTING_BROWSER_VERSION = None
-        WD_TESTING_URL = None
-        WD_HUB_URL = None
-
-
-if WD_TESTING_URL and WD_HUB_URL is None and \
-   'SAUCE_USERNAME' in os.environ and 'SAUCE_ACCESS_KEY' in os.environ:
-    WD_HUB_URL = 'http://{}:{}@ondemand.saucelabs.com/wd/hub'.format(
-        os.environ['SAUCE_USERNAME'],
-        os.environ['SAUCE_ACCESS_KEY']
-    )
-    WD_IS_USING_SAUCE_LABS = True
 
 
 def _get_webdriver(name):
@@ -107,10 +75,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         desired_cap['browserName'] = WD_TESTING_BROWSER
         if 'WD_TESTING_BROWSER_VERSION' in os.environ:
             desired_cap['version'] = os.environ['WD_TESTING_BROWSER_VERSION']
-        if 'WD_JOB_VISIBILITY' in os.environ:
-            desired_cap['public'] = os.environ['WD_JOB_VISIBILITY']
-        if WD_TUNNEL_ID:
-            desired_cap['tunnel-identifier'] = WD_TUNNEL_ID
 
         desired_cap['name'] = 'CALC'
         print('capabilities:', desired_cap)
@@ -163,22 +127,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             self.base_url = WD_TESTING_URL
         self.driver.set_window_size(*self.window_size)
         super().setUp()
-
-        if WD_IS_USING_SAUCE_LABS and not hasattr(self, '_gateway_ensured'):
-            self.ensure_gateway_works()
-            self._gateway_ensured = True
-
-    def tearDown(self):
-        if WD_IS_USING_SAUCE_LABS:
-            print("Results: http://saucelabs.com/jobs/{}".format(
-                self.driver.session_id
-            ))
-
-    def ensure_gateway_works(self):
-        def about():
-            self.load('/about/')
-            return 'CALC' in self.driver.page_source
-        self.wait_for(about)
 
     def load(self, uri='/'):
         url = self.base_url + uri
@@ -251,16 +199,6 @@ class DataExplorerTests(SeleniumTestCase):
             )
         return has_class(form, 'loaded')
 
-    def xtest_results_count__empty_result_set(self):
-        driver = self.load_and_wait()
-        self.assert_results_count(driver, 0)
-
-    def xtest_results_count(self):
-        get_contract_recipe().make(_quantity=10,
-                                   labor_category=seq("Engineer"))
-        driver = self.load_and_wait()
-        self.assert_results_count(driver, 10)
-
     def test_titles_are_correct(self):
         get_contract_recipe().make(_quantity=1,
                                    labor_category=seq("Architect"))
@@ -269,159 +207,6 @@ class DataExplorerTests(SeleniumTestCase):
             driver.title.startswith('CALC'),
             'Title mismatch, {} does not start with CALC'.format(driver.title)
         )
-
-    def xtest_filter_order_is_correct(self):
-        get_contract_recipe().make(_quantity=1,
-                                   labor_category=seq("Architect"))
-        self.load()
-        form = self.get_form()
-
-        inputs = form.find_elements_by_css_selector(
-            "input:not([type='hidden'])")
-
-        # the last visible form inputs should be the price filters
-        self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
-        self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
-
-    # see https://travis-ci.org/18F/calc/builds/76802593
-    # many/most/all? of the filter and search tests aren't
-    # running. some of them were Xed before me, some of them I am Xing
-    # out now because they are seemingly suddenly failing and getting
-    # an empty result set back.  we're transitioning off the project,
-    # so I can't dig in now.  I suspect there is a thread of fragility
-    # through these tests, and I have not managed to get them working
-    # dependably in my time on the project. I think they need looking
-    # at by someone very experienced in Selenium testing. 8/25/15 [TS]
-
-    def xtest_form_submit_loading(self):
-        get_contract_recipe().make(_quantity=1,
-                                   labor_category=seq("Architect"))
-        self.load()
-        self.search_for('Architect')
-        form = self.submit_form()
-        self.assertTrue(has_class(form, 'loading'),
-                        "Form doesn't have 'loading' class")
-        self.wait_for(self.data_is_loaded)
-        self.assertTrue(has_class(form, 'loaded'),
-                        "Form doesn't have 'loaded' class")
-        self.assertFalse(has_class(form, 'loading'),
-                         "Form shouldn't have 'loading' class after loading")
-
-    def xtest_search_input(self):
-        get_contract_recipe().make(_quantity=9, labor_category=cycle(
-            ["Engineer", "Architect", "Writer"]))
-        driver = self.load()
-        self.search_for('Engineer')
-        self.submit_form()
-        self.assertTrue('q=Engineer' in driver.current_url,
-                        'Missing "q=Engineer" in query string')
-        self.wait_for(self.data_is_loaded)
-
-        self.assert_results_count(driver, 3)
-        labor_cell = driver.find_element_by_css_selector(
-            'tbody tr .column-labor_category')
-        self.assertTrue('Engineer' in labor_cell.text,
-                        'Labor category cell text mismatch')
-
-    def xtest_price_gte(self):
-        # note: the hourly rates here will actually start at 80-- this seems
-        # like a bug, but whatever
-        get_contract_recipe().make(_quantity=10,
-                                   labor_category=seq("Contractor"),
-                                   hourly_rate_year1=seq(70, 10),
-                                   current_price=seq(70, 10))
-        driver = self.load()
-        form = self.get_form()
-        self.search_for('Contractor')
-
-        minimum = 100
-        # add results count check
-        self.set_form_value(form, 'price__gte', minimum)
-        self.submit_form_and_wait()
-        self.assertTrue(
-            ('price__gte=%d' % minimum) in driver.current_url,
-            'Missing "price__gte={0}" in query string: {1}'.format(
-                minimum,
-                driver.current_url
-            )
-        )
-        self.assert_results_count(driver, 8)
-
-    def xtest_price_lte(self):
-        # note: the hourly rates here will actually start at 80-- this seems
-        # like a bug, but whatever
-        get_contract_recipe().make(_quantity=10,
-                                   labor_category=seq("Contractor"),
-                                   hourly_rate_year1=seq(70, 10),
-                                   current_price=seq(70, 10))
-        driver = self.load()
-        form = self.get_form()
-        self.search_for('Contractor')
-
-        maximum = 100
-        # add results count check
-        self.set_form_value(form, 'price__lte', maximum)
-        self.submit_form_and_wait()
-        self.assertTrue(('price__lte=%d' % maximum) in driver.current_url,
-                        'Missing "price__lte=%d" in query string' % maximum)
-        self.assert_results_count(driver, 3)
-
-    def xtest_price_range(self):
-        # note: the hourly rates here will actually start at 80-- this seems
-        # like a bug, but whatever
-        get_contract_recipe().make(_quantity=10,
-                                   labor_category=seq("Contractor"),
-                                   hourly_rate_year1=seq(70, 10),
-                                   current_price=seq(70, 10))
-        driver = self.load()
-        form = self.get_form()
-        self.search_for('Contractor')
-
-        minimum = 100
-        maximum = 130
-        self.set_form_value(form, 'price__gte', minimum)
-        self.set_form_value(form, 'price__lte', maximum)
-        self.submit_form_and_wait()
-        self.assert_results_count(driver, 4)
-        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url,
-                        'Missing "price__gte=%d" in query string' % minimum)
-        self.assertTrue(('price__lte=%d' % maximum) in driver.current_url,
-                        'Missing "price__lte=%d" in query string' % maximum)
-
-    def xtest_filter_experience_range(self):
-        get_contract_recipe().make(_quantity=5, vendor_name=seq(
-            "4 years of experience"), min_years_experience='4')
-        get_contract_recipe().make(_quantity=5, vendor_name=seq(
-            "5 years of experience"), min_years_experience='5')
-        driver = self.load_and_wait()
-        form = self.get_form()
-
-        # self.set_form_value(form, 'experience_range', '5,10')
-
-        self.set_form_value(form, 'min_experience', "5")
-        self.set_form_value(form, 'max_experience', "10")
-
-        self.submit_form_and_wait()
-
-        self.assert_results_count(driver, 5)
-
-        self.assertIsNone(
-            re.search(r'4 years of experience\d+', driver.page_source))
-        self.assertIsNotNone(
-            re.search(r'5 years of experience\d+', driver.page_source))
-
-    def xtest_filter_year_out(self):
-        get_contract_recipe().make(_quantity=1, second_year_price=23.45)
-        driver = self.load_and_wait()
-        form = self.get_form()
-
-        self.set_form_value(form, 'contract-year', "2")
-        self.submit_form_and_wait()
-        self.assert_results_count(driver, 1)
-
-        rate = driver.find_element_by_xpath(
-            '//*[@id="results-table"]/tbody/tr[1]/td[4]')
-        self.assertEqual(rate.text, '$23.45')
 
     def test_contract_link(self):
         get_contract_recipe().make(_quantity=1, idv_piid='GS-23F-0062P')
@@ -446,90 +231,18 @@ class DataExplorerTests(SeleniumTestCase):
             self.assertFalse(has_matching_class(
                 head, 'column-business[_-]size'))
 
-    def xtest_filter_to_only_small_businesses(self):
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"),
-                                   business_size='o')
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"),
-                                   business_size='s')
-        driver = self.load_and_wait()
-        form = self.get_form()
-
-        self.set_form_value(form, 'business_size', 's')
-        self.submit_form_and_wait()
-
-        self.assert_results_count(driver, 5)
-
-        self.assertIsNone(re.search(r'Large Biz\d+', driver.page_source))
-        self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
-
-    def xtest_filter_to_only_large_businesses(self):
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"),
-                                   business_size='o')
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"),
-                                   business_size='s')
-        driver = self.load_and_wait()
-        form = self.get_form()
-
-        self.set_form_value(form, 'business_size', 'o')
-        self.submit_form_and_wait()
-
-        self.assert_results_count(driver, 5)
-
-        self.assertIsNone(re.search(r'Small Biz\d+', driver.page_source))
-        self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
-
-    def xtest_no_filter_shows_all_sizes_of_business(self):
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"),
-                                   business_size='o')
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"),
-                                   business_size='s')
-        driver = self.load_and_wait()
-
-        self.assert_results_count(driver, 10)
-
-        self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
-        self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
-
-    def xtest_filter_schedules(self):
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("MOBIS"),
-                                   schedule='MOBIS')
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("AIMS"),
-                                   schedule='AIMS')
-        driver = self.load_and_wait()
-        form = self.get_form()
-
-        self.set_form_value(form, 'schedule', 'MOBIS')
-        self.submit_form_and_wait()
-
-        self.assert_results_count(driver, 5)
-
-        self.assertIsNone(re.search(r'AIMS\d+', driver.page_source))
-        self.assertIsNotNone(re.search(r'MOBIS\d+', driver.page_source))
-
     def test_index_accessibility(self):
         self.load_and_wait()
+        axe.run_and_validate(self.driver)
+
+    def test_styleguide_accessibility(self):
+        self.load('/styleguide/')
         axe.run_and_validate(self.driver)
 
     def test_schedule_column_is_open_by_default(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load()
         col_header = find_column_header(driver, 'schedule')
-
-        self.assertFalse(has_class(col_header, 'collapsed'))
-
-    # functionality temporarily deactivated
-    def xtest_hide_schedule_column(self):
-        get_contract_recipe().make(_quantity=5)
-        driver = self.load()
-        col_header = find_column_header(driver, 'schedule')
-
-        # hide column
-        col_header.find_element_by_css_selector('.toggle-collapse').click()
-
-        self.assertTrue(has_class(col_header, 'collapsed'))
-
-        # re-show column
-        col_header.find_element_by_css_selector('.toggle-collapse').click()
 
         self.assertFalse(has_class(col_header, 'collapsed'))
 
@@ -588,33 +301,6 @@ class DataExplorerTests(SeleniumTestCase):
         self.assertTrue(
             rect_count > 0,
             "No histogram rectangles found (selector: '.histogram rect')"
-        )
-
-    def xtest_histogram_shows_min_max(self):
-        get_contract_recipe().make(_quantity=5)
-        driver = self.load_and_wait()
-        histogram = driver.find_element_by_css_selector('.histogram')
-        for metric in ('min', 'max', 'average'):
-            node = histogram.find_element_by_class_name(metric)
-            self.assertTrue(
-                node.text.startswith(u'$'),
-                "histogram '.%s' node does not start with '$': '%s'" % (
-                    metric,
-                    node.text
-                )
-            )
-
-    # XXX this test is deprecated because it's too brittle.
-    # We shouldn't really care about the number of x-axis ticks.
-    def xtest_histogram_shows_intevals(self):
-        get_contract_recipe().make(_quantity=5)
-        driver = self.load_and_wait()
-        ticks = driver.find_elements_by_css_selector(
-            '.histogram .x.axis .tick')
-        # XXX there should be 10 bins, but 11 labels (one for each bin edge)
-        self.assertEqual(
-            len(ticks), 11,
-            "Found wrong number of x-axis ticks: %d" % len(ticks)
         )
 
     def test_histogram_shows_tooltips(self):
