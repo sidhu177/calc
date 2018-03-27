@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1729px" height="640px" viewBox="0 0 1729 640" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>background-header</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="1738" height="641"></rect>
+    </defs>
+    <g id="background-header" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2" transform="translate(-3.000000, 0.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Rectangle" fill="#092D39" xlink:href="#path-1"></use>
+            <g id="Group" mask="url(#mask-2)">
+                <g transform="translate(1272.000000, -105.000000)">
+                    <polygon id="Fill-43" fill="#103C4C" opacity="0.800000012" points="419.136134 0 0 0 209.582093 567.283894"></polygon>
+                    <polygon id="Fill-47" fill="#0D3644" opacity="0.699999988" points="998.217413 1442.07488 417.973519 0 208.414465 567.283894 531.585313 1442.07488"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

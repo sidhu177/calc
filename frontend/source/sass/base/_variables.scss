@@ -1,50 +1,51 @@
 @import '../uswds/utilities';
 
-/* #044364: used for header background fallback */
+/* #092d39: used for header background fallback */
 /* #D2F6FF used for info alert bg */
 
 // Color
-$color-primary:              #17779f;
-$color-primary-darker:       #0c4c6f;
-$color-primary-darkest:      #044364;
+$color-primary:              #2D6580;
+$color-primary-darker:       #274E60;
+$color-primary-darkest:      #092D39;
 
-$color-primary-alt:          #00c6f3;
+$color-primary-alt:          #ccde61;
 $color-primary-alt-lightest: #c5d6de;
 
 $color-secondary:            #e31c3d;
 $color-secondary-dark:       #BC1630;
 $color-secondary-darkest:    #981b1e;
-$color-secondary-lightest:   #FAD0D0;
+$color-secondary-lightest:   #fad0d0;
 
 $color-white:                #ffffff;
-$color-base:                 #212121;
-$color-black:                #000000;
-$color-gray-dark:            #323a45;
-$color-gray-medium-dark:     #4E565F; // new for footer eg, likely temporary
-$color-gray:                 #5b616b; // lighten($color-gray-dark, 20%)
-$color-gray-medium:          #757575; // lightest gray that passes color contrast
-$color-gray-light:           #aeb0b5; // lighten($color-gray-dark, 60%)
-$color-gray-lighter:         #d6d7d9; // lighten($color-gray-dark, 80%)
-$color-gray-lightest:        #f1f1f1; // lighten($color-gray-dark, 91%)
+$color-base:                 #021014;
+$color-black:                #021014;
+$color-gray-dark:            #2d4d59;
+$color-gray-medium-dark:     #436a79;
+$color-gray:                 #547d8c;
+$color-gray-medium:          #7da1b0;
+$color-gray-light:           #dfe8ed;
+$color-gray-lighter:         #f5f8fa;
+$color-gray-lightest:        #f5f8fa;
 
 $color-gold:                 #fdb81e;
-$color-gold-darkest:         #825C1E;
-$color-gold-lightest:        #FBEEBE;
+$color-gold-darkest:         #825c1e;
+$color-gold-lightest:        #fbeebe;
 
-$color-green:                #61701C;
+$color-green:                #61701c;
 $color-green-light:          $color-green; // for wds compat
-$color-green-lightest:       #E6EDC2;
+$color-green-lightest:       #e6edc2;
 
 $color-focus:                $color-primary-alt;
 $color-visited:              #4c2c92;
 
-$color-error-bg: #fef5f5;
+$color-error-bg: #fad0d0;
 
 // Fonts
 $em-base:             10px;
 $base-font-size:      rem(16px);
 $medium-font-size:    rem(14px);
 $small-font-size:     rem(12px);
+$display-font-size:   rem(40px);
 $h1-font-size:        rem(34px);
 $h2-font-size:        rem(28px);
 $h3-font-size:        rem(22px);
