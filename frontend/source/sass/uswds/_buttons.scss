@@ -83,12 +83,13 @@ button,
   &.button-footer {
     background-color: $color-white;
     border-radius: 4px;
-    color: $color-gray-medium-dark;
+    color: $color-base;
+    text-transform: none;
 
     &:hover,
     &.button-hover {
       background-color: $color-gray-lighter;
-      color: $color-gray-medium-dark;
+      color: $color-base;
     }
   }
 }
