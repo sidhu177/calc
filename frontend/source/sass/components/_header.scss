@@ -138,9 +138,8 @@ header {
 
 .user-id {
   margin: 0 0 0.8rem 0;
-  float: right;
+  padding-left: 2.8rem;
   font-size: 1.5rem;
-  text-align: right;
 
   > a {
     color: $color-white;
@@ -172,9 +171,10 @@ nav {
     margin-bottom: 0;
 
     li {
+      font-size: 1.5rem;
       list-style: none;
       display: inline-block;
-      margin: 0 $space-3x;
+      margin: 0 $space-2x;
       border-bottom: $space-1x solid transparent; //so pages with no applicable item still have the right spacing
       &:first-child {
         margin-left: 0em;
