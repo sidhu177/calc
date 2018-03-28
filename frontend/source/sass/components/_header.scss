@@ -45,6 +45,30 @@ header {
   @include antialias();
 }
 
+.hero {
+  margin-bottom: $space-8x;
+
+  a {
+    color: $color-primary-alt;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.hero-callout {
+  border-left: 4px solid $color-gray;
+  padding-left: $space-3x;
+
+  p {
+    font-size: $medium-font-size;
+    margin: 0;
+  }
+}
+
 .base-header {
   display: flex;
   margin-top: 4em;
@@ -58,12 +82,14 @@ header {
   height: 42px;
   padding-bottom: 0;
 }
+
 .description-main {
   color: $color-white;
   font-size: $display-font-size;
   margin-top: 0;
   margin-bottom: .3em;
 }
+
 .description-secondary {
   color: $color-primary-alt-lightest;
   font-size: $h4-font-size;
