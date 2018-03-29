@@ -63,6 +63,8 @@ h6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: $font-sans;
+
   &[id][tabindex="-1"]:focus {
     // The tabindex="-1" has only been provided to work around a
     // hasLayout bug in IE that prevents sequential keyboard navigation
