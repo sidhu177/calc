@@ -14,6 +14,17 @@ class Region10SpreadsheetConverter():
 
     def __init__(self, xls_file):
         self.xls_file = xls_file
+        self._book = None
+
+    @property
+    def book(self):
+        if self._book is None:
+            # Note that for spreadsheets with lots of rows, this can take
+            # a really long time (e.g., 2 minutes for a sheet with 55,000
+            # rows), which is why we're caching it.
+            self._book = xlrd.open_workbook(file_contents=self.xls_file.read())
+            self.xls_file.seek(0)
+        return self._book
 
     # Dict of R10 Excel sheet headings to the expected col index of CSV rows
     # loaded by the existing R10 data loader
@@ -55,9 +66,7 @@ class Region10SpreadsheetConverter():
         '''
         Returns a dict containing metadata about the related xls_file
         '''
-        book = xlrd.open_workbook(file_contents=self.xls_file.read())
-        sheet = book.sheet_by_index(self.sheet_index)
-        self.xls_file.seek(0)
+        sheet = self.book.sheet_by_index(self.sheet_index)
         return {
             'num_rows': sheet.nrows - 1  # subtract 1 for the header row
         }
@@ -70,11 +79,9 @@ class Region10SpreadsheetConverter():
         '''
         heading_indices = self.get_heading_indices_map()
 
-        book = xlrd.open_workbook(file_contents=self.xls_file.read())
+        datemode = self.book.datemode  # necessary for Excel date parsing
 
-        datemode = book.datemode  # necessary for Excel date parsing
-
-        sheet = book.sheet_by_index(self.sheet_index)
+        sheet = self.book.sheet_by_index(self.sheet_index)
 
         # skip the heading row, process the rest
         for rx in range(1, sheet.nrows):
@@ -100,8 +107,6 @@ class Region10SpreadsheetConverter():
 
             yield row
 
-        self.xls_file.seek(0)
-
     def convert_file(self):
         '''
         Converts the input Region 10 XLS/X spreadsheet to a list
@@ -114,8 +119,8 @@ class Region10SpreadsheetConverter():
         Given a sheet, returns a mapping of R10 Excel sheet headings
         to the column indices associated with those fields in that sheet
         '''
-        book = xlrd.open_workbook(file_contents=self.xls_file.read())
-        sheet = book.sheet_by_index(self.sheet_index)
+
+        sheet = self.book.sheet_by_index(self.sheet_index)
         headings = sheet.row(0)
 
         idx_map = {}
@@ -133,5 +138,4 @@ class Region10SpreadsheetConverter():
                 raise ValueError(
                     'Missing columns: {}'.format(', '.join(missing_headers)))
 
-        self.xls_file.seek(0)
         return idx_map

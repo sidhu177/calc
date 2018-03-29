@@ -2,7 +2,7 @@
 
 exports[`<ExportData> matches snapshot 1`] = `
 <a
-  className="button button-primary export-data"
+  className="usa-button usa-button-primary export-data"
   href="undefinedrates/csv/?hi=james"
   title="Click to export your search results to an Excel file (CSV)"
 >

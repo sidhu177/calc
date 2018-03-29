@@ -1,4 +1,8 @@
-@import '../uswds/utilities';
+@import '../../../../node_modules/uswds/src/stylesheets/core/_utilities.scss';
+@import 'rem';
+
+// Set the base path for assets (used for font and image paths)
+$asset-path: '../vendor/uswds/' !default;
 
 /* #092d39: used for header background fallback */
 /* #D2F6FF used for info alert bg */
@@ -72,6 +76,7 @@ $large-screen:      1201px;
 
 // Magic Numbers
 $border-radius: 0;
+$button-border-radius: $border-radius;
 $box-shadow: 0 0 2px rgba(#000, 0.3);
 $focus-shadow: 0 0 3px $color-focus, 0 0 7px $color-focus;
 
@@ -90,3 +95,7 @@ $space-4x: $base-spacing-unit * 4; // 32px
 $space-6x: $base-spacing-unit * 6; // 48px
 $space-8x: $base-spacing-unit * 8; // 64px
 $space-10x: $base-spacing-unit * 10; // 80px
+
+// Form variable overrides
+$form-width: 100%; // was 32rem, but causes weirdness on main page
+$input-max-width: 46rem;

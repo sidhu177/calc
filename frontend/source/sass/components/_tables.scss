@@ -3,6 +3,7 @@ table {
   width: 100%;
   margin-top: 2rem;
   font-size: $medium-font-size;
+  border: none; // WDS override
   caption {
     color: $color-gray;
     text-align: left;
@@ -27,6 +28,11 @@ table {
       /* for ths within tbodys */
       font-weight: $font-weight-normal;
     }
+  }
+  td,
+  th {
+    border: none; // WDS override
+    background: transparent; // WDS override
   }
   th {
     font-weight: $font-weight-bold;

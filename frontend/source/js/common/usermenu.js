@@ -1,3 +1,4 @@
+// @ts-check
 /* global document */
 
 function enableUsermenu() {
@@ -10,14 +11,14 @@ function enableUsermenu() {
     return;
   }
 
-  trigger.setAttribute('aria-haspopup', true);
-  trigger.setAttribute('aria-expanded', false);
+  trigger.setAttribute('aria-haspopup', true.toString());
+  trigger.setAttribute('aria-expanded', false.toString());
   trigger.setAttribute('aria-label', openLabel);
 
   trigger.addEventListener('click', (e) => {
     menu.classList.toggle('is-open');
     const isOpen = menu.classList.contains('is-open');
-    trigger.setAttribute('aria-expanded', isOpen);
+    trigger.setAttribute('aria-expanded', isOpen.toString());
     trigger.setAttribute('aria-label', isOpen ? closeLabel : openLabel);
     e.preventDefault();
   });

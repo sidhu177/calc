@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function DescriptionFilter({
@@ -22,9 +23,9 @@ export default function DescriptionFilter({
 }
 
 DescriptionFilter.propTypes = {
-  extraClassName: React.PropTypes.string,
-  label: React.PropTypes.string,
-  children: React.PropTypes.any.isRequired,
+  extraClassName: PropTypes.string,
+  label: PropTypes.string,
+  children: PropTypes.any.isRequired,
 };
 
 DescriptionFilter.defaultProps = {

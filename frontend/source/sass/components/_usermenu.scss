@@ -9,11 +9,10 @@ $usermenu-width: 150px;
     display: none;
 
     position: absolute;
-    top: 1.2em;
+    top: $space-3x;
     right: 0;
     width: $usermenu-width;
     z-index: 1;
-
     text-align: left;
     font-size: $medium-font-size;
     font-weight: $font-weight-bold;

@@ -1,5 +1,4 @@
 @import '../base/variables';
-@import '../uswds/inputs';
 
 legend {
   font-size: $base-font-size;
@@ -35,6 +34,7 @@ select {
 
 select {
   border-radius: $border-radius;
+  background-image: none !important;
   &.select-small {
     background-position: right 1rem center;
     padding: 0.34em;

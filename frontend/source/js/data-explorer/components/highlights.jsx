@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -52,9 +53,9 @@ export function Highlights({
 }
 
 Highlights.propTypes = {
-  stdDeviation: React.PropTypes.number.isRequired,
-  avgPrice: React.PropTypes.number.isRequired,
-  proposedPrice: React.PropTypes.number.isRequired,
+  stdDeviation: PropTypes.number.isRequired,
+  avgPrice: PropTypes.number.isRequired,
+  proposedPrice: PropTypes.number.isRequired,
 };
 
 function mapStateToProps(state) {

@@ -48,17 +48,17 @@
     {{ form.file }}
 
     <div class="form-button-row clearfix">
-      <button type="submit" class="button-primary">
+      <button type="submit" class="usa-button-primary">
         Upload revised price list
       </button>
 
       {% if gleaned_data.valid_rows %}
-        <a href="{% url 'data_capture:replace_step_2' id=price_list.pk %}" class="button button-secondary">
+        <a href="{% url 'data_capture:replace_step_2' id=price_list.pk %}" class="usa-button usa-button-secondary">
           Continue without these rows
         </a>
       {% else %}
         <div class="submit-group">
-          <div class="button button-disabled">Continue without these rows</div>
+          <div class="usa-button usa-button-disabled">Continue without these rows</div>
         </div>
       {% endif %}
     </div>
@@ -67,6 +67,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel</button>
+    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel</button>
   </form>
 {% endblock card_footer %}

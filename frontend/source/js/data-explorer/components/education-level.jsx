@@ -1,5 +1,7 @@
 /* global document */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -161,9 +163,9 @@ export class EducationLevel extends React.Component {
 }
 
 EducationLevel.propTypes = {
-  levels: React.PropTypes.array.isRequired,
-  idPrefix: React.PropTypes.string,
-  toggleEducationLevel: React.PropTypes.func.isRequired,
+  levels: PropTypes.array.isRequired,
+  idPrefix: PropTypes.string,
+  toggleEducationLevel: PropTypes.func.isRequired,
 };
 
 EducationLevel.defaultProps = {

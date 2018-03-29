@@ -1,7 +1,10 @@
-/* global $ */
-
 import React from 'react';
 import { connect } from 'react-redux';
+
+/* global $ */
+
+import PropTypes from 'prop-types';
+
 import Range from 'rc-slider/lib/Range';
 
 import {
@@ -114,10 +117,10 @@ export class Experience extends React.Component {
 }
 
 Experience.propTypes = {
-  min: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
-  setExperience: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  setExperience: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 Experience.defaultProps = {

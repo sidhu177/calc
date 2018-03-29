@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -50,9 +51,9 @@ export function QueryType({ queryType, setQueryType, idPrefix }) {
 }
 
 QueryType.propTypes = {
-  queryType: React.PropTypes.string.isRequired,
-  setQueryType: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  queryType: PropTypes.string.isRequired,
+  setQueryType: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 QueryType.defaultProps = {

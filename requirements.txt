@@ -1,6 +1,6 @@
 # Production dependencies
 dj-database-url==0.4.2
-dj-email-url==0.0.10
+dj-email-url==0.1.0
 django-click==1.2.0
 Django==1.11.11
 django-cors-headers==2.0.2

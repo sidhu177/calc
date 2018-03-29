@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import { autobind } from '../util';
@@ -31,8 +32,8 @@ export default class EducationLevelItem extends React.Component {
 }
 
 EducationLevelItem.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  value: React.PropTypes.string.isRequired,
-  checked: React.PropTypes.bool.isRequired,
-  onCheckboxClick: React.PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  onCheckboxClick: PropTypes.func.isRequired,
 };

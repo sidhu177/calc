@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -104,15 +105,15 @@ export function Description({
 }
 
 Description.propTypes = {
-  shownResults: React.PropTypes.number.isRequired,
-  totalResults: React.PropTypes.number.isRequired,
-  minExperience: React.PropTypes.number.isRequired,
-  maxExperience: React.PropTypes.number.isRequired,
-  education: React.PropTypes.array.isRequired,
-  site: React.PropTypes.string.isRequired,
-  businessSize: React.PropTypes.string.isRequired,
-  schedule: React.PropTypes.string.isRequired,
-  laborCategory: React.PropTypes.string.isRequired,
+  shownResults: PropTypes.number.isRequired,
+  totalResults: PropTypes.number.isRequired,
+  minExperience: PropTypes.number.isRequired,
+  maxExperience: PropTypes.number.isRequired,
+  education: PropTypes.array.isRequired,
+  site: PropTypes.string.isRequired,
+  businessSize: PropTypes.string.isRequired,
+  schedule: PropTypes.string.isRequired,
+  laborCategory: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {

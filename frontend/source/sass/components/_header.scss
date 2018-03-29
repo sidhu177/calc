@@ -79,7 +79,12 @@ header {
 
 .logo {
   display: inline-block;
+<<<<<<< HEAD
   height: 42px;
+=======
+  height: 58px;
+  max-width: none;
+>>>>>>> hjb-use-uswds
   padding-bottom: 0;
 }
 
@@ -195,6 +200,9 @@ nav {
         color: $color-white;
         text-decoration: none;
         &:hover {
+          color: $color-white;
+        }
+        &:visited {
           color: $color-white;
         }
       }

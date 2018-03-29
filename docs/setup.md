@@ -13,7 +13,7 @@ locally:
   * If not using the [Docker-based development workflow](docker.md), make sure your system `python` command runs Python 3. You can check this by running `python --version`.
 * [Node 6.0](https://nodejs.org/)
 * [yarn](https://yarnpkg.com)
-  * Install globally via `npm install -g yarn`
+  * Install globally via `npm install -g yarn` or via another method described at [https://yarnpkg.com/lang/en/docs/install/](https://yarnpkg.com/lang/en/docs/install/).
 * [Postgres 9.5](https://www.postgresql.org/)
   * It's easiest to have a local instance of it running on its default
     port, as this requires no extra configuration on the CALC side.
@@ -87,7 +87,7 @@ In another terminal, you will also need to run `gulp` to watch and rebuild
 static assets:
 
 ```sh
-npm run gulp
+yarn gulp
 ```
 
 ### Starting the task runner

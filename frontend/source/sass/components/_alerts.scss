@@ -1,9 +1,22 @@
-@import '../uswds/alerts';
-//TODO: rewrite alerts so the new styles are here
-/*$color-error-bg: #f9f0f0;*/
+@import '../base/variables';
 $color-error-bg: #fef5f5;
-.alert {
+.usa-alert {
   margin: 1rem 0;
+  padding: 1rem 6rem 1rem 2rem;
+  border-radius: $border-radius;
+  &::before {
+    width: 0;
+  }
+
+  h3 {
+    font-weight: $font-weight-bold;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
 
   td, th {
     border-color: $color-gray-dark;
@@ -12,7 +25,6 @@ $color-error-bg: #fef5f5;
       border-right: none;
     }
   }
-
 
   thead th {
     color: $color-black;
@@ -28,7 +40,7 @@ $color-error-bg: #fef5f5;
   }
 }
 
-.alert-error {
+.usa-alert-error {
   border: 2px solid $color-secondary-dark;
   background-color: $color-error-bg;
   h3 {
@@ -36,10 +48,24 @@ $color-error-bg: #fef5f5;
   }
 }
 
+.usa-alert-success {
+  background-color: $color-green-lightest;
+  border: 2px solid $color-green; //borders added for consistency with error style
+}
+
+.usa-alert-warning {
+  background-color: $color-gold-lightest;
+  border: 2px solid $color-gold; //borders added for consistency with error style
+}
+
+.usa-alert-info {
+  background-color: #D2F6FF;
+  border: 2px solid $color-primary-alt; //borders added for consistency with error style
+}
+
 alerts-widget:focus {
   outline: none;
 }
-
 
 // TODO: style these the same as alerts?
 // or perhaps just use alert classes in messages.html
@@ -79,13 +105,13 @@ alerts-widget:focus {
 
 /* for Django admin */
 .messagelist li {
-  @extend .alert;
+  @extend .usa-alert;
 }
 
 .messagelist li.success {
-  @extend .alert-success;
+  @extend .usa-alert-success;
 }
 
 .errornote {
-  @extend .alert-error;
+  @extend .usa-alert-error;
 }

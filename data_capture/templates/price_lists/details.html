@@ -52,10 +52,10 @@
 
             <div class="form-button-row align-left clearfix">
               <div class="submit-group">
-                <button type="submit" class="button">Save changes</button>
+                <button type="submit" class="usa-button">Save changes</button>
               </div>
 
-              <a type="submit" class="button button-outline" href="{{ details_without_edit_url }}">Discard changes</a>
+              <a type="submit" class="usa-button usa-button-outline" href="{{ details_without_edit_url }}">Discard changes</a>
             </div>
           </form>
         </div>
@@ -70,7 +70,7 @@
 
             <div class="row">
               <div class="columns eight">
-                <p><a href="{{ details_with_edit_url }}" class="button" data-edit-btn>Edit</a></p>
+                <p><a href="{{ details_with_edit_url }}" class="usa-button" data-edit-btn>Edit</a></p>
                 {% if price_list.get_status_display == 'approved' %}
                   <p class="help-text">Making changes to these details will remove this price list's data from CALC until an administrator reviews it again.</p>
                 {% endif %}
@@ -91,7 +91,7 @@
         <div class="row">
           <div class="columns twelve">
             <br />
-            <a href="{% url 'data_capture:replace_step_1' id=price_list.pk %}" class="button button-primary">Upload replacement price list</a>
+            <a href="{% url 'data_capture:replace_step_1' id=price_list.pk %}" class="usa-button usa-button-primary">Upload replacement price list</a>
             {% if price_list.get_status_display == 'approved' %}
               <p class="help-text">Uploading a new price list will remove this price list's data from CALC until an administrator reviews it again.</p>
             {% endif %}

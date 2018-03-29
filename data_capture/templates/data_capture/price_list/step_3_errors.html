@@ -63,19 +63,19 @@
     {{ form.file }}
 
     <div class="form-button-row clearfix">
-      <a href="{% url 'data_capture:step_3' %}" class="button button-outline button-previous">Previous</a>
+      <a href="{% url 'data_capture:step_3' %}" class="usa-button usa-button-outline button-previous">Previous</a>
 
-      <button type="submit" class="button-primary">
+      <button type="submit" class="usa-button-primary">
         Upload revised price list
       </button>
 
       {% if gleaned_data.valid_rows %}
-        <a href="{% url 'data_capture:step_4' %}" class="button button-secondary">
+        <a href="{% url 'data_capture:step_4' %}" class="usa-button usa-button-secondary">
           Continue without these rows
         </a>
       {% else %}
         <div class="submit-group">
-          <div class="button button-disabled">Continue without these rows</div>
+          <div class="usa-button usa-button-disabled">Continue without these rows</div>
         </div>
       {% endif %}
 
@@ -86,6 +86,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
   </form>
 {% endblock %}

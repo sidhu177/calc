@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -28,9 +29,9 @@ export function Schedule({ idPrefix, schedule, setSchedule }) {
 }
 
 Schedule.propTypes = {
-  schedule: React.PropTypes.string.isRequired,
-  setSchedule: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  schedule: PropTypes.string.isRequired,
+  setSchedule: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 Schedule.defaultProps = {

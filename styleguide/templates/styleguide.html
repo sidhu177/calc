@@ -22,7 +22,7 @@
     CALC uses <a href="http://bourbon.io/">Bourbon</a> and
     <a href="http://neat.bourbon.io/">Neat</a> as the foundation
     for its styles, with alterations based on the
-    <a href="https://standards.usa.gov/">U.S. Web Design Standards (USWDS)</a>.
+    <a href="https://designsystem.digital.gov/">U.S. Web Design System (USWDS)</a>.
   </p>
 
   <p>
@@ -201,14 +201,14 @@
 
   {% example %}
   <button>Default button</button>
-  <a class="button button-primary" href="#">Link</a>
-  <button class="button-primary">Button</button>
-  <input class="button-primary" type="button" value="Input">
-  <input class="button-primary" type="submit" value="Submit">
-  <button class="button-disabled">Disabled button</button>
-  <button class="button-secondary">Secondary button</button>
-  <button class="button-gray">Gray button</button>
-  <button class="button-link">Link button</button>
+  <a class="usa-button usa-button-primary" href="#">Link</a>
+  <button class="usa-button-primary">Button</button>
+  <input class="usa-button-primary" type="button" value="Input">
+  <input class="usa-button-primary" type="submit" value="Submit">
+  <button class="usa-button-disabled">Disabled button</button>
+  <button class="usa-button-secondary">Secondary button</button>
+  <button class="usa-button-gray">Gray button</button>
+  <button class="usa-button-link">Link button</button>
   {% endexample %}
 
   {% guide_section "Steps Widget" %}
@@ -255,28 +255,28 @@
   </p>
 
   {% example %}
-  <div class="alert alert-error" role="alert">
+  <div class="usa-alert usa-alert-error" role="alert">
     <h3>Error!</h3>
     <p>Better get out your eraser.</p>
   </div>
   {% endexample %}
 
   {% example %}
-  <div class="alert alert-success" role="alert">
+  <div class="usa-alert usa-alert-success" role="alert">
     <h3>Success alert</h3>
     <p>Hooray!</p>
   </div>
   {% endexample %}
 
   {% example %}
-  <div class="alert alert-warning" role="alert">
+  <div class="usa-alert usa-alert-warning" role="alert">
     <h3>Warning alert</h3>
     <p>Danger, danger, Will Robinson!</p>
   </div>
   {% endexample %}
 
   {% example %}
-  <div class="alert alert-info" role="alert">
+  <div class="usa-alert usa-alert-info" role="alert">
     <h3>Info alert</h3>
     <p>Now you have The Information!</p>
   </div>
@@ -408,8 +408,7 @@
   {% guide_section "Forms" %}
 
   <p>
-    Defined in {% scss "components/_forms.scss" %} and
-    {% scss "uswds/_forms.scss" %}.
+    Defined in {% scss "components/_forms.scss" %}.
   </p>
 
   {% example %}
@@ -500,11 +499,11 @@
 
   {% example %}
   <div class="form-button-row clearfix">
-    <a href="#" class="button button-outline button-previous">Previous</a>
+    <a href="#" class="usa-button usa-button-outline button-previous">Previous</a>
 
 
     <div class="submit-group">
-      <button type="submit" class="button-primary">Next</button>
+      <button type="submit" class="usa-button-primary">Next</button>
       <span class="submit-label">
         Provide details about the contract.
       </span>
@@ -593,7 +592,7 @@
         </p>
 
         <div class="dialog-buttons">
-          <button class="button-primary" data-a11y-dialog-hide>
+          <button class="usa-button-primary" data-a11y-dialog-hide>
             Dismiss dialog
           </button>
         </div>
@@ -670,7 +669,7 @@
     on this page via the button below.
   </p>
 
-  <button class="button-secondary"
+  <button class="usa-button-secondary"
           onclick="throw new Error('I am an intentional error')">
     Trigger JavaScript Error
   </button>

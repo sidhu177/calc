@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -25,9 +26,9 @@ export function BusinessSize({ idPrefix, size, setSize }) {
 }
 
 BusinessSize.propTypes = {
-  size: React.PropTypes.string.isRequired,
-  setSize: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  size: PropTypes.string.isRequired,
+  setSize: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 BusinessSize.defaultProps = {

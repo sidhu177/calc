@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -24,9 +25,9 @@ export function Site({ idPrefix, site, setSite }) {
 }
 
 Site.propTypes = {
-  site: React.PropTypes.string.isRequired,
-  setSite: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  site: PropTypes.string.isRequired,
+  setSite: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 Site.defaultProps = {

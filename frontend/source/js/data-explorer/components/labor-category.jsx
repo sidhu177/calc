@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -73,12 +74,12 @@ export class LaborCategory extends React.Component {
 }
 
 LaborCategory.propTypes = {
-  idPrefix: React.PropTypes.string,
-  query: React.PropTypes.string.isRequired,
-  queryType: React.PropTypes.string.isRequired,
-  setQuery: React.PropTypes.func.isRequired,
-  api: React.PropTypes.object.isRequired,
-  children: React.PropTypes.any,
+  idPrefix: PropTypes.string,
+  query: PropTypes.string.isRequired,
+  queryType: PropTypes.string.isRequired,
+  setQuery: PropTypes.func.isRequired,
+  api: PropTypes.object.isRequired,
+  children: PropTypes.any,
 };
 
 LaborCategory.defaultProps = {

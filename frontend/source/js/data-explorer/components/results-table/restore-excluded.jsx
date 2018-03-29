@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -25,8 +26,8 @@ function RestoreExcluded({ exclude, onClick }) {
 }
 
 RestoreExcluded.propTypes = {
-  exclude: React.PropTypes.array.isRequired,
-  onClick: React.PropTypes.func.isRequired,
+  exclude: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

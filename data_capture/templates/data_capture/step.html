@@ -9,7 +9,7 @@
       <div class="card">
         <div class="card__content">
           {% if replay %}
-            <div class="alert alert-warning" role="alert">
+            <div class="usa-alert usa-alert-warning" role="alert">
               <h3>This is a replay!</h3>
 
               <p>You are replaying <a href="{% url 'admin:data_capture_attemptedpricelistsubmission_change' replay.id %}">price list submission attempt #{{ replay.id }}</a>.</p>
@@ -22,7 +22,7 @@
 
               <form method="post">
                 {% csrf_token %}
-                <button type="submit" name="cancel" class="button-outline" formnovalidate>Exit this replay</button>
+                <button type="submit" name="cancel" class="usa-button-outline" formnovalidate>Exit this replay</button>
               </form>
             </div>
           {% endif %}
@@ -71,12 +71,12 @@
         </p>
 
         <div class="dialog-buttons">
-          <button class="button-primary" data-a11y-dialog-hide>
+          <button class="usa-button-primary" data-a11y-dialog-hide>
             No, keep working
           </button>
           <form method="post">
             {% csrf_token %}
-            <button type="submit" name="cancel" class="button-secondary">
+            <button type="submit" name="cancel" class="usa-button-secondary">
               Yes, discard my work
             </button>
           </form>

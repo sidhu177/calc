@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -52,8 +53,8 @@ export function createHeaderCellConnector(description, title, key) {
     };
 
     wrappedComponent.propTypes = {
-      sort: React.PropTypes.object.isRequired,
-      setSort: React.PropTypes.func.isRequired,
+      sort: PropTypes.object.isRequired,
+      setSort: PropTypes.func.isRequired,
     };
 
     return wrappedComponent;
@@ -88,8 +89,8 @@ export class GenericHeaderCell extends React.Component {
 }
 
 GenericHeaderCell.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  tooltip: React.PropTypes.string.isRequired,
-  toggleSort: React.PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  tooltip: PropTypes.string.isRequired,
+  toggleSort: PropTypes.func.isRequired,
 };

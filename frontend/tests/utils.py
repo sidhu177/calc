@@ -14,5 +14,5 @@ def build_static_assets():
     global _static_assets_built
 
     if not _static_assets_built:
-        subprocess.check_call(['npm', 'run', 'gulp', '--', 'build'])
+        subprocess.check_call(['yarn', 'gulp', 'build'])
         _static_assets_built = True

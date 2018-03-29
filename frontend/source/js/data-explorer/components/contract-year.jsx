@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -88,9 +89,9 @@ export function ContractYear({ idPrefix, contractYear, setContractYear }) {
 }
 
 ContractYear.propTypes = {
-  contractYear: React.PropTypes.string.isRequired,
-  setContractYear: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  contractYear: PropTypes.string.isRequired,
+  setContractYear: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 ContractYear.defaultProps = {

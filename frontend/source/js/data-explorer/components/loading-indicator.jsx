@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -34,8 +35,8 @@ export function LoadingIndicator({ error, inProgress }) {
 }
 
 LoadingIndicator.propTypes = {
-  error: React.PropTypes.string,
-  inProgress: React.PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  inProgress: PropTypes.bool.isRequired,
 };
 
 LoadingIndicator.defaultProps = {

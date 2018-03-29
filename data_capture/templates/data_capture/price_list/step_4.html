@@ -37,10 +37,10 @@
 
   <div class="form-button-row clearfix">
     <div class="submit-group">
-      <button type="submit" class="button button-primary" name="save-changes">Save changes</button>
+      <button type="submit" class="usa-button usa-button-primary" name="save-changes">Save changes</button>
     </div>
 
-    <a type="submit" class="button button-outline" href="{{ step_4_without_edit_url }}">Discard changes</a>
+    <a type="submit" class="usa-button usa-button-outline" href="{{ step_4_without_edit_url }}">Discard changes</a>
   </div>
 
 </div>
@@ -71,7 +71,7 @@
       <dt>Escalation rate</dt>
       <dd>{% if price_list.escalation_rate %}{{ price_list.escalation_rate }}%{% else %}None{% endif %}</dd>
     </dl>
-    <p><a href="{{ step_4_with_edit_url }}" class="button button-primary" data-edit-btn>Edit</a></p>
+    <p><a href="{{ step_4_with_edit_url }}" class="usa-button usa-button-primary" data-edit-btn>Edit</a></p>
   </div>
 </div>
 {% endif %}
@@ -79,7 +79,7 @@
 {% if not is_preferred_schedule %}
   <div class="row">
     <div class="columns eight">
-      <div class="alert alert-warning">
+      <div class="usa-alert usa-alert-warning">
         <p>
           <strong>Note:</strong> You specified that the price list you were
           uploading was for <em>{{ preferred_schedule_title }}</em>, but it
@@ -102,7 +102,7 @@
 </div>
 
 {% if replay %}
-<div class="alert alert-warning" role="alert">
+<div class="usa-alert usa-alert-warning" role="alert">
   <h3>Remember, this is a replay!</h3>
 
   <p>
@@ -116,22 +116,22 @@
 <div class="row">
   <div class="twelve columns form-button-row clearfix">
     {% if prev_url %}
-      <a href="{{ prev_url }}" class="button button-outline button-previous">Previous</a>
+      <a href="{{ prev_url }}" class="usa-button usa-button-outline button-previous">Previous</a>
     {% elif gleaned_data.invalid_rows %}
-      <a href="{% url 'data_capture:step_3_errors' %}" class="button button-outline button-previous">Previous</a>
+      <a href="{% url 'data_capture:step_3_errors' %}" class="usa-button usa-button-outline button-previous">Previous</a>
     {% else %}
-      <a href="{% url 'data_capture:step_3' %}" class="button button-previous">Previous</a>
+      <a href="{% url 'data_capture:step_3' %}" class="usa-button usa-button-previous">Previous</a>
     {% endif %}
 
     {% if gleaned_data.valid_rows %}
       <div class="submit-group">
         {% if show_edit_form %}
-          <button type="submit" class="button button-primary">Save and submit for review</button>
+          <button type="submit" class="usa-button usa-button-primary">Save and submit for review</button>
           <span class="submit-label">
             Save changes and submit price list data to an administrator for approval.
           </span>
         {% else %}
-          <button type="submit" class="button button-primary" data-edit-text="Save and submit for review">Submit for review</button>
+          <button type="submit" class="usa-button usa-button-primary" data-edit-text="Save and submit for review">Submit for review</button>
           <span class="submit-label" data-edit-text="Save changes and submit price list data to an administrator for approval.">
             Submit price list data to an administrator for approval.
           </span>
@@ -146,6 +146,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
   </form>
 {% endblock %}

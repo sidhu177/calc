@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -443,8 +444,8 @@ class Histogram extends React.Component {
 }
 
 Histogram.propTypes = {
-  ratesData: React.PropTypes.object.isRequired,
-  proposedPrice: React.PropTypes.number.isRequired,
+  ratesData: PropTypes.object.isRequired,
+  proposedPrice: PropTypes.number.isRequired,
 };
 
 function mapStateToProps(state) {

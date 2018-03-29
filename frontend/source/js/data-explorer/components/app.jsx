@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -102,13 +103,13 @@ class App extends React.Component {
             <div className="row">
               <div className="twelve columns">
                 <LaborCategory api={this.props.api}>
-                  <button className="submit button-primary">
+                  <button className="submit usa-button-primary">
                     Search
                   </button>
                   {' '}
                   <input
                     onClick={this.handleResetClick}
-                    className="reset button button-outline"
+                    className="reset usa-button usa-button-outline"
                     type="reset"
                     value="Clear search"
                   />
@@ -155,7 +156,7 @@ class App extends React.Component {
                 <div className="download-buttons row">
                   <div className="four columns">
                     <a
-                      className="button button-primary"
+                      className="usa-button usa-button-primary"
                       id={prefixId('download-histogram') /* Selenium needs it. */}
                       href=""
                       onClick={this.handleDownloadClick}
@@ -208,12 +209,12 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  api: React.PropTypes.object.isRequired,
-  ratesInProgress: React.PropTypes.bool.isRequired,
-  ratesError: React.PropTypes.string,
-  resetState: React.PropTypes.func.isRequired,
-  invalidateRates: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  api: PropTypes.object.isRequired,
+  ratesInProgress: PropTypes.bool.isRequired,
+  ratesError: PropTypes.string,
+  resetState: PropTypes.func.isRequired,
+  invalidateRates: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 App.defaultProps = {

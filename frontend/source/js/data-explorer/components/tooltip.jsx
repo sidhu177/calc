@@ -1,5 +1,7 @@
 /* global $ */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import { autobind } from '../util';
@@ -64,9 +66,9 @@ export default class Tooltip extends React.Component {
 }
 
 Tooltip.propTypes = {
-  children: React.PropTypes.any,
-  text: React.PropTypes.string.isRequired,
-  show: React.PropTypes.bool,
+  children: PropTypes.any,
+  text: PropTypes.string.isRequired,
+  show: PropTypes.bool,
 };
 
 Tooltip.defaultProps = {

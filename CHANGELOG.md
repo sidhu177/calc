@@ -7,6 +7,21 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [2.8.5][] - 2018-03-29
+
+### Changed
+
+- Improved performance of Region 10 bulk data upload processing (#1675).
+- Switched to native PostgreSQL full-text search instead of using djorm-exp-pgfulltext (#1652).
+- Upgraded to Django 1.11 (#1640).
+- Upgraded to Redis 3.2 (#1647).
+- Upgraded to React 15.5 (#1680).
+- Upgraded dj-email-url in support of switching to Amazon SES for email sending (#1678).
+- Fixed automated deployments to redeploy the main app and worker apps (#1651).
+- Added coverage reporting for the Data Explorer React app (#1653).
+- Setup nightly tests to be run against the production instance of CALC (#1654).
+- Minimized vendor JavaScript bundle (#1655).
+
 ## [2.8.4][] - 2018-03-20
 
 ### Changed
@@ -304,7 +319,8 @@ to [Semantic Versioning](http://semver.org/).
 - refining header wording
 - replace drop down for education with multi select
 
-[unreleased]: https://github.com/18F/calc/compare/v2.8.4...HEAD
+[unreleased]: https://github.com/18F/calc/compare/v2.8.5...HEAD
+[2.8.5]: https://github.com/18F/calc/compare/v2.8.4...v2.8.5
 [2.8.4]: https://github.com/18F/calc/compare/v2.8.3...v2.8.4
 [2.8.3]: https://github.com/18F/calc/compare/v2.8.2...v2.8.3
 [2.8.2]: https://github.com/18F/calc/compare/v2.8.1...v2.8.2

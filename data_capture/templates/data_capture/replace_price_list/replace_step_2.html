@@ -24,7 +24,7 @@
         {% csrf_token %}
         {% if gleaned_data.valid_rows %}
           <div class="submit-group">
-            <button type="submit" class="button button-primary">Submit for review</button>
+            <button type="submit" class="usa-button usa-button-primary">Submit for review</button>
             <span class="submit-label">
               Submit price list data to an administrator for approval.
             </span>
@@ -37,6 +37,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel</button>
+    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel</button>
   </form>
 {% endblock card_footer %}

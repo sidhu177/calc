@@ -2,6 +2,8 @@ const path = require('path');
 const webpackStream = require('webpack-stream');
 const webpack = require('webpack');
 
+const USE_POLLING = 'USE_POLLING' in process.env;
+
 exports.scriptSources = ({ bundles, rootDir }) =>
   Object.keys(bundles).map((name) => {
     const options = bundles[name];
@@ -34,6 +36,10 @@ exports.webpackify = ({ isWatching, isProd }) => {
 
   return webpackStream({
     watch: isWatching,
+    watchOptions: USE_POLLING ? {
+      aggregateTimeout: 300,
+      poll: 500,
+    } : {},
     resolve: {
       extensions: ['.js', '.jsx'],
     },

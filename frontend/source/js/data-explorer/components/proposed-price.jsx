@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -89,9 +90,9 @@ export class ProposedPrice extends React.Component {
 }
 
 ProposedPrice.propTypes = {
-  proposedPrice: React.PropTypes.number.isRequired,
-  setProposedPrice: React.PropTypes.func.isRequired,
-  idPrefix: React.PropTypes.string,
+  proposedPrice: PropTypes.number.isRequired,
+  setProposedPrice: PropTypes.func.isRequired,
+  idPrefix: PropTypes.string,
 };
 
 ProposedPrice.defaultProps = {

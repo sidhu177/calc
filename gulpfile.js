@@ -25,6 +25,8 @@ const named = require('vinyl-named');
 
 const webpackUtil = require('./frontend/gulp/webpack-util');
 
+const USWDS_DIST = 'node_modules/uswds/dist';
+
 const BUILT_FRONTEND_DIR = 'frontend/static/frontend/built';
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -126,13 +128,17 @@ gulp.task('sphinx', (cb) => {
   });
 });
 
+gulp.task('copy-uswds-assets', () => gulp.src(`${USWDS_DIST}/@(js|fonts|img)/**/**`)
+  .pipe(gulp.dest(`${BUILT_FRONTEND_DIR}/vendor/uswds/`)));
+
 // production build task
 // will need to run before collectstatic
-// `npm run gulp -- build` or `gulp run build` if gulp-cli is installed globally
-gulp.task('build', ['sass', 'js', 'sphinx']);
+
+// `yarn gulp build` or `gulp run build` if gulp-cli is installed globally
+gulp.task('build', ['copy-uswds-assets', 'sass', 'js', 'sphinx']);
 
 // watch files for changes
-gulp.task('watch', ['set-watching', 'sass', 'js', 'sphinx'], () => {
+gulp.task('watch', ['set-watching', 'copy-uswds-assets', 'sass', 'js', 'sphinx'], () => {
   gulp.watch([
     path.join(dirs.src.sphinx, paths.sphinx),
     path.join(dirs.src.root, paths.changelog),

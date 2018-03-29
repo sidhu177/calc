@@ -24,7 +24,7 @@ pipeline.
 If you just want to build the assets once without watching for changes, run:
 
 ```sh
-npm run gulp -- build
+yarn gulp build
 ```
 
 ## Developing the front end
@@ -32,10 +32,10 @@ npm run gulp -- build
 Different parts of CALC are constructed in different ways, so
 developing the front end depends on which part you want to change.
 
-We use [yarn][] to manage our node dependencies. `yarn`, in addition to being
-faster than using `npm install`, has the benefit of locking dependency
-versions via a `yarn.lock` file. Read the [yarn workflow docs][] if you are not
-familiar with how to use it.
+We use [yarn][] to manage our node dependencies and run node tasks.
+`yarn`, in addition to being faster than using `npm install`, has the
+benefit of locking dependency versions via a `yarn.lock` file.
+Read the [yarn workflow docs][] if you are not familiar with how to use it.
 
 ### Data explorer
 
@@ -49,19 +49,19 @@ The explorer's test suite uses [Jest][], and the tests are located in
 To run all the tests, run:
 
 ```
-npm run test
+yarn test
 ```
 
 You can also run the tests in a continuous "watch" mode, which re-runs
 tests as you change your code:
 
 ```
-npm run test:watch
+yarn test:watch
 ```
 
 Finally, you can also run `jest` directly. If you're using Docker,
 this can be done via `docker-compose run app jest`; otherwise you can
-use `npm run test --`, followed by any
+use `yarn test`, followed by any
 [Jest CLI options](https://facebook.github.io/jest/docs/cli.html).
 
 ### Data capture

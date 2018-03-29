@@ -122,6 +122,11 @@ string), the boolean is true; otherwise, it's false.
   of gulp's watch mode such that it doesn't run `eslint` every time a
   file changes.
 
+* `USE_POLLING` is a boolean; if true, this will force all the watchers
+  to use filesystem polling instead of OS notifications, which works
+  better with some configurations, such as Windows, VirtualBox, and
+  NFS mounts.
+
 [RoboBrowser]: http://robobrowser.readthedocs.io/
 [`SECRET_KEY`]: https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key
 [`DEFAULT_FROM_EMAIL`]: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-DEFAULT_FROM_EMAIL

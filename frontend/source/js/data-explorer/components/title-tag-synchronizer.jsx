@@ -1,5 +1,7 @@
 /* global window */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -37,8 +39,8 @@ export class TitleTagSynchronizer extends React.Component {
 }
 
 TitleTagSynchronizer.propTypes = {
-  q: React.PropTypes.string.isRequired,
-  document: React.PropTypes.object,
+  q: PropTypes.string.isRequired,
+  document: PropTypes.object,
 };
 
 TitleTagSynchronizer.defaultProps = {
