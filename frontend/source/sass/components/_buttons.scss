@@ -15,9 +15,7 @@ button,
   // WDS override
   margin-bottom: 0;
   margin-top: 0;
-  font-size: $small-font-size;
-  text-transform: uppercase;
-  font-size: $small-font-size; // original is $base-font, which is too large here
+  font-size: $medium-font-size; // original is $base-font, which is too large here
   font-weight: $font-weight-bold;
   line-height: 1.7; // adjusted from 1, which makes links show funky
 
@@ -37,13 +35,12 @@ button,
 
   &.button-footer {
     background-color: $color-white;
-    border-radius: 4px;
-    color: $color-white;
+    border-radius: 3px;
+    color: $color-base;
 
     &:hover,
     &.button-hover {
       background-color: $color-gray-lighter;
-      color: $color-gray-medium-dark;
     }
   }
 }
