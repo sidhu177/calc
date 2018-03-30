@@ -166,9 +166,18 @@ nav {
     display: table;
     clear: both;
   }
-  ul {
+
+  .nav--wide {
     @include span-columns(12 of 12);
     @include shift(0);
+  }
+
+  .nav--narrow {
+    @include span-columns(8 of 12);
+    @include shift(2);
+  }
+
+  ul {
     list-style: none;
     text-align: left;
     color: $color-white;
