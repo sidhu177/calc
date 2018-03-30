@@ -38,7 +38,7 @@
 
 header {
   color: $color-white;
-  background: $color-primary-darker;
+  background: $color-primary-darkest;
   background-image: url(../../images/background-header.svg);
   background-size: 100%;
   padding-bottom: $space-4x; //to create "stacked" look
@@ -59,7 +59,10 @@ header {
   }
 }
 
-.hero-callout {
+.header-login {
+}
+
+.header-callout {
   border-left: 4px solid $color-gray;
   padding-left: $space-3x;
 
@@ -142,9 +145,11 @@ header {
   padding-left: 2.8rem;
   font-size: 1.5rem;
 
-  > a {
-    color: $color-white;
-  }
+}
+
+a.user-id {
+  color: $color-primary-alt;
+  margin-left: 2px;
 }
 
 @media all and (max-width: 890px){
