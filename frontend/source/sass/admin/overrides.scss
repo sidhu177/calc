@@ -12,18 +12,12 @@ nav ul {
     border-bottom: 0;
     a[href*="admin"]{
       border-bottom: $space-1x solid $color-primary-alt;
-      padding-bottom: 7px;
+      padding-bottom: 6px;
       font-weight: $font-weight-bold;
     }
   }
 }
 /* end temp styles */
-
-/* temp header padding override until we create a better subnav style ugh */
-header {
-  padding-bottom: 0;
-}
-/* end temp ugh styles */
 
 /* USWDS override, because we can't control Django's markup easily */
 .field-is_muted input[type=checkbox],
