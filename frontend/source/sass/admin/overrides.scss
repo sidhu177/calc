@@ -63,8 +63,22 @@ form .aligned p.help {
 
 /* groups pages */
 #user-tools ul {
-  text-align: center;
-  margin: ($space-1x + $space-half) 0 $space-3x;
+  margin: 0;
+  a {
+    color: $color-base;
+    text-decoration: none;
+
+    &:hover {
+      /* border-bottom: $space-1x solid $color-gray-medium-dark; add this hover, needs debugging so the border hover doesn't show for the selected nav item */
+    }
+
+    &.selected {
+      /* these aren't working, prob need a diff method becuase django) */
+      border-bottom: $space-1x solid $color-primary-alt;
+      font-weight: $font-weight-bold;
+    }
+  }
+
   li {
     display: inline-block;
     margin: 0 2rem 0 0;

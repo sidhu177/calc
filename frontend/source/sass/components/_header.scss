@@ -211,6 +211,8 @@ nav {
         text-decoration: none;
         &:hover {
           color: $color-white;
+          /* border-bottom: $space-1x solid $color-gray-medium-dark; add this hover, needs debugging so the border hover doesn't show for the selected nav item */
+          padding-bottom: $space-half;
         }
         &:visited {
           color: $color-white;
