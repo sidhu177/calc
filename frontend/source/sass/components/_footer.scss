@@ -1,16 +1,20 @@
 @import '../base/variables';
 
 footer {
-  background: #cddc86; //add a variable for this
-  background-image: url(../../images/background-footer.svg);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  border-top: 4px solid $color-white;
-  padding-bottom: $space-4x; //to create "stacked" look
+  color: $color-white;
+  background: $color-gray-medium-dark;
   padding: 4rem 0 4rem 0;
+  line-height: 1.4;
+  font-weight: $font-weight-light;
+  @include antialias();
 
   a {
-    color: $color-base;
+    color: $color-white;
+    &:hover,
+    &:active {
+      color: $color-white;
+      text-decoration: none;
+    }
   }
 
   h2 {
@@ -23,7 +27,7 @@ footer {
 }
 
 .divider_footer {
-  border-left: 1px solid #a0ad64; //add a variable for this
+  border-left: 4px solid #a0ad64; //add a variable for this color
   padding-left: 3rem;
 }
 
@@ -35,7 +39,7 @@ footer {
   float: right;
   a {
     display: inline-block;
-    margin-left: $space-2x;
+    margin-left: 2rem;
     margin-top: 2rem;
     img {
       width: 60px;
