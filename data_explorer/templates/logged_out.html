@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
+{% block body_class %}content--skinny{% endblock %}
 {% block body %}
-<div class="container card--narrow">
+<div class="container">
   <div class="row card">
-    <div class="card__content">
+    <div class="content">
       <h2>You have logged out of CALC.</h2>
       <p>You can <a href="/">explore CALC's pricing data</a> or <a href="{% url 'uaa_client:login' %}">log back in</a>.</p>
     </div>

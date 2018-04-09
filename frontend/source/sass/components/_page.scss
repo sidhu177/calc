@@ -19,19 +19,34 @@ main {
   font-size: $h3-font-size;
 }
 
+/* Top level classes go in {% body_class %} */
+.content--narrow {
+  header,
+  main,
+  footer {
+    @include span-columns(8);
+    @include shift(2);
+  }
+}
+
 .card {
   background-color: $color-white;
   padding: $space-8x 0;
   border-bottom: $space-half solid $background-color;
 
   &:last-child {
-    border-bottom-color: $color-gray-light;
+    border-bottom-color: $color-gray-light; // TODO: This is not getting picked up for some reason.
   }
 }
 
 .card__footer {
   padding: $space-half 0;
   margin-bottom: $space-10x;
+  margin-top: -$space-10x; //ugh this is dumb
+  // hackity spacing hackity hack
+  > * {
+    padding-top: $space-10x;
+  }
   button.usa-button-link {
     margin-top: $space-half;
     font-size: $small-font-size;
@@ -39,48 +54,53 @@ main {
   }
 }
 
-/* this isn't exactly BEM, but the best way I can find to manage the variable
- * card widths without duplicating the styles for card, content & footer.
- * Top level goes in {% body_class %} even though that's not a class on <body>.
- * Ugh. */
-.card--narrow {
-  .card {
-    @include span-columns(8);
-    @include shift(2);
-    .card__content {
-      @include span-columns(6 of 8);
-      @include shift-in-context(1 of 8);
+// Formerly .content--wide; now default style
+header,
+main,
+footer {
+  // .container can be used anywhere. Only target top-level ones.
+  > .container {
+    // .row can also be used anywhere; target just top-level classes.
+    > .row,
+    .card,
+    .card__footer {
+      @include span-columns(12);
+      .content {
+        @include span-columns(10 of 12);
+        @include shift-in-context(1 of 12);
+      }
     }
-    &:last-child {
-      margin-bottom: $space-10x; //hacky spacing hackity hack
-    }
-  }
-  .card__footer {
-    margin-top: -$space-10x; //ugh this is dumb
-    @include span-columns(8);
-    @include shift(2);
   }
 }
 
-.card--wide {
-  .card {
-    @include span-columns(12);
-
-    .card__content {
-      @include span-columns(10 of 12);
-      @include shift-in-context(1 of 12);
+.content--skinny {
+  header,
+  main {
+    // .container can be used anywhere. Only target top-level ones.
+    > .container {
+      // .row can also be used anywhere; target just top-level classes.
+      nav,
+      .card,
+      .card__footer {
+        @include span-columns(12);
+        @media screen and (min-width: $medium-large-screen) {
+          @include span-columns(8);
+          @include shift(2);
+        }
+        .content {
+          @include span-columns(10 of 12);
+          @include shift-in-context(1 of 12);
+          @media screen and (min-width: $medium-large-screen) {
+            @include span-columns(6 of 8);
+            @include shift-in-context(1 of 8);
+          }
+        }
+      }
     }
-    &:last-child {
-      margin-bottom: $space-10x;
-    }
-  }
-  .card__footer {
-    margin-top: -$space-10x;
-    @include span-columns(12);
   }
 }
 
-.card .card__content:first-child h2:first-child {
+.card .content:first-child h2:first-child {
   // The first header on a card has too much space.
   margin-top: 0;
 }

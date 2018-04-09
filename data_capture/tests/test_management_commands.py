@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 from click.testing import CliRunner
 
 from ..management.commands import initgroups, send_example_emails
+from .common import R10_XLSX_PATH
 
 
 class TestInitgroups(TestCase):
@@ -36,3 +37,8 @@ class TestSendexampleemails(TestCase):
 class TestSendtesthtmlemail(TestCase):
     def test_it_does_not_explode(self):
         call_command('send_test_html_email', 'foo@example.com')
+
+
+class TestProcessBulkUpload(TestCase):
+    def test_it_does_not_explode(self):
+        call_command('process_bulk_upload', R10_XLSX_PATH)

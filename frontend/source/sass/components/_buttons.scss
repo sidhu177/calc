@@ -32,8 +32,8 @@ button,
 
   &.button-footer {
     background-color: $color-white;
-    border-radius: 3px;
-    color: $color-base;
+    border-radius: $border-radius;
+    color: $color-gray-medium;
 
     &:hover,
     &.button-hover {

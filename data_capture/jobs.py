@@ -14,10 +14,33 @@ from contracts.models import Contract, BulkUploadContractSource
 contracts_logger = logging.getLogger('contracts')
 
 
+def _create_contract_batches(upload_source, batch_size=5000):
+    r10_file = ContentFile(upload_source.original_file)
+    converter = Region10SpreadsheetConverter(r10_file)
+
+    contracts = []
+    bad_rows = []
+    i = 0
+
+    for row in converter.convert_next():
+        try:
+            c = Region10Loader.make_contract(row, upload_source=upload_source)
+            contracts.append(c)
+        except (ValueError, ValidationError) as e:
+            bad_rows.append(row)
+        i += 1
+        if i == batch_size:
+            yield contracts, bad_rows
+            i = 0
+            contracts = []
+            bad_rows = []
+
+    if i > 0:
+        yield contracts, bad_rows
+
+
 @transaction.atomic
 def _process_bulk_upload(upload_source):
-    file = ContentFile(upload_source.original_file)
-    converter = Region10SpreadsheetConverter(file)
 
     contracts_logger.info("Deleting contract objects related to region 10.")
 
@@ -27,22 +50,19 @@ def _process_bulk_upload(upload_source):
         upload_source__procurement_center=BulkUploadContractSource.REGION_10
     ).delete()
 
-    contracts = []
-    bad_rows = []
-
     contracts_logger.info("Generating new contract objects.")
 
-    for row in converter.convert_next():
-        try:
-            c = Region10Loader.make_contract(row, upload_source=upload_source)
-            contracts.append(c)
-        except (ValueError, ValidationError) as e:
-            bad_rows.append(row)
+    total_contracts = 0
+    total_bad_rows = 0
 
-    contracts_logger.info("Saving new contract objects.")
-
-    # Save new contracts
-    Contract.objects.bulk_create(contracts)
+    for contracts, bad_rows in _create_contract_batches(upload_source):
+        Contract.objects.bulk_create(contracts)
+        total_contracts += len(contracts)
+        total_bad_rows += len(bad_rows)
+        contracts_logger.info(
+            f"Saved {total_contracts} contracts so far "
+            f"({total_bad_rows} bad rows found)."
+        )
 
     contracts_logger.info("Updating full-text search indexes.")
 
@@ -53,7 +73,7 @@ def _process_bulk_upload(upload_source):
     upload_source.has_been_loaded = True
     upload_source.save()
 
-    return len(contracts), len(bad_rows)
+    return total_contracts, total_bad_rows
 
 
 @job

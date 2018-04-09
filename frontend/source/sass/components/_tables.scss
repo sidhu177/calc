@@ -180,7 +180,7 @@ td.error {
         bottom: 95%;
         left: 0;
         background-color: $color-secondary-lightest;
-        border-radius: 4px;
+        border-radius: $border-radius;
       }
     }
   }
@@ -204,7 +204,7 @@ td.error {
         bottom: 95%;
         left: 0;
         background-color: $color-secondary-lightest;
-        border-radius: 4px;
+        border-radius: $border-radius;
       }
     }
   }

@@ -12,18 +12,12 @@ nav ul {
     border-bottom: 0;
     a[href*="admin"]{
       border-bottom: $space-1x solid $color-primary-alt;
-      padding-bottom: 7px;
+      padding-bottom: 6px;
       font-weight: $font-weight-bold;
     }
   }
 }
 /* end temp styles */
-
-/* temp header padding override until we create a better subnav style ugh */
-header {
-  padding-bottom: 0;
-}
-/* end temp ugh styles */
 
 /* USWDS override, because we can't control Django's markup easily */
 .field-is_muted input[type=checkbox],
@@ -69,8 +63,22 @@ form .aligned p.help {
 
 /* groups pages */
 #user-tools ul {
-  text-align: center;
-  margin: ($space-1x + $space-half) 0 $space-3x;
+  margin: 0;
+  a {
+    color: $color-base;
+    text-decoration: none;
+
+    &:hover {
+      /* border-bottom: $space-1x solid $color-gray-medium-dark; add this hover, needs debugging so the border hover doesn't show for the selected nav item */
+    }
+
+    &.selected {
+      /* these aren't working, prob need a diff method becuase django) */
+      border-bottom: $space-1x solid $color-primary-alt;
+      font-weight: $font-weight-bold;
+    }
+  }
+
   li {
     display: inline-block;
     margin: 0 2rem 0 0;
@@ -242,7 +250,7 @@ thead a:focus {
 /* same as filter-block in changelists.css */
 .sidebar {
   background: $color-gray-lightest;
-  border-radius: 4px;
+  border-radius: $border-radius;
   margin-bottom: 0;
   padding: 1rem 2rem;
   h2,

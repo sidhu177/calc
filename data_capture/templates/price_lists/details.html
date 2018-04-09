@@ -3,9 +3,9 @@
 {% block title %}{{ price_list.contract_number }} Price List Details{% endblock %}
 
 {% block body %}
-  <div class="container card--wide">
+  <div class="container">
     <div class="card">
-      <div class="card__content">
+      <div class="content">
         <p><a href="{% url 'data_capture:price_lists' %}">&laquo; Back to your price lists</a></p>
         <div class=" price-list__status-header">
           <h1 class="h1--deemphasized">Uploaded price list details</h1>
@@ -29,7 +29,7 @@
       </div><!--card__content-->
     </div><!--card-->
     <div class="card">
-      <div class="card__content">
+      <div class="content">
         <div data-edit-contract-details {% if not show_edit_form %}style="display:none;"{% endif %}>
           <form method="post">
             {% csrf_token %}

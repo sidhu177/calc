@@ -74,7 +74,7 @@ header {
 
 .base-header {
   display: flex;
-  margin-top: 4em;
+  margin-top: 3em;
   + .row {
     margin-top: 2em;
   }
@@ -166,9 +166,18 @@ nav {
     display: table;
     clear: both;
   }
+
+  //.nav--wide {
+    //@include span-columns(12 of 12);
+    //@include shift(0);
+  //}
+
+  //.nav--narrow {
+    //@include span-columns(8 of 12);
+    //@include shift(2);
+  //}
+
   ul {
-    @include span-columns(12 of 12);
-    @include shift(0);
     list-style: none;
     text-align: left;
     color: $color-white;
@@ -202,6 +211,8 @@ nav {
         text-decoration: none;
         &:hover {
           color: $color-white;
+          /* border-bottom: $space-1x solid $color-gray-medium-dark; add this hover, needs debugging so the border hover doesn't show for the selected nav item */
+          padding-bottom: $space-half;
         }
         &:visited {
           color: $color-white;

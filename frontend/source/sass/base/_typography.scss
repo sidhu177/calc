@@ -63,7 +63,7 @@ h6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $font-sans;
+  font-family: $font-sans; // WDS override
 
   &[id][tabindex="-1"]:focus {
     // The tabindex="-1" has only been provided to work around a
@@ -81,6 +81,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+table caption a {
+  font-family: $font-sans; // WDS override for h5 mixin that gets applied here for some reason
+}
+
 p {
   font-size: $base-font-size;
   line-height: $base-line-height;
@@ -90,6 +94,12 @@ p {
   }
   &.large {
     font-size: $base-font-size + 0.4;
+  }
+}
+
+a {
+  &:visited {
+    color: $color-primary; // WDS override
   }
 }
 

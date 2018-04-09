@@ -214,3 +214,9 @@ input[type].form__inline,
     border-radius: 0 $border-radius $border-radius 0;
   }
 }
+
+// WDS override for date groupings
+input[type="number"] {
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}

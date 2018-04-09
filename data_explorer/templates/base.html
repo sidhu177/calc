@@ -44,20 +44,24 @@
     {% block head %}
     {% endblock %}
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     {% include '_banner.html' %}
     <header>
       <div class="container">
-      {% include '_header.html' %}
-      {# Extended header should be placed in this block in descendant templates #}
-      {% block header_extension %}{% endblock %}
-      {% include '_nav.html' %}
+        <div class="row">
+        {% include '_header.html' %}
+        {# Extended header should be placed in this block in descendant templates #}
+        {% block header_extension %}{% endblock %}
+        {% include '_nav.html' %}
+        </div>
       </div>
     </header>
 
     <main id="main">
-    {% block body %}
-    {% endblock %}
+      <div class="container">
+      {% block body %}
+      {% endblock %}
+      </div>
     </main>
 
     {% block modals %}{% endblock modals %}

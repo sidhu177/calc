@@ -4,9 +4,6 @@
 // Set the base path for assets (used for font and image paths)
 $asset-path: '../vendor/uswds/' !default;
 
-/* #092d39: used for header background fallback */
-/* #D2F6FF used for info alert bg */
-
 // Color
 $color-primary:              #2D6580;
 $color-primary-darker:       #274E60;
@@ -65,7 +62,6 @@ $small-line-height: 1.3;
 
 $font-family-main: 'Libre Franklin', 'Helvetica', 'Arial', sans-serif;
 $font-sans: $font-family-main;
-$font-serif: $font-family-main;
 $font-family-mono: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 $font-weight-bold: 700;
 $font-weight-normal: 400;
@@ -74,6 +70,7 @@ $font-weight-light: 200;
 // Mobile First Breakpoints
 $small-screen:      481px;
 $medium-screen:     600px;
+$medium-large-screen: 900px;
 $large-screen:      1201px;
 
 // Magic Numbers
@@ -85,7 +82,7 @@ $focus-shadow: 0 0 3px $color-focus, 0 0 7px $color-focus;
 // Neat grid overrides
 $column: 5rem;
 $gutter: 3rem;
-$max-width: 930px;
+$max-width: 980px;
 
 // Spacing units
 $base-spacing-unit: .8rem; //8px

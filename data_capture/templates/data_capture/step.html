@@ -4,56 +4,50 @@
 {% block title %}Add price data to CALC / {{ step.description|capfirst }}: {% block subtitle %}{% endblock %}{% endblock %}
 
 {% block body %}
-  <div class="container {% block body_class %}card--narrow{% endblock %}">
-    <div class="row">
-      <div class="card">
-        <div class="card__content">
-          {% if replay %}
-            <div class="usa-alert usa-alert-warning" role="alert">
-              <h3>This is a replay!</h3>
+  <div class="card">
+    <div class="content">
+      {% if replay %}
+        <div class="usa-alert usa-alert-warning" role="alert">
+          <h3>This is a replay!</h3>
 
-              <p>You are replaying <a href="{% url 'admin:data_capture_attemptedpricelistsubmission_change' replay.id %}">price list submission attempt #{{ replay.id }}</a>.</p>
+          <p>You are replaying <a href="{% url 'admin:data_capture_attemptedpricelistsubmission_change' replay.id %}">price list submission attempt #{{ replay.id }}</a>.</p>
 
-              <p>The following is probably what
-                <strong>{{ replay.submitter.email }}</strong> saw
-                when attempting to submit a price list on
-                <strong>{{ replay.created_at|tz_timestamp }}</strong>.
-              </p>
+          <p>The following is probably what
+            <strong>{{ replay.submitter.email }}</strong> saw
+            when attempting to submit a price list on
+            <strong>{{ replay.created_at|tz_timestamp }}</strong>.
+          </p>
 
-              <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="cancel" class="usa-button-outline" formnovalidate>Exit this replay</button>
-              </form>
-            </div>
-          {% endif %}
-
-          {% block steps %}
-          {{ step.widget }}
-          {% endblock %}
-
-          <h1>
-            {% block page_heading %}{% endblock %}
-            <span class="sr-only">{{ step.description }}</span>
-          </h1>
-          {% block step_heading %}{% endblock %}
-        </div><!--card-content -->
-      </div><!--card__header-->
-      <div class="card">
-        <div class="card__content">
-          {% include 'data_capture/messages.html' %}
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="cancel" class="usa-button-outline" formnovalidate>Exit this replay</button>
+          </form>
         </div>
+      {% endif %}
 
-        <div class="card__content">
-          {% block step_body %}{% endblock %}
-        </div>
-      </div><!--card-->
-    </div><!-- .row -->
-    <div class="row">
-      <div class="card__footer">
-        {% block card_footer %}{% endblock %}
-      </div>
+      {% block steps %}
+      {{ step.widget }}
+      {% endblock %}
+
+      <h1>
+        {% block page_heading %}{% endblock %}
+        <span class="sr-only">{{ step.description }}</span>
+      </h1>
+      {% block step_heading %}{% endblock %}
+    </div><!--content -->
+  </div><!--card-->
+  <div class="card">
+    <div class="content">
+      {% include 'data_capture/messages.html' %}
     </div>
-  </div><!-- container -->
+
+    <div class="content">
+      {% block step_body %}{% endblock %}
+    </div>
+  </div><!--card-->
+  <div class="card__footer">
+    {% block card_footer %}{% endblock %}
+  </div>
 {% endblock %}
 
 {% block modals %}

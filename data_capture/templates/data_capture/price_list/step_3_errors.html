@@ -1,6 +1,5 @@
 {% extends 'data_capture/step.html' %}
-
-{% block body_class %}secondary-step card--wide card--no-header{% endblock %}
+{% block card_class %}secondary-step card--no-header{% endblock %}
 
 {% block subtitle %}Errors in price list upload{% endblock %}
 {% block step_heading %}<h2>Review errors</h2>{% endblock %}
@@ -40,10 +39,10 @@
       {% endwith %}
       {{ gleaned_data.to_error_table|safe }}
     {% endwith %}
-  </div><!--card__content-->
+  </div><!--content-->
   </div><!--card-->
   <div class="card">
-  <div class="card__content">
+  <div class="content">
   <h2 id="upload" tabindex="-1">Upload replacement (optional)</h2>
 
   <p>

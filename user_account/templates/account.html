@@ -2,11 +2,12 @@
 {% load humanize %}
 {% load data_capture %}
 
+{% block body_class %}content--skinny{% endblock %}
 {% block title %}User Account{% endblock %}
 {% block body %}
-  <div class="container card--narrow">
+  <div class="container">
     <div class="card">
-      <div class="card__content">
+      <div class="content">
       <h1>Activity summary</h1>
       {% if total_submitted %}
         <div class="">
@@ -24,12 +25,12 @@
           <p>Adding your awarded contract data helps all users of CALC. Try <a href="{% url 'data_capture:step_1' %}">adding a price list</a> now!</p>
         </div>
       {% endif %}
-      </div><!--card__content-->
+      </div><!--content-->
     </div><!--card-->
 
     {% if total_submitted %}
       <div class="row card">
-        <div class="card__content">
+        <div class="content">
           <h2>Recently approved price lists</h2>
           {% if recently_approved_price_lists %}
             <ul class="price-list-list">
@@ -47,7 +48,7 @@
         </div>
       </div>
       <div class="row card">
-        <div class="card__content">
+        <div class="content">
           <h2>Recently submitted price lists</h2>
           {% if recently_submitted_price_lists %}
             <ul class="price-list-list">

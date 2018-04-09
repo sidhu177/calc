@@ -33,66 +33,71 @@
     {% include "_nav.html" %}
     </div>
   </header>
-  <!-- Header -->
-  <div class="container">
-      <div id="branding">
-      {% block branding %}{% endblock %}
-      </div>
-      {% block usertools %}
-      {% if has_permission %}
-      <div id="user-tools">
-          <ul>
-            <li><a href="{% url 'admin:index' %}">{% trans 'Admin home' %}</a></li>
-          {% block userlinks %}
-              {% if site_url %}
-                  <li><a href="{{ site_url }}">{% trans 'View site' %}</a></li>
-              {% endif %}
-              {% if user.is_active and user.is_staff %}
-                  {% url 'django-admindocs-docroot' as docsroot %}
-                  {% if docsroot %}
-                      <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
-                  {% endif %}
-              {% endif %}
-              {% if user.has_usable_password %}
-              <li><a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a></li>
-              {% endif %}
-              <li><a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
-          {% endblock %}
-        </ul>
-      </div>
-      {% endif %}
-      {% endblock %}
-      {% block nav-global %}{% endblock %}
-  </div>
-  <!-- END Header -->
-  <div class="container">
-    {% endif %}
 
-    {% block messages %}
-        {% if messages %}
-        <div class="row card">
-          <ul class="messagelist card__content">
-          {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
-          {% endfor %}
-          </ul>
-        </div>
+    <main>
+      <div class="container">
         {% endif %}
-    {% endblock messages %}
 
-    <!-- Content -->
-    <div id="content" class="row card">
-      <div class="card__content">
-        {% block pretitle %}{% endblock %}
-        {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-        {% block content %}
-        {% block object-tools %}{% endblock %}
-        {{ content }}
-        {% endblock %}
-        {% block sidebar %}{% endblock %}
+        {% block messages %}
+            {% if messages %}
+            <div class="row card">
+              <ul class="messagelist content">
+              {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+              {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+        {% endblock messages %}
+
+        <!-- Content -->
+        <div id="content" class="row card">
+          <div class="content">
+
+            <!-- Section nav -->
+            <div class="container">
+                <div id="branding">
+                {% block branding %}{% endblock %}
+                </div>
+                {% block usertools %}
+                {% if has_permission %}
+                <div id="user-tools">
+                    <ul>
+                      <li><a href="{% url 'admin:index' %}">{% trans 'Admin home' %}</a></li>
+                    {% block userlinks %}
+                        {% if site_url %}
+                            <li><a href="{{ site_url }}">{% trans 'View site' %}</a></li>
+                        {% endif %}
+                        {% if user.is_active and user.is_staff %}
+                            {% url 'django-admindocs-docroot' as docsroot %}
+                            {% if docsroot %}
+                                <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
+                            {% endif %}
+                        {% endif %}
+                        {% if user.has_usable_password %}
+                        <li><a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                    {% endblock %}
+                  </ul>
+                </div>
+                {% endif %}
+                {% endblock %}
+                {% block nav-global %}{% endblock %}
+            </div>
+            <!-- END Section nav -->
+
+            {% block pretitle %}{% endblock %}
+            {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+            {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+            {% endblock %}
+            {% block sidebar %}{% endblock %}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </main>
   <div class="row card__footer">
     {% block card_footer %}{% endblock %}
   </div>

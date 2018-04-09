@@ -1,12 +1,13 @@
 {% extends 'data_capture/base.html' %}
 {% load data_capture %}
 
+{% block body_class %}content--skinny{% endblock %}
 {% block title %}Price Lists{% endblock %}
 
 {% block body %}
-  <div class="container card--narrow">
+  <div class="container">
     <div class="row card">
-      <div class="card__content">
+      <div class="content">
         <h1>Your price lists</h1>
         <h2 id="approved">Approved price lists</h2>
         <p>Price lists that have their data available in CALC.</p>
@@ -25,7 +26,7 @@
       </div>
     </div><!--card-->
     <div class="row card">
-      <div class="card__content">
+      <div class="content">
         <h2 id="unreviewed">Unreviewed price lists</h2>
         <p>Price lists that have been submitted but that have not yet been reviewed by an administrator.</p>
         {% if unreviewed_price_lists %}
@@ -43,7 +44,7 @@
       </div>
     </div>
     <div class="row card">
-      <div class="card__content">
+      <div class="content">
         <h2 id="rejected">Rejected price lists</h2>
         <p>Price lists that have been reviewed but rejected by a CALC administrator.<p>
         {% if rejected_price_lists %}
@@ -61,7 +62,7 @@
       </div>
     </div>
     <div class="row card">
-      <div class="card__content">
+      <div class="content">
         <h2 id="retired">Retired price lists</h2>
         <p>Price lists that were approved but that have since been retired by a CALC administrator.</p>
         {% if retired_price_lists %}
