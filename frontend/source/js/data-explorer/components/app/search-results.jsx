@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import {
-  resetState,
   invalidateRates,
 } from '../../actions';
 
@@ -17,7 +16,6 @@ import ProposedPrice from '../proposed-price';
 import ExportData from '../export-data';
 import ResultsTable from '../results-table';
 import LoadableOptionalFilters from '../optional-filters/loadable-optional-filters';
-import LoadingIndicator from '../loading-indicator';
 
 import { autobind } from '../../util';
 
@@ -61,7 +59,6 @@ class SearchResults extends React.Component {
               <h4>Hourly rate data</h4>
 
               <ProposedPrice />
-              <LoadingIndicator />
 
               <div className="graph">
                 <div id={prefixId('price-histogram')}>
@@ -132,5 +129,5 @@ export default connect(
     ratesInProgress: state.rates.inProgress,
     ratesError: state.rates.error,
   }),
-  { resetState, invalidateRates },
+  { invalidateRates },
 )(SearchResults);

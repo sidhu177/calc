@@ -12,6 +12,7 @@ import {
 import QueryType from '../query-type';
 import LaborCategory from '../labor-category';
 import TitleTagSynchronizer from '../title-tag-synchronizer';
+import LoadingIndicator from '../loading-indicator';
 
 import LoadableSearchResults from './loadable-search-results';
 
@@ -21,7 +22,6 @@ import { autobind } from '../../util';
 /**
  * TODO:
  *   - Make clear actually clear the results section
- *   - Show loading indicator here instead of in search-results (?)
  *   - Think about/improve the hasRates prop
  *   - Probably extract the #search section to its own component
  *   - Think about/improve where redux state is connected
@@ -114,8 +114,12 @@ class App extends React.Component {
             </div>
           </div>
         </section>
-        {ratesInProgress && <p>LOADING</p>}
-        {(!ratesInProgress && hasRates) && <LoadableSearchResults {...this.props} />}
+
+        <LoadingIndicator />
+
+        {(!ratesInProgress && hasRates) &&
+          <LoadableSearchResults {...this.props} />
+        }
       </form>
     );
   }
