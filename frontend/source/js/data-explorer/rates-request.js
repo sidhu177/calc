@@ -51,6 +51,7 @@ export default class StoreRatesAutoRequester {
     }
 
     const data = getRatesParameters(store.getState());
+
     const defaults = {
       histogram: HISTOGRAM_BINS,
     };

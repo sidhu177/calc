@@ -18,6 +18,16 @@ import LoadableSearchResults from './loadable-search-results';
 import { autobind } from '../../util';
 
 
+/**
+ * TODO:
+ *   - Make clear actually clear the results section
+ *   - Show loading indicator here instead of in search-results (?)
+ *   - Think about/improve the hasRates prop
+ *   - Probably extract the #search section to its own component
+ *   - Think about/improve where redux state is connected
+ */
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -64,6 +74,7 @@ class App extends React.Component {
 
   render() {
     const prefixId = name => `${this.props.idPrefix}${name}`;
+    const { hasRates, ratesInProgress } = this.props;
 
     return (
       <form
@@ -103,7 +114,8 @@ class App extends React.Component {
             </div>
           </div>
         </section>
-        <LoadableSearchResults {...this.props} />
+        {ratesInProgress && <p>LOADING</p>}
+        {(!ratesInProgress && hasRates) && <LoadableSearchResults {...this.props} />}
       </form>
     );
   }
@@ -115,18 +127,21 @@ App.propTypes = {
   ratesError: PropTypes.string,
   resetState: PropTypes.func.isRequired,
   invalidateRates: PropTypes.func.isRequired,
+  hasRates: PropTypes.bool,
   idPrefix: PropTypes.string,
 };
 
 App.defaultProps = {
   idPrefix: '',
   ratesError: null,
+  hasRates: false,
 };
 
 export default connect(
   state => ({
     ratesInProgress: state.rates.inProgress,
     ratesError: state.rates.error,
+    hasRates: !!(state.rates.data && state.rates.data.results.length),
   }),
   { resetState, invalidateRates },
 )(App);
