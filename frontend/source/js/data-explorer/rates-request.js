@@ -75,7 +75,8 @@ export default class StoreRatesAutoRequester {
         field => newState[field] !== oldState[field],
       );
 
-      if (updated || newState.rates.stale) {
+      // TODO: improve this
+      if (newState.q !== '' && (updated || newState.rates.stale)) {
         this._startRatesRequest(store);
       }
 
