@@ -21,7 +21,8 @@ import { autobind } from '../../util';
 
 /**
  * TODO:
- *   - Make clear actually clear the results section
+ *   - hide clear search button when no rates are present
+ *   - add a no results component/alert to search-results.jsx
  *   - Think about/improve the hasRates prop
  *   - Probably extract the #search section to its own component
  *   - Think about/improve where redux state is connected
