@@ -9,8 +9,6 @@ import App from './components/app';
 
 import ga from '../common/ga';
 
-import { invalidateRates } from './actions';
-
 import appReducer from './reducers';
 
 import StoreHistorySynchronizer from './history';
@@ -50,8 +48,6 @@ historySynchronizer.initialize(store, () => {
                     window.location.search);
   ga('send', 'pageview');
 });
-
-store.dispatch(invalidateRates());
 
 // Load the React app once the document is ready
 $(() => {
