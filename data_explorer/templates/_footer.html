@@ -9,18 +9,22 @@
               <p>Now contracting officers and other acquisition professionals can upload price lists to CALC.</p>
               <a href="{% url 'uaa_client:login' %}" class="usa-button button-footer">Log in</a>
             {% elif user.is_authenticated %}
-              <p>You are logged in as {{ user.email }}</p>
-              <p><a href="{% url 'user_account:index' %}">View account</a> | <a href="{% url 'logout' %}">Log out</a></p>
+            <h2>Welcome!</h2>
+            <p>You are logged in to CALC as {{ user.email }}, and can now <a href="{% url 'data_capture:step_1' %}">add price lists</a>.</p>
+            <div class="footer__bottom-links">
+              <p class="small"><a href="{% url 'user_account:index' %}">View activity</a>
+              <p class="small"><a href="{% url 'logout' %}">Log out</a></p>
+            </div><p>
             {% endif %}
           </div>
 
-          <div class="five columns divider_footer">
+          <div class="five columns footer__divider">
             <h2>Get in touch</h2>
             <p>
               We're always looking for feedback on CALC!<br>
               To share your thoughts, email us at <a href="mailto:{{ HELP_EMAIL }}">{{ HELP_EMAIL }}</a>.
             </p>
-            <div class="footer_extra">
+            <div class="footer__bottom-links">
               <p class="small">
                 <a href="{% url 'updates' %}">Read about recent updates to CALC</a>
               </p>

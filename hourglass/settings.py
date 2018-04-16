@@ -17,7 +17,7 @@ from typing import Tuple, Any, Dict  # NOQA
 
 from .settings_utils import (load_cups_from_vcap_services,
                              load_redis_url_from_vcap_services,
-                             get_whitelisted_ips, is_running_tests)
+                             is_running_tests)
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -73,8 +73,6 @@ DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 SERVER_EMAIL = os.environ['SERVER_EMAIL']
 HELP_EMAIL = os.environ.get('HELP_EMAIL', DEFAULT_FROM_EMAIL)
 
-API_HOST = os.environ.get('API_HOST', '/api/')
-
 GA_TRACKING_ID = os.environ.get('GA_TRACKING_ID', '')
 
 NON_PROD_INSTANCE_NAME = os.environ.get('NON_PROD_INSTANCE_NAME', '')
@@ -88,7 +86,6 @@ TEMPLATES = [{
     'OPTIONS': {
         'context_processors': [
             'hourglass.context_processors.canonical_url',
-            'hourglass.context_processors.api_host',
             'hourglass.context_processors.show_debug_ui',
             'hourglass.context_processors.google_analytics_tracking_id',
             'hourglass.context_processors.help_email',
@@ -230,10 +227,6 @@ PAGINATION = 200
 
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
-    'WHITELIST': get_whitelisted_ips(),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'api.permissions.WhiteListPermission',
-    ),
 }
 
 LOGGING: Dict[str, Any] = {

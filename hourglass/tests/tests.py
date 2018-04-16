@@ -13,7 +13,6 @@ from semantic_version import Version
 from .. import healthcheck, __version__
 from ..settings_utils import (load_cups_from_vcap_services,
                               load_redis_url_from_vcap_services,
-                              get_whitelisted_ips,
                               is_running_tests)
 
 
@@ -234,20 +233,6 @@ class RedisUrlTests(unittest.TestCase):
         self.assertTrue('REDIS_URL' in env)
         self.assertEqual(env['REDIS_URL'],
                          'redis://:the_password@the_host:1234')
-
-
-class GetWhitelistedIPsTest(unittest.TestCase):
-
-    def test_returns_none_when_not_in_env(self):
-        env = {}
-        self.assertIsNone(get_whitelisted_ips(env))
-
-    def test_returns_whitelisted_ips_list(self):
-        env = {
-            'WHITELISTED_IPS': '1.2.3.4,1.2.3.8, 1.2.3.16'
-        }
-        ips = get_whitelisted_ips(env)
-        self.assertListEqual(ips, ['1.2.3.4', '1.2.3.8', '1.2.3.16'])
 
 
 @override_settings(

@@ -1,6 +1,7 @@
 /* global $ document */
 
 import { getLastCommaSeparatedTerm } from './util';
+import { API_PATH_SEARCH } from './api';
 
 export function appendHighlightedTerm($el, term, searchStr) {
   const sanitizedSearch = searchStr.replace(/[^a-z0-9 ]/gi, '')
@@ -75,7 +76,7 @@ export function initialize(el, {
 
       if (autoCompReq) { autoCompReq.abort(); }
       autoCompReq = api.get({
-        uri: 'search/',
+        uri: API_PATH_SEARCH,
         data: {
           q: lastTerm,
           query_type: getQueryType(),

@@ -1,22 +1,9 @@
-import re
 from urllib.parse import urlparse, parse_qs
 
 from .util import ProductionTestCase
 
 
 class ProductionTests(ProductionTestCase):
-    api_url = None
-
-    def get_api_url(self):
-        if self.api_url:
-            return self.api_url
-        res = self.client.get('/')
-        m = re.search(r'var API_HOST = "([^"]+)"',
-                      res.content.decode('utf-8'))
-        api_url = m.group(1)
-        self.api_url = api_url
-        return api_url
-
     def test_oauth2_redirect_uri_has_correct_domain(self):
         '''
         Mitigation against https://github.com/18F/calc/pull/1187.
@@ -93,9 +80,8 @@ class ProductionTests(ProductionTestCase):
         '''
         Mitigation against https://github.com/18F/calc/issues/1307.
         '''
-        api_url = self.get_api_url()
         res = self.client.get(
-            api_url + 'search/?format=json&q=zzzzzzzz&query_type=match_all',
+            '/api/search/?format=json&q=zzzzzzzz&query_type=match_all',
             headers={'Origin': self.ORIGIN}
         )
         self.assertEqual(res.status_code, 200)
@@ -103,9 +89,8 @@ class ProductionTests(ProductionTestCase):
         self.assertEqual(res.headers['Access-Control-Allow-Origin'], '*')
 
     def test_api_passes_json_accept_header(self):
-        api_url = self.get_api_url()
         res = self.client.get(
-            api_url + 'search/?q=zzzzzzzz&query_type=match_all',
+            '/api/search/?q=zzzzzzzz&query_type=match_all',
             headers={'Accept': 'application/json'}
         )
         self.assertEqual(res.status_code, 200)

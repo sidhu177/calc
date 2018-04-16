@@ -1,13 +1,14 @@
-/* global window */
 import xhr from 'xhr';
 import * as qs from 'querystring';
 
+export const API_BASE = '/api';
+export const API_PATH_RATES_CSV = '/rates/csv';
+export const API_PATH_RATES = '/rates';
+export const API_PATH_SEARCH = '/search';
+
 export default class API {
-  constructor(basePath = '') {
-    this.basePath = window.API_HOST || basePath;
-    if (this.basePath.charAt(this.basePath.length - 1) !== '/') {
-      this.basePath += '/';
-    }
+  constructor(basePath = API_BASE) {
+    this.basePath = basePath;
   }
 
   get({ uri, data }, callback) {

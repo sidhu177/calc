@@ -33,10 +33,6 @@
     <link rel="stylesheet" href="{% static 'frontend/built/style/main.min.css' %}"/>
 
     <![if gt IE 8]>
-    <script {{ csp_nonce }}>
-      var API_HOST = "{{ API_HOST }}";
-    </script>
-
     <script src="{% static 'frontend/built/js/common.js' %}"></script>
 
     <![endif]>

@@ -23,6 +23,8 @@ import {
   getSerializedFields,
 } from './serialization';
 
+import { API_PATH_RATES } from './api';
+
 const nonRatesFields = ['proposed-price', 'contract-year'];
 
 const ratesFields = allFields.filter(f => nonRatesFields.indexOf(f) === -1);
@@ -57,7 +59,7 @@ export default class StoreRatesAutoRequester {
     store.dispatch(startRatesRequest());
 
     this.request = this.api.get({
-      uri: 'rates/',
+      uri: API_PATH_RATES,
       data: Object.assign(defaults, data),
     }, (error, res) => {
       this.request = null;

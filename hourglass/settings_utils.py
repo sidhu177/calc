@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from typing import List, Optional
+from typing import List
 
 Environ = os._Environ
 
@@ -27,18 +27,6 @@ def load_cups_from_vcap_services(name: str='calc-env',
         if entry['name'] == name:
             for key, value in entry['credentials'].items():
                 env[key] = value
-
-
-def get_whitelisted_ips(env: Environ=os.environ) -> Optional[List[str]]:
-    '''
-    Detects if WHITELISTED_IPS is in the environment; if not,
-    returns None. if so, parses WHITELISTED_IPS as a comma-separated
-    string and returns a list of values.
-    '''
-    if 'WHITELISTED_IPS' not in env:
-        return None
-
-    return [s.strip() for s in env['WHITELISTED_IPS'].split(',')]
 
 
 def load_redis_url_from_vcap_services(name: str,

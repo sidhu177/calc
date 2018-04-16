@@ -6,8 +6,7 @@ footer {
   background-size: 100%;
   background-repeat: no-repeat;
   border-top: 4px solid $color-white;
-  padding-bottom: $space-4x; //to create "stacked" look
-  padding: 4rem 0 4rem 0;
+  padding: $space-8x 0 4rem 0;
 
   a {
     color: $color-base;
@@ -20,18 +19,24 @@ footer {
     font-size: 1.8rem;
     letter-spacing: 0;
     font-weight: $font-weight-bold;
+    margin-top: 0;
     margin-bottom: .1em;
   }
-
 }
 
-.divider_footer {
-  border-left: 1px solid #a0ad64; //add a variable for this
+.footer__divider {
+  border-left: 4px solid #a0ad64;
   padding-left: 3rem;
 }
 
-.footer_extra {
-  margin-top: 3rem;
+.footer__bottom-links {
+  margin-top: $space-3x;
+
+  p {
+    &:last-child {
+    margin-bottom: 0;
+    }
+  }
 }
 
 #logos {

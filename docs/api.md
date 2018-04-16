@@ -2,26 +2,17 @@
 
 CALC's back end exposes a public API for its labor rates data. This API is used by CALC's front end Data Explorer application, and can also be accessed by any third-party application over the public internet.
 
-# Local development vs. deployed instances
-
-When developing CALC locally, the API is served from the relative URL prefix `/api/` (for example `http://localhost:8000/api/rates`).
-
-In its deployed instances (development, staging, and production), CALC's public API is fronted by an [API Umbrella][] instance on [api.data.gov](https://api.data.gov) which proxies all API requests to CALC. This allows CALC to not have to concern itself with details like rate limiting. The production CALC API is available at `https://api.data.gov/gsa/calc/`.
-
-In order to ensure that API requests work both in local development and in deployed instances, CALC's front end code should not simply make requests against the relative `/api/` URLs. Instead, a global JavaScript variable called `API_HOST` is available for use as a prefix to requests. When developing locally, it will be set to `/api/`, but on CALC's development, staging, and production deployments it will be an absolute URL.
-
-[API Umbrella]: https://apiumbrella.io/
-
 ## API endpoints
 
-The following documentation assumes you're trying to access the API from the production instance via a tool like `curl` at `https://api.data.gov/gsa/calc/`. In development, use `http://localhost:8000/api/` or rely on the `API_HOST` variable.
+The following documentation assumes you're trying to access the API from the production instance via a tool like `curl` at `https://calc.gsa.gov/api/`.
+In development, use `http://localhost:8000/api/`.
 
 ### `/rates/`
 
 You can access labor rate information at `/rates/`.
 
 ```
-https://api.data.gov/gsa/calc/rates/
+https://calc.gsa.gov/api/rates/
 ```
 
 #### Labor Categories
@@ -29,7 +20,7 @@ https://api.data.gov/gsa/calc/rates/
 You can search for prices of specific labor categories by using the `q` parameter. For example:
 
 ```
-https://api.data.gov/gsa/calc/rates/?q=accountant
+https://calc.gsa.gov/api/rates/?q=accountant
 ```
 
 You can change the way that labor categories are searched by using the `query_type` parameter, which can be either:
@@ -41,13 +32,13 @@ You can change the way that labor categories are searched by using the `query_ty
 You can search for multiple labor categories separated by a comma.
 
 ```
-https://api.data.gov/gsa/calc/rates/?q=trainer,instructor
+https://calc.gsa.gov/api/rates/?q=trainer,instructor
 ```
 
 If any of the labor categories you'd like included in your search has a comma, you can surround that labor category with quotation marks:
 
 ```
-https://api.data.gov/gsa/calc/rates/?q="engineer, senior",instructor
+https://calc.gsa.gov/api/rates/?q="engineer, senior",instructor
 ```
 
 All of the query types are case-insensitive.
@@ -59,14 +50,14 @@ All of the query types are case-insensitive.
 You can also filter by the minimum years of experience and maximum years of experience. For example:
 
 ```
-https://api.data.gov/gsa/calc/rates/?&min_experience=5&max_experience=10&q=technical
+https://calc.gsa.gov/api/rates/?&min_experience=5&max_experience=10&q=technical
 ```
 
 Or, you can filter with a single, comma-separated range.
 For example, if you wanted results with more than five years and less than ten years of experience:
 
 ```
-https://api.data.gov/gsa/calc/rates/?experience_range=5,10
+https://calc.gsa.gov/api/rates/?experience_range=5,10
 ```
 
 ##### Education
@@ -82,20 +73,20 @@ These filters accept one or more (comma-separated) education values:
 * `PHD` (Ph.D).
 
 ```
-https://api.data.gov/gsa/calc/rates/?education=AA,BA
+https://calc.gsa.gov/api/rates/?education=AA,BA
 ```
 
 Use `min_education` to get all results that meet and exceed the selected education.
 The following example will return results that have an education level of `MA` or `PHD`:
 
 ```
-https://api.data.gov/gsa/calc/rates/?min_education=MA
+https://calc.gsa.gov/api/rates/?min_education=MA
 ```
 
 The default pagination is set to 200. You can paginate using the `page` parameter:
 
 ```
-https://api.data.gov/gsa/calc/rates/?q=translator&page=2
+https://calc.gsa.gov/api/rates/?q=translator&page=2
 ```
 
 #### Price Filters
@@ -103,15 +94,15 @@ https://api.data.gov/gsa/calc/rates/?q=translator&page=2
 You can filter by price with any of the `price` (exact match), `price__lte` (price is less than or equal to) or `price__gte` (price is greater than or equal to) parameters:
 
 ```
-https://api.data.gov/gsa/calc/rates/?price=95
-https://api.data.gov/gsa/calc/rates/?price__lte=95
-https://api.data.gov/gsa/calc/rates/?price__gte=95
+https://calc.gsa.gov/api/rates/?price=95
+https://calc.gsa.gov/api/rates/?price__lte=95
+https://calc.gsa.gov/api/rates/?price__gte=95
 ```
 
 The `price__lte` and `price__gte` parameters may be used together to search for a price range:
 
 ```
-https://api.data.gov/gsa/calc/rates/?price__gte=95&price__lte=105
+https://calc.gsa.gov/api/rates/?price__gte=95&price__lte=105
 ```
 
 #### Excluding Records
@@ -119,7 +110,7 @@ https://api.data.gov/gsa/calc/rates/?price__gte=95&price__lte=105
 You can also exclude specific records from the results by passing in an `exclude` parameter and a comma-separated list of ids:
 
 ```
-https://api.data.gov/gsa/calc/rates/?q=environmental+technician&exclude=875173,875749
+https://calc.gsa.gov/api/rates/?q=environmental+technician&exclude=875173,875749
 ```
 
 #### Other Filters
@@ -134,7 +125,7 @@ Other parameters allow you to filter by:
 Here is an example with all four parameters (`schedule`, `sin`, `site`, and `business_size`) included:
 
 ```
-https://api.data.gov/gsa/calc/rates/?schedule=mobis&sin=874&site=customer&business_size=s
+https://calc.gsa.gov/api/rates/?schedule=mobis&sin=874&site=customer&business_size=s
 ```
 
 For schedules, there are 8 different values that will return results (case-insensitive):
