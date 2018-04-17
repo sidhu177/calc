@@ -99,12 +99,12 @@ class App extends React.Component {
                     Search
                   </button>
                   {' '}
-                  <input
+                  {hasRates && <input
                     onClick={this.handleResetClick}
                     className="reset usa-button usa-button-outline"
                     type="reset"
                     value="Clear search"
-                  />
+                  />}
                 </LaborCategory>
               </div>
               <div className="twelve columns">
