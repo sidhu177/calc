@@ -5,6 +5,7 @@ import {
   MAX_EXPERIENCE,
   DEFAULT_CONTRACT_YEAR,
   EMPTY_RATES_DATA,
+  NO_MATCHING_RATES_DATA,
   DEFAULT_SORT,
   DEFAULT_QUERY_TYPE,
   MAX_QUERY_LENGTH,
@@ -119,7 +120,7 @@ function rates(state = {
     if (d && d.results && d.results.length) {
       return d;
     }
-    return EMPTY_RATES_DATA;
+    return NO_MATCHING_RATES_DATA;
   };
 
   switch (action.type) {

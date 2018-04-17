@@ -21,7 +21,6 @@ import { autobind } from '../../util';
 
 /**
  * TODO:
- *   - hide clear search button when no rates are present
  *   - add a no results component/alert to search-results.jsx
  *   - Think about/improve the hasRates prop
  *   - Probably extract the #search section to its own component
@@ -75,7 +74,7 @@ class App extends React.Component {
 
   render() {
     const prefixId = name => `${this.props.idPrefix}${name}`;
-    const { hasRates, ratesInProgress } = this.props;
+    const { hasRates, ratesInProgress, ratesReturned } = this.props;
 
     return (
       <form
@@ -118,7 +117,7 @@ class App extends React.Component {
 
         <LoadingIndicator />
 
-        {(!ratesInProgress && hasRates) &&
+        {((!ratesInProgress && hasRates) || !ratesReturned) &&
           <LoadableSearchResults {...this.props} />
         }
       </form>
@@ -140,6 +139,7 @@ App.defaultProps = {
   idPrefix: '',
   ratesError: null,
   hasRates: false,
+  ratesReturned: null,
 };
 
 export default connect(
@@ -147,6 +147,7 @@ export default connect(
     ratesInProgress: state.rates.inProgress,
     ratesError: state.rates.error,
     hasRates: !!(state.rates.data && state.rates.data.results.length),
+    ratesReturned: state.rates.data.results,
   }),
   { resetState, invalidateRates },
 )(App);
