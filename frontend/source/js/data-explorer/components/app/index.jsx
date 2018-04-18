@@ -146,7 +146,7 @@ export default connect(
   state => ({
     ratesInProgress: state.rates.inProgress,
     ratesError: state.rates.error,
-    hasRates: !!(state.rates.data && state.rates.data.results.length),
+    hasRates: !!(state.rates.data && state.rates.data.results.length && state.q),
     ratesReturned: state.rates.data.results,
   }),
   { resetState, invalidateRates },
