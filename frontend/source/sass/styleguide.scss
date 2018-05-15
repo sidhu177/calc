@@ -4,8 +4,13 @@
 @import 'components/sidenav';
 @import 'components/swatch';
 
+
 h3.styleguide-section {
-  margin-top: 0;
+  border-bottom: 1px solid lightgray;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
 }
 
 .styleguide-section {
@@ -13,7 +18,7 @@ h3.styleguide-section {
     opacity: 1;
   }
   a {
-    color: $color-gray-light;
+    color: lightgray;
     text-decoration: none;
     margin-left: -0.8em;
     padding-right: 2px;
@@ -27,7 +32,7 @@ h3.styleguide-section {
 }
 
 .styleguide-example {
-  border: 1px solid $color-gray-light;
+  border: 1px solid lightgray;
   margin-bottom: 2.5rem;
   .rendering {
     padding: 1em 2.5em;
@@ -35,7 +40,7 @@ h3.styleguide-section {
       font-size: 1em;
       text-transform: uppercase;
       font-weight: bold;
-      color: $color-gray;
+      color: gray;
       letter-spacing: 1px;
     }
   }
@@ -75,20 +80,20 @@ code > a {
 /* http://www.jimmyscode.com/css-styling-for-kbd-tags/ */
 kbd {
   padding:0.1em 0.6em;
-  border:1px solid $color-gray-light;
+  border:1px solid #ccc;
   font-size:11px;
   font-family:Arial,Helvetica,sans-serif;
-  background-color:$color-white;
-  color:$color-gray;
-  -moz-box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px $color-white inset;
-  -webkit-box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px $color-white inset;
-  box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px $color-white inset;
+  background-color:#f7f7f7;
+  color:#333;
+  -moz-box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px #ffffff inset;
+  -webkit-box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px #ffffff inset;
+  box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px #ffffff inset;
   -moz-border-radius:3px;
   -webkit-border-radius:3px;
   border-radius:3px;
   display:inline-block;
   margin:0 0.1em;
-  text-shadow:0 1px 0 $color-white;
+  text-shadow:0 1px 0 #fff;
   line-height:1.4;
   white-space:nowrap;
 }
@@ -103,5 +108,5 @@ kbd {
   transform: scale(0.75);
   transform-origin: 0 0;
   height: 600px;
-  border: 1px solid $color-gray;
+  border: 1px solid gray;
 }
