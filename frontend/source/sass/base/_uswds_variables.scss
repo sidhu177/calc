@@ -13,11 +13,12 @@ $color-primary-darker:       #274E60;
 $color-primary-darkest:      #092D39;
 
 $color-green:                #bbcb70;
-$color-green-light:          #ccdc86;
+$color-green-light:          #cddc86;
 $color-green-lighter:        #dae6a3;
+$color-green-lightest:       #e6edc2;
 
 $color-primary-alt:          #ccde61;
-$color-secondary:            $color-primary-alt;
+$color-secondary:            $color-green-bright;
 // Solve later: disconnect between ^this^ and other "secondary" colors
 
 $color-red-dark:             #BC1630;
