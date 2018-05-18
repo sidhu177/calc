@@ -8,9 +8,11 @@ $asset-path: '../vendor/uswds/' !default;
 
 // Color overrides
 // Addtional colors specific to CALC are defined in _variables.scss
-$color-primary:              #2D6580;
-$color-primary-darker:       #274E60;
-$color-primary-darkest:      #092D39;
+$color-blue:                 #0770b5; // Link color
+$color-primary:              $color-blue;
+$color-blue-dark:            #136b94;
+$color-primary-darker:       $color-blue-dark;
+$color-primary-darkest:      #0c4c6f;
 
 $color-green:                #bbcb70;
 $color-green-light:          #cddc86;
@@ -18,14 +20,12 @@ $color-green-lighter:        #dae6a3;
 $color-green-lightest:       #e6edc2;
 
 $color-primary-alt:          #ccde61;
-$color-secondary:            $color-green-bright;
+$color-secondary:            #ccde61;
 // Solve later: disconnect between ^this^ and other "secondary" colors
 
-$color-red-dark:             #BC1630;
+$color-red-dark:             #bc1630;
 $color-red-darkest:          #981b1e; // No change from USWDS, including for visual reference
 $color-red-lightest:         #ffe0e0;
-
-$color-blue:                 #077bc7; // Link color
 
 $color-white:                #ffffff; // No change from USWDS, including for visual reference
 $color-base:                 #021014;
