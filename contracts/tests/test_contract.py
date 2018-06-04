@@ -10,7 +10,7 @@ from contracts.mommy_recipes import get_contract_recipe
 
 from ..models import (
     Contract, convert_to_tsquery, CashField, BulkUploadContractSource,
-    ScheduleUpdateInfo
+    ScheduleStats
 )
 
 
@@ -84,15 +84,15 @@ class ScheduleUpdateInfoTests(TestCase):
         get_contract_recipe().make(
             schedule='Consolidated', upload_source=None)
         get_contract_recipe().make(
-            schedule='MOBIS', upload_source=None)
+            schedule='MOBIS', idv_piid='a', upload_source=None)
         get_contract_recipe().make(
-            schedule='MOBIS', upload_source=feb_source)
+            schedule='MOBIS', idv_piid='b', upload_source=feb_source)
         get_contract_recipe().make(
-            schedule='MOBIS', upload_source=mar_source)
+            schedule='MOBIS', idv_piid='b', upload_source=mar_source)
 
-        self.assertEqual(Contract.objects.get_schedule_update_info(), [
-            ScheduleUpdateInfo('Consolidated', None, None),
-            ScheduleUpdateInfo('MOBIS', feb_source.updated_at, mar_source.updated_at),
+        self.assertEqual(Contract.objects.get_schedule_stats(), [
+            ScheduleStats('Consolidated', 1, 1, None, None),
+            ScheduleStats('MOBIS', 3, 2, feb_source.updated_at, mar_source.updated_at),
         ])
 
 

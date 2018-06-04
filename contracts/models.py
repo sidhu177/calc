@@ -6,7 +6,7 @@ from decimal import Decimal
 from django.db import models, connection
 from django.contrib.auth.models import User
 from django.db.models.expressions import Value
-from django.db.models import Max, Min
+from django.db.models import Max, Min, Count
 from django.contrib.postgres.search import SearchVectorField, SearchVector
 
 
@@ -75,12 +75,19 @@ def convert_to_tsquery_union(queries):
     return " | ".join(queries)
 
 
-class ScheduleUpdateInfo(NamedTuple):
+class ScheduleStats(NamedTuple):
     '''
-    Represents metadata about when a schedule was updated.
+    Represents statistics about the data we have for a schedule.
     '''
 
+    # The name of the schedule (e.g. 'Schedule 70').
     schedule: str
+
+    # The number of labor rates we have for the schedule.
+    labor_rates: int
+
+    # The number of contracts we have for the schedule.
+    contracts: int
 
     # The following fields represent that earliest and latest
     # known date of a schedule being updated. If no date is known,
@@ -90,20 +97,21 @@ class ScheduleUpdateInfo(NamedTuple):
 
 
 class CurrentContractManager(models.Manager):
-    def get_schedule_update_info(self) -> List[ScheduleUpdateInfo]:
+    def get_schedule_stats(self) -> List[ScheduleStats]:
         '''
-        Returns a list of ScheduleUpdateInfo tuples that represent
-        when all the schedules in the queryset were updated, ordered
-        alphabetically by schedule.
+        Returns detailed statistics about the schedule data we
+        have, ordered alphabetically by schedule.
         '''
 
         qs = self.values('schedule').annotate(
+            labor_rates=Count('pk'),
+            contracts=Count('idv_piid', distinct=True),
             earliest_update=Min('upload_source__updated_at'),
             latest_update=Max('upload_source__updated_at')
         ).order_by('schedule')
 
         return [
-            ScheduleUpdateInfo(**kwargs) for kwargs in qs.all()
+            ScheduleStats(**kwargs) for kwargs in qs.all()
         ]
 
     def bulk_update_normalized_labor_categories(self):
