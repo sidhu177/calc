@@ -92,8 +92,8 @@ class ScheduleStats(NamedTuple):
     # The following fields represent that earliest and latest
     # known date of a schedule being updated. If no date is known,
     # however, these values can be None.
-    earliest_update: Optional[datetime]
-    latest_update: Optional[datetime]
+    earliest_update: Optional[datetime] = None
+    latest_update: Optional[datetime] = None
 
 
 class CurrentContractManager(models.Manager):

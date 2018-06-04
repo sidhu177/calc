@@ -91,8 +91,10 @@ class ScheduleUpdateInfoTests(TestCase):
             schedule='MOBIS', idv_piid='b', upload_source=mar_source)
 
         self.assertEqual(Contract.objects.get_schedule_stats(), [
-            ScheduleStats('Consolidated', 1, 1, None, None),
-            ScheduleStats('MOBIS', 3, 2, feb_source.updated_at, mar_source.updated_at),
+            ScheduleStats('Consolidated', labor_rates=1, contracts=1),
+            ScheduleStats('MOBIS', labor_rates=3, contracts=2,
+                          earliest_update=feb_source.updated_at,
+                          latest_update=mar_source.updated_at),
         ])
 
 
