@@ -1,11 +1,12 @@
 import re
-
+from typing import NamedTuple, Optional, List
 from datetime import datetime
 from decimal import Decimal
 
 from django.db import models, connection
 from django.contrib.auth.models import User
 from django.db.models.expressions import Value
+from django.db.models import Max, Min
 from django.contrib.postgres.search import SearchVectorField, SearchVector
 
 
@@ -74,7 +75,37 @@ def convert_to_tsquery_union(queries):
     return " | ".join(queries)
 
 
+class ScheduleUpdateInfo(NamedTuple):
+    '''
+    Represents metadata about when a schedule was updated.
+    '''
+
+    schedule: str
+
+    # The following fields represent that earliest and latest
+    # known date of a schedule being updated. If no date is known,
+    # however, these values can be None.
+    earliest_update: Optional[datetime]
+    latest_update: Optional[datetime]
+
+
 class CurrentContractManager(models.Manager):
+    def get_schedule_update_info(self) -> List[ScheduleUpdateInfo]:
+        '''
+        Returns a list of ScheduleUpdateInfo tuples that represent
+        when all the schedules in the queryset were updated, ordered
+        alphabetically by schedule.
+        '''
+
+        qs = self.values('schedule').annotate(
+            earliest_update=Min('upload_source__updated_at'),
+            latest_update=Max('upload_source__updated_at')
+        ).order_by('schedule')
+
+        return [
+            ScheduleUpdateInfo(**kwargs) for kwargs in qs.all()
+        ]
+
     def bulk_update_normalized_labor_categories(self):
         '''
         Iterate through all Contract models and update their

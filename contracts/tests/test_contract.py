@@ -4,10 +4,14 @@ from decimal import Decimal
 from itertools import cycle
 
 from django.db import connection
+from django.utils.timezone import utc
 from django.test import TestCase, SimpleTestCase
 from contracts.mommy_recipes import get_contract_recipe
 
-from ..models import Contract, convert_to_tsquery, CashField
+from ..models import (
+    Contract, convert_to_tsquery, CashField, BulkUploadContractSource,
+    ScheduleUpdateInfo
+)
 
 
 _normalize = Contract.normalize_labor_category
@@ -53,6 +57,43 @@ class NormalizeLaborCategoryTests(SimpleTestCase):
 
     def test_abbr_uppercase(self):
         self.assertEqual(_normalize('JR. PERSON'), 'junior person')
+
+
+class ScheduleUpdateInfoTests(TestCase):
+    def make_upload_source(self, year, month):
+        source = BulkUploadContractSource(
+            has_been_loaded=True,
+            original_file=f"{year}-{month}".encode("ascii"),
+            file_mime_type="text/plain",
+            procurement_center=BulkUploadContractSource.REGION_10,
+        )
+        source.save()
+
+        # This is the only easy way to change updated_at, since it's
+        # otherwise overridden during save() by Django's auto_now logic.
+        BulkUploadContractSource.objects.filter(pk=source.pk).update(
+            updated_at=datetime.datetime(year, month, 1, tzinfo=utc))
+
+        source.refresh_from_db()
+        return source
+
+    def test_it_works(self):
+        feb_source = self.make_upload_source(2018, 2)
+        mar_source = self.make_upload_source(2018, 3)
+
+        get_contract_recipe().make(
+            schedule='Consolidated', upload_source=None)
+        get_contract_recipe().make(
+            schedule='MOBIS', upload_source=None)
+        get_contract_recipe().make(
+            schedule='MOBIS', upload_source=feb_source)
+        get_contract_recipe().make(
+            schedule='MOBIS', upload_source=mar_source)
+
+        self.assertEqual(Contract.objects.get_schedule_update_info(), [
+            ScheduleUpdateInfo('Consolidated', None, None),
+            ScheduleUpdateInfo('MOBIS', feb_source.updated_at, mar_source.updated_at),
+        ])
 
 
 class ContractTestCase(TestCase):
