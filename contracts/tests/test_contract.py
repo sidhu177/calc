@@ -59,7 +59,7 @@ class NormalizeLaborCategoryTests(SimpleTestCase):
         self.assertEqual(_normalize('JR. PERSON'), 'junior person')
 
 
-class ScheduleUpdateInfoTests(TestCase):
+class ScheduleStatsTests(TestCase):
     def make_upload_source(self, year, month):
         source = BulkUploadContractSource(
             has_been_loaded=True,
