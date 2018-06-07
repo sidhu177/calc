@@ -1,27 +1,37 @@
 FROM python:3.6.4
 
-ENV PHANTOMJS_VERSION 1.9.7
+ENV NODE_VERSION=6
+ENV CHROME_VERSION=67
+ENV CHROMEDRIVER_VERSION=2.37
 
-# https://hub.docker.com/r/cmfatih/phantomjs/~/dockerfile/
-RUN \
-  mkdir -p /srv/var && \
-  wget -q --no-check-certificate -O /tmp/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 && \
-  tar -xjf /tmp/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C /tmp && \
-  rm -f /tmp/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 && \
-  mv /tmp/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/ /srv/var/phantomjs && \
-  ln -s /srv/var/phantomjs/bin/phantomjs /usr/bin/phantomjs
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 
-# Note that we want postgresql-client so 'manage.py dbshell' works.
 RUN apt-get update && \
-  apt-get install -y nodejs postgresql-client
+  apt-get install -y \
+  nodejs unzip \
+  # Note that we want postgresql-client so 'manage.py dbshell' works.
+  postgresql-client \
+  # This is some kind of dependency for headless chrome; See https://crbug.com/795759.
+  libgconf-2-4 \
+  # Install latest chrome dev package and dependencies.
+  google-chrome-unstable=${CHROME_VERSION}.* ttf-freefont \
+  --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /src/*.deb
 
 RUN pip install virtualenv
 
 WORKDIR /calc
 
 RUN npm install -g yarn
+
+RUN wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
+  && unzip chromedriver_linux64.zip \
+  && chmod +x chromedriver \
+  && mv chromedriver /usr/local/bin/chromedriver
 
 ENV PATH /calc/node_modules/.bin:$PATH
 ENV DDM_IS_RUNNING_IN_DOCKER yup

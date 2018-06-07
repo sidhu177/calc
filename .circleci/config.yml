@@ -2,11 +2,11 @@ version: 2.0
 
 default-docker-config: &default-docker-config
   docker:
-    - image: circleci/python:3.6
+    - image: circleci/python:3.6-browsers
       environment:
         CI_NODE_VERSION: 6.13.1
         NPM_CONFIG_ENGINE_STRICT: true
-        PHANTOMJS_TIMEOUT: 15
+        WD_CHROME_ARGS: --headless --no-sandbox --disable-setuid-sandbox
         SKIP_STATIC_ASSET_BUILDING: yup
         DEBUG: yup
         DATABASE_URL: postgres://postgres@localhost/hourglass
@@ -100,26 +100,14 @@ jobs:
             - node_modules
             - ~/.yarn-cache
 
-      - restore_cache:
-          key: v1-phantomjs-2-1-1
-      - run:
-          name: Install phantomjs
-          command: |
-            [ -f /tmp/phantomjs ] || curl --output /tmp/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-            sudo chmod ugo+x /tmp/phantomjs
-            sudo ln -sf /tmp/phantomjs /usr/local/bin/phantomjs
-      - save_cache:
-          key: v1-phantomjs-2-1-1
-          paths:
-            - /tmp/phantomjs
-
       - run:
           name: Display versions
           command: |
             echo $(node --version)
             echo $(npm --version)
             echo $(yarn --version)
-            echo $(phantomjs --version)
+            echo $(google-chrome -version)
+            echo $(chromedriver -version)
             echo $(pwd)
       - run:
           name: Run linters and static analysis
@@ -142,8 +130,7 @@ jobs:
           name: Run python tests
           command: |
             # Note that this MUST come after building the front end assets
-            # For details on why we're ignoring selenium tests, see https://github.com/18F/calc/issues/330
-            py.test --ignore=frontend/tests/test_selenium.py --cov=. --cov-report xml:./coverage/python/coverage.xml
+            py.test --cov=. --cov-report xml:./coverage/python/coverage.xml
 
       - run:
           name: CodeClimate combine and upload coverage

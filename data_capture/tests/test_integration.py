@@ -10,7 +10,6 @@ from hourglass.tests.common import BaseLoginTestCase
 from data_capture.tests.common import FAKE_SCHEDULE, FAKE_SCHEDULE_EXAMPLE_PATH
 from data_capture.schedules import registry
 from data_capture.models import SubmittedPriceList
-from frontend import safe_mode
 from .browsers import BrowserTestCase
 
 
@@ -26,7 +25,14 @@ def autologin(request):
     if user is None:
         raise Exception('Unable to authenticate')
     django.contrib.auth.login(request, user)
-    request.session[safe_mode.SESSION_KEY] = True
+
+    # We used to enable safe mode to reduce the chance of JS race conditions
+    # getting in the way, but its overlay sometimes gets in the way of
+    # clicking on elements, so we're just disabling it for now.
+    #
+    # from frontend import safe_mode
+    # request.session[safe_mode.SESSION_KEY] = True
+
     return HttpResponse('{} is now logged in'.format(
         user.email
     ))

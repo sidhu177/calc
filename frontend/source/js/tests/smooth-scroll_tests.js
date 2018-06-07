@@ -7,8 +7,6 @@ import {
   getOrCreateVisitId,
 } from '../data-capture/smooth-scroll';
 
-const IS_PHANTOM = /PhantomJS/.test(window.navigator.userAgent);
-
 QUnit.module('smooth-scroll');
 
 function test(name, cb) {
@@ -169,22 +167,22 @@ test('activate() works', (assert) => {
   const done = assert.async();
   const steps = (function* runSteps() {
     assert.equal(iframe.contentWindow.location.hash, '');
-    if (!IS_PHANTOM) { assert.equal(getScrollTop(), 0); }
+    assert.equal(getScrollTop(), 0);
 
     yield $('a', iframe.contentDocument).click();
 
     assert.equal(iframe.contentWindow.location.hash, '#foo');
-    if (!IS_PHANTOM) { assert.ok(getScrollTop() !== 0); }
+    assert.ok(getScrollTop() !== 0);
 
     yield iframe.contentWindow.history.back();
 
     assert.equal(iframe.contentWindow.location.hash, '');
-    if (!IS_PHANTOM) { assert.equal(getScrollTop(), 0); }
+    assert.equal(getScrollTop(), 0);
 
     yield iframe.contentWindow.history.forward();
 
     assert.equal(iframe.contentWindow.location.hash, '#foo');
-    if (!IS_PHANTOM) { assert.ok(getScrollTop() !== 0); }
+    assert.ok(getScrollTop() !== 0);
 
     $(iframe).remove();
     done();

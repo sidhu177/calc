@@ -16,8 +16,7 @@ ln -sf docker-compose.local.yml docker-compose.override.yml
 You can optionally load some data into your dockerized database with:
 
 ```sh
-docker-compose run app python manage.py load_data
-docker-compose run app python manage.py load_s70
+docker-compose run app python manage.py load_api_data --end-page=5
 ```
 
 Once the above commands are successful, run:

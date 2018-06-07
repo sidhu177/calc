@@ -1,20 +1,7 @@
-""" Note about tests:
-
-They time out and cause failures intermittently.
-See https://travis-ci.org/18F/calc/builds/77211412.
-
-The original author of the tests and I could not solve this problem. I've
-watched the timeouts happen on specific tests by increasing nose's verbosity,
-and I have seen them on these tests:
-test_schedule_column_is_open_by_default
-test_contract_link
-
-8/25/15 [TS]
-"""
-
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.ui import Select
 
 from contracts.mommy_recipes import get_contract_recipe
@@ -24,76 +11,47 @@ from itertools import cycle
 import re
 import time
 import os
-import socket
+import atexit
 from datetime import datetime
 
 from . import axe
 from .utils import build_static_assets
 
 
-WD_HUB_URL = os.environ.get('WD_HUB_URL')
-WD_TESTING_URL = os.environ.get('WD_TESTING_URL')
-WD_TESTING_BROWSER = os.environ.get('WD_TESTING_BROWSER',
-                                    'phantomjs')
-WD_SOCKET_TIMEOUT = int(os.environ.get('WD_SOCKET_TIMEOUT', '5'))
-PHANTOMJS_TIMEOUT = int(os.environ.get('PHANTOMJS_TIMEOUT', '3'))
-WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS = 10
+WD_CHROME_ARGS = filter(None, os.environ.get('WD_CHROME_ARGS', '').split())
+
+_driver = None
 
 
-def _get_webdriver(name):
-    name = name.lower()
-    if name == 'chrome':
-        return webdriver.Chrome()
-    elif name == 'firefox':
-        return webdriver.Firefox()
-    elif name == 'phantomjs':
-        driver = webdriver.PhantomJS()
-        driver.command_executor.set_timeout(PHANTOMJS_TIMEOUT)
-        return driver
-    raise Exception('No such webdriver: "%s"' % name)
+def get_driver():
+    global _driver
+
+    if _driver is None:
+        options = ChromeOptions()
+        for arg in WD_CHROME_ARGS:
+            options.add_argument(arg)
+        _driver = webdriver.Chrome(chrome_options=options)
+
+    return _driver
+
+
+@atexit.register
+def teardown_driver():
+    global _driver
+
+    if _driver is not None:
+        _driver.quit()
+        _driver = None
 
 
 class SeleniumTestCase(StaticLiveServerTestCase):
-    connect = None
-    driver = None
-    screenshot_filename = 'selenium_tests/screenshot.png'
+    screenshot_filename = 'selenium_tests_screenshot.png'
     window_size = (1000, 1000)
 
     @classmethod
-    def get_driver(cls):
-        if not WD_TESTING_URL:
-            return _get_webdriver(WD_TESTING_BROWSER)
-
-        if not WD_HUB_URL:
-            raise Exception('WD_HUB_URL must be defined!')
-
-        desired_cap = webdriver.DesiredCapabilities.CHROME
-        # these are the standard Selenium capabilities
-
-        if 'WD_TESTING_PLATFORM' in os.environ:
-            desired_cap['platform'] = os.environ['WD_TESTING_PLATFORM']
-        desired_cap['browserName'] = WD_TESTING_BROWSER
-        if 'WD_TESTING_BROWSER_VERSION' in os.environ:
-            desired_cap['version'] = os.environ['WD_TESTING_BROWSER_VERSION']
-
-        desired_cap['name'] = 'CALC'
-        print('capabilities:', desired_cap)
-
-        driver = webdriver.Remote(
-            desired_capabilities=desired_cap,
-            command_executor=WD_HUB_URL
-        )
-
-        # XXX should this be higher?
-        driver.implicitly_wait(20)
-        return driver
-
-    @classmethod
     def setUpClass(cls):
-        cls._old_socket_timeout = socket.getdefaulttimeout()
-        socket.setdefaulttimeout(WD_SOCKET_TIMEOUT)
         build_static_assets()
-        cls.driver = cls.get_driver()
+        cls.driver = get_driver()
         cls.longMessage = True
         cls.maxDiff = None
         super().setUpClass()
@@ -101,10 +59,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         cls.take_screenshot()
-        cls.driver.quit()
-        if cls.connect:
-            cls.connect.shutdown_connect()
-        socket.setdefaulttimeout(cls._old_socket_timeout)
         super().tearDownClass()
 
     @classmethod
@@ -123,8 +77,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def setUp(self):
         self.base_url = self.live_server_url
-        if WD_TESTING_URL:
-            self.base_url = WD_TESTING_URL
         self.driver.set_window_size(*self.window_size)
         super().setUp()
 
@@ -132,17 +84,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         url = self.base_url + uri
         print('loading URL: %s' % url)
 
-        attempts = 0
-
-        while True:
-            try:
-                self.driver.get(url)
-                break
-            except socket.timeout:
-                if attempts >= WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS:
-                    raise
-                print("Socket timeout, trying again.")
-                attempts += 1
+        self.driver.get(url)
 
         # self.driver.execute_script('$("body").addClass("selenium")')
         return self.driver

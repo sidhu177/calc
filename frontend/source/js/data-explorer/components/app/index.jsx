@@ -75,8 +75,8 @@ class App extends React.Component {
 
   render() {
     const prefixId = name => `${this.props.idPrefix}${name}`;
-    const { hasRates, ratesInProgress } = this.props;
-
+    const { hasRates, ratesInProgress, ratesReturned } = this.props;
+    
     return (
       <form
         id={prefixId('search')}
@@ -99,12 +99,12 @@ class App extends React.Component {
                     Search
                   </button>
                   {' '}
-                  <input
+                  {hasRates && <input
                     onClick={this.handleResetClick}
                     className="reset usa-button usa-button-outline"
                     type="reset"
                     value="Clear search"
-                  />
+                  />}
                 </LaborCategory>
               </div>
               <div className="twelve columns">
@@ -118,7 +118,7 @@ class App extends React.Component {
 
         <LoadingIndicator />
 
-        {(!ratesInProgress && hasRates) &&
+        {((!ratesInProgress && hasRates) || !ratesReturned) &&
           <LoadableSearchResults {...this.props} />
         }
       </form>
@@ -140,13 +140,15 @@ App.defaultProps = {
   idPrefix: '',
   ratesError: null,
   hasRates: false,
+  ratesReturned: null,
 };
 
 export default connect(
   state => ({
     ratesInProgress: state.rates.inProgress,
     ratesError: state.rates.error,
-    hasRates: !!(state.rates.data && state.rates.data.results.length),
+    hasRates: !!(state.rates.data && state.rates.data.results.length && state.q),
+    ratesReturned: state.rates.data.results,
   }),
   { resetState, invalidateRates },
 )(App);

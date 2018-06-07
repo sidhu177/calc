@@ -97,6 +97,10 @@ export const EMPTY_RATES_DATA = {
   ],
 };
 
+export const NO_MATCHING_RATES_DATA = {
+  results: false,
+};
+
 export const DEFAULT_SORT = { key: 'current_price', descending: false };
 
 export const SORT_KEYS = [

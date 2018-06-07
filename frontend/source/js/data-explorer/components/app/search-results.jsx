@@ -38,9 +38,18 @@ class SearchResults extends React.Component {
 
   render() {
     const prefixId = name => `${this.props.idPrefix}${name}`;
+    const { ratesReturned, ratesInProgress } = this.props;
 
     return (
       <section className="results">
+      {!ratesReturned &&
+        <div className="container">
+          <div className="row">
+            <p>No results found!</p>
+          </div>
+        </div>
+      }
+      {ratesReturned &&
         <div className="container">
           <div className="row">
 
@@ -128,6 +137,7 @@ export default connect(
   state => ({
     ratesInProgress: state.rates.inProgress,
     ratesError: state.rates.error,
+    ratesReturned: state.rates.data.results,
   }),
   { invalidateRates },
 )(SearchResults);

@@ -25,13 +25,6 @@ QUnit.module('ajaxform', {
 });
 
 function createBlob(content) {
-  // If in PhantomJS 1.x
-  if (window.WebKitBlobBuilder) {
-    const builder = new window.WebKitBlobBuilder();
-    builder.append(content);
-    return builder.getBlob();
-  }
-
   // In a more modern engine with Blob support
   if (window.Blob) {
     return new window.Blob([content]);

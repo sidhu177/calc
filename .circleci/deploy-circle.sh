@@ -52,7 +52,13 @@ echo "Deploying to $SPACE space."
 cf login -a $API -u $DEPLOY_USER -p $DEPLOY_PASS -o $ORG -s $SPACE
 
 # scale down the app instances to avoid overrunning our memory allotment
-cf scale -i 1 $APP_NAME
+if cf app $APP_NAME ; then
+  echo "Scaling down $APP_NAME to single instance."
+  cf scale -i 1 $APP_NAME
+else
+  echo "$APP_NAME not found; skipping scale."
+fi
+
 
 cf zero-downtime-push $APP_NAME -f $MANIFEST
 

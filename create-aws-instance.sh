@@ -43,9 +43,7 @@ source ${ENV_FILE}
 
 ./docker-update.sh
 
-docker-compose run app python manage.py load_data
-
-docker-compose run app python manage.py load_s70
+docker-compose run app python manage.py load_api_data --end-page=5
 
 docker-compose up -d
 

@@ -1,47 +1,11 @@
-import csv
-import logging
-
 from datetime import datetime
-from django.core.exceptions import ValidationError
 
 from contracts.models import Contract
 
 FEDERAL_MIN_CONTRACT_RATE = 10.20
 
-logger = logging.getLogger('contracts')
-
 
 class Region10Loader(object):
-    header_rows = 1
-
-    def load_file(self, filename, upload_source=None, strict=False):
-        with open(filename, 'rU') as f:
-            return list(
-                self.parse(f, upload_source=upload_source, strict=strict)
-            )
-
-    def parse(self, fileobj, upload_source=None, strict=False):
-        reader = csv.reader(fileobj)
-
-        for _ in range(self.header_rows):
-            next(reader)
-
-        count = skipped = 0
-
-        for row in reader:
-            try:
-                yield self.make_contract(row, upload_source=upload_source)
-                count += 1
-            except (ValueError, ValidationError) as e:
-                if strict:
-                    logger.error('error parsing {}'.format(row))
-                    raise
-                else:
-                    skipped += 1
-
-        logger.info('rows fetched: {}'.format(count))
-        logger.info('rows skipped: {}'.format(skipped))
-
     @classmethod
     def make_contract(cls, line, upload_source=None):
         if line[0]:

@@ -98,10 +98,6 @@ string), the boolean is true; otherwise, it's false.
 * `NEW_RELIC_LICENSE_KEY` is the private New Relic license key for this project.
   If it is present, then the WSGI app will be wrapped with the  New Relic agent.
 
-* `TEST_WITH_ROBOBROWSER` is a boolean that indicates whether to run
-  some integration tests using [RoboBrowser][] instead of Selenium/WebDriver.
-  Running tests with RoboBrowser can be much faster and less error-prone
-  than via Selenium, but it also means that the tests are less end-to-end.
 
 * `SLACKBOT_WEBHOOK_URL` is the URL of a [Slack incoming webhook][] that
   will be sent messages whenever certain kinds of
@@ -116,7 +112,6 @@ string), the boolean is true; otherwise, it's false.
   better with some configurations, such as Windows, VirtualBox, and
   NFS mounts.
 
-[RoboBrowser]: http://robobrowser.readthedocs.io/
 [`SECRET_KEY`]: https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key
 [`DEFAULT_FROM_EMAIL`]: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-DEFAULT_FROM_EMAIL
 [`SERVER_EMAIL`]: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-SERVER_EMAIL

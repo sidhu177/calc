@@ -6,6 +6,7 @@ services:
     command: python manage.py runserver 0.0.0.0:${DOCKER_EXPOSED_PORT}
     environment:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
+      - WD_CHROME_ARGS=--headless --no-sandbox --disable-setuid-sandbox
     links:
       - mailcatcher
   gulp:

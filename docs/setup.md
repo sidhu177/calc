@@ -63,12 +63,17 @@ via commands like `git pull` or `git checkout`.
 
 ### Loading data (optional)
 
-After that, you can optionally load all of the data by running:
+After that, you can optionally load data by running:
 
 ```sh
-./manage.py load_data
-./manage.py load_s70
+./manage.py load_api_data --end-page=5
 ```
+
+This will load about 1000 rates from the production CALC instance
+into your local CALC instance.  You can increase the value passed
+to the `--end-page` argument to increase the amount of data
+that is copied over, or you can leave out the argument entirely
+to transfer all of CALC's data, but it may take some time.
 
 ### Starting the development server
 
