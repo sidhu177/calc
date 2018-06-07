@@ -4,7 +4,7 @@ import createSortableColumn from './sortable-column';
 
 const column = createSortableColumn({
   key: 'labor_category',
-  title: 'Labor Category',
+  title: 'Labor category',
 });
 
 export const HeaderCell = column.HeaderCell;

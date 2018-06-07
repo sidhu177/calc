@@ -10,6 +10,7 @@ global.$ = require('jquery');
 global.jQuery = global.$;
 
 require('../vendor/jquery.tooltipster');
+require('uswds');
 
-require('./dap-hacks');
 require('./usermenu');
+require('./ga').autoTrackInterestingLinks();

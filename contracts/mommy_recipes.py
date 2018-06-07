@@ -11,7 +11,6 @@ def get_contract_recipe(schedule=None, sin=None):
     return Recipe(
         Contract,
         idv_piid=seq('ABC123'),
-        piid=piid,
         vendor_name=seq("CompanyName"),
         labor_category="Business Analyst II",
         schedule=schedule or cycle(SCHEDULES),

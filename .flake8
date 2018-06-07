@@ -1,0 +1,15 @@
+[flake8]
+
+exclude = 
+    */migrations/*.py,
+    node_modules,
+    venv
+
+ignore =
+    # E701, is intended to prevent one-liners like
+    # "if blah: continue", but we're getting false
+    # positives on Python 3.6 variable annotations,
+    # so we're going to disable it for now.
+    E701
+
+max-line-length = 100

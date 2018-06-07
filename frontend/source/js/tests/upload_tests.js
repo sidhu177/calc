@@ -163,7 +163,7 @@ function mockOriginalEvent(extras) {
 
   advancedTest('advanced upload does not allow non-accepted file types', (assert) => {
     const badFakeFile = { name: 'boop', type: 'application/badtest' };
-    const evt = jQuery.Event('drop', { // eslint-disable-line new-cap
+    const evt = jQuery.Event('drop', {
       originalEvent: mockOriginalEvent({ dataTransfer: { files: [badFakeFile] } }),
     });
 
@@ -174,7 +174,7 @@ function mockOriginalEvent(extras) {
 
   advancedTest('advanced upload allows accepted file types', (assert) => {
     const goodFileMime = { name: 'boop', type: 'application/test' };
-    const mimeDropEvt = jQuery.Event('drop', { // eslint-disable-line new-cap
+    const mimeDropEvt = jQuery.Event('drop', {
       originalEvent: mockOriginalEvent({ dataTransfer: { files: [goodFileMime] } }),
     });
 
@@ -182,7 +182,7 @@ function mockOriginalEvent(extras) {
     assert.strictEqual(input[0].upgradedValue, goodFileMime);
 
     const goodFileExt = { name: 'boop.csv', type: 'whatever' };
-    const extDropEvt = jQuery.Event('drop', { // eslint-disable-line new-cap
+    const extDropEvt = jQuery.Event('drop', {
       originalEvent: mockOriginalEvent({ dataTransfer: { files: [goodFileExt] } }),
     });
     upload.trigger(extDropEvt);
@@ -192,7 +192,7 @@ function mockOriginalEvent(extras) {
   advancedTest('advanced upload allows any file when "accept" not specified', (assert) => {
     input.attr('accept', null);
     const fakeFile = { name: 'boop' };
-    const evt = jQuery.Event('drop', { // eslint-disable-line new-cap
+    const evt = jQuery.Event('drop', {
       originalEvent: mockOriginalEvent({ dataTransfer: { files: [fakeFile] } }),
     });
     upload.trigger(evt);
@@ -201,7 +201,7 @@ function mockOriginalEvent(extras) {
 
   advancedTest('"changefile" event triggered on drop', (assert) => {
     const fakeFile = { name: 'boop', type: 'application/test' };
-    const evt = jQuery.Event('drop', { // eslint-disable-line new-cap
+    const evt = jQuery.Event('drop', {
       originalEvent: mockOriginalEvent({ dataTransfer: { files: [fakeFile] } }),
     });
 

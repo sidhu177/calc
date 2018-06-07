@@ -8,7 +8,7 @@ from django.test import override_settings, TestCase
 from django.contrib.admin.sites import AdminSite
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from hourglass.tests.common import BaseLoginTestCase
+from calc.tests.common import BaseLoginTestCase
 from .. import admin, email
 from ..models import (SubmittedPriceList, SubmittedPriceListRow,
                       AttemptedPriceListSubmission)
@@ -47,7 +47,7 @@ DEBUG_ADMIN_SETTINGS = dict(
     ]),
     MIDDLEWARE_CLASSES=tuple([
         name for name in settings.MIDDLEWARE_CLASSES
-        if name != 'hourglass.middleware.DebugOnlyDebugToolbarMiddleware'
+        if name != 'calc.middleware.DebugOnlyDebugToolbarMiddleware'
     ]),
 )
 

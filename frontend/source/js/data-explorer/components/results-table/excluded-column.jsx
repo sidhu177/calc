@@ -20,7 +20,7 @@ function BaseDataCell({ excludeRow, result }) {
     excludeRow(rowId);
   };
 
-  const tooltip = `Exclude ${result.labor_category} from your search`;
+  const tooltip = 'Exclude this row from your search';
 
   return (
     <td className="cell column-exclude">

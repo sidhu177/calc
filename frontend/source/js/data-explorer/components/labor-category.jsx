@@ -66,7 +66,7 @@ export class LaborCategory extends React.Component {
           onKeyDown={handleEnter(this.handleEnter)}
           maxLength={MAX_QUERY_LENGTH}
         />
-        <label htmlFor={id} className="sr-only">Type a labor category</label>
+        <label htmlFor={id} className="usa-sr-only">Type a labor category</label>
         {this.props.children}
       </div>
     );

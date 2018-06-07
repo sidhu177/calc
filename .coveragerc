@@ -9,7 +9,7 @@ omit =
   */mommy_recipes.py
   */tests.py
   */tests/*
-  hourglass/wsgi.py
+  calc/wsgi.py
   meta/management/commands/*
 [report]
 exclude_lines =

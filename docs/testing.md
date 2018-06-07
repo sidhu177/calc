@@ -3,7 +3,7 @@
 CALC provides a custom Django management command to run all linters and tests:
 
 ```sh
-python manage.py ultratest
+docker-compose run app python manage.py ultratest
 ```
 
 ### Python unit tests
@@ -11,7 +11,7 @@ python manage.py ultratest
 To run just unit tests:
 
 ```sh
-py.test
+docker-compose run app py.test
 ```
 
 For more information on running only specific tests, see
@@ -52,7 +52,7 @@ static analysis.
 To run bandit:
 
 ```sh
-bandit -r .
+docker-compose run app bandit -r .
 ```
 
 bandit's configuration is in the [`.bandit`](../.bandit) file.

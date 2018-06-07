@@ -1,43 +1,45 @@
 ## Using Docker
 
-A Docker setup potentially makes development and deployment easier.
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
 
-To use it, install [Docker][] and [Docker Compose][] and read the
-[18F Docker guide][] if you haven't already.
+If you're ever having problems because `docker-compose up` explodes in an unfriendly way, it's quite likely that `./docker-update.sh` will fix it.
 
-Then run:
+</div>
 
-```sh
-cp .env.sample .env
-ln -sf docker-compose.local.yml docker-compose.override.yml
+For setup instructions on using Docker and Docker Compose for CALC's development environment, see our [Setup](setup.md) guide.
+
+### Updating the containers
+
+Whenever you update your repository via e.g. `git pull` or
+`git checkout`, you should update your containers by running:
+
+```
 ./docker-update.sh
 ```
 
-You can optionally load some data into your dockerized database with:
+### Starting over
 
-```sh
-docker-compose run app python manage.py load_api_data --end-page=5
+If your Docker setup appears to be in an irredeemable state
+and `./docker-update.sh` doesn't fix it--or
+if you just want to free up extra disk space used up by
+CALC--you can destroy everything by running:
+
+```
+docker-compose down -v
 ```
 
-Once the above commands are successful, run:
+Note that this will delete all the data in your CALC
+instance's database.
 
-```sh
-docker-compose up
-```
-
-This will start up all required servers in containers and output their
-log information to stdout. You should be able to visit http://localhost:8000/
-directly to access the site.
-
-### Changing the exposed port
-
-If you don't want to serve your app on port 8000, you can change
-the value of `DOCKER_EXPOSED_PORT` in your `.env` file.
+At this point you can re-run `./docker-update.sh` to set
+everything up again.
 
 ### Accessing the app container
 
-You'll likely want to run `manage.py` or `py.test` to do other things at
-some point. To do this, it's probably easiest to run:
+Command-line snippets in this developer documentation often start
+with `docker-compose run app`, which gets repetitive. One
+way to avoid this is to run:
 
 ```sh
 docker-compose run app bash
@@ -45,41 +47,68 @@ docker-compose run app bash
 
 This will run an interactive bash session inside the main app container.
 In this container, the `/calc` directory is mapped to the root of
-the repository on your host; you can run `manage.py` or `py.test` from there.
+the repository on your host; you can run any command, like `manage.py`
+or `py.test`, from there.
+
+### A `manage.py` shortcut
 
 Note that if you don't have Django installed on your host system, you
 can just run `python manage.py` directly from outside the container--the
 `manage.py` script has been modified to run itself in a Docker container
 if it detects that Django isn't installed.
 
-### Updating the containers
-
-Whenever you update your repository via e.g. `git pull` or
-`git checkout`, you should update your containers by running
-`./docker-update.sh`.
-
 ### Custom dependencies
 
-Feel free to install custom dependencies, e.g. your favorite
+Feel free to install custom Python dependencies, e.g. your favorite
 debugging library, in your container via
-`docker-compose run app pip install` or
-`docker-compose run app yarn add`. Everything should work
-as expected.
+`docker-compose run app pip install`.
+
+For custom node dependencies, you can use
+`docker-compose run app yarn add`. However, note that this will
+modify your `package.json` and `yarn.lock`, which you probably
+won't want to commit to git. You'll have to either make sure
+not to commit those files, or undo the installation once
+you're finished using the package with
+`docker-compose run app yarn remove`.
 
 ### Debugging Python
 
 CALC's `requirements-dev.txt` file will install [`ipdb`][].
 
-To drop into an interactive debugging section, add `import ipdb;
-ipdb.set_trace()` on the line above the point you want to start your debugging
-session. Then run Docker using the `service-ports` option: `docker-compose run
---service-ports app`. Your interactive debugging session should start in your
-terminal when you reload the page.
+To drop into an interactive debugging section:
 
-Here's a [handy list of `ipdb` commands][ipdb_intro].
+1. In a _separate terminal_ from the one that's already
+   running `docker-compose up`, run:
+
+   ```
+   docker attach calc_app_1
+   ```
+
+   We'll call this the "debugging terminal".
+
+2. Add `import ipdb; ipdb.set_trace()` at whatever line you want
+   to invoke the debugger at (this is a standard Python convention).
+
+3. Trigger a code path that executes the line you just added.
+   You should see the debugger start up in your debugging terminal.
+   (You'll also see it start up in the `docker-compose up` terminal,
+   but you can ignore that.)
+
+4. Debug as you normally would. (If you're unfamiliar with the
+   debugger, here's a [handy list of `ipdb` commands][ipdb_intro].)
+
+5. Once you're done, **do not press `Ctrl + C`**.  Instead,
+   type `continue` into the debugger, and then press `Ctrl + P`
+   followed by `Ctrl + Q` to detach the debugger terminal
+   from the app container and return to the shell.
 
 [`ipdb`]: https://pypi.python.org/pypi/ipdb
 [ipdb_intro]: https://www.safaribooksonline.com/blog/2014/11/18/intro-python-debugger/
+
+### Changing the exposed port
+
+If you don't want to serve your app on port 8000, you can change
+the value of `DOCKER_EXPOSED_PORT` in your `.env` file.
 
 ### Deploying to cloud environments
 
@@ -138,7 +167,4 @@ your own needs. Run it without any arguments for help.
 the container image. This means that every time you make a source code
 change, you will need to re-run `./docker-update.sh`.
 
-[18F Docker guide]: https://pages.18f.gov/dev-environment-standardization/virtualization/docker/
-[Docker]: https://www.docker.com/
-[Docker Compose]: https://docs.docker.com/compose/
 [docker-machine-cloud]: https://docs.docker.com/machine/get-started-cloud/

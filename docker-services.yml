@@ -24,3 +24,5 @@ services:
       # server to work, as it makes the app connect to itself (which will
       # cause the app to hang if only one worker exists).
       - WEB_CONCURRENCY=2
+    mem_limit: 1G
+    memswap_limit: 0

@@ -1,6 +1,6 @@
 {% extends 'data_capture/step.html' %}
 {% block body_class %}content--skinny{% endblock %}
-{% block card_class %}secondary-step card--no-header{% endblock %}
+{% block main_class %}secondary-step card--collapse-header{% endblock %}
 {% block subtitle %}Data submitted for review!{% endblock%}
 {% block step_heading %}<h2>Price list submitted!</h2>{% endblock %}
 
@@ -10,7 +10,7 @@
   </p>
 
   <div class="form-button-row clearfix">
-    <a href="{% url 'index' %}" class="usa-button usa-button-outline">CALC home</a>
+    <a href="{% url 'index' %}" class="usa-button usa-button-secondary">CALC home</a>
     <a href="{% url 'data_capture:step_1' %}" class="usa-button usa-button-primary">Add another price list</a>
   </div>
 {% endblock %}

@@ -1,11 +1,14 @@
+// The widget that allows users to upload a price list.
+// Read more: https://calc-dev.app.cloud.gov/styleguide/#ajax-form-upload-widget
+
 @import "../base/variables";
 
 upload-widget {
-  margin: 3rem 0;
+  margin: $space-3x 0;
   display: flex;
   position: relative;
   align-items: center;
-  padding: 1rem 3em;
+  padding: $space-1x $space-3x;
   background-color: $color-gray-lightest;
   transition: background-color 0.5s, border-color 0.5s;
   -webkit-transition: background-color 0.5s, border-color 0.5s;
@@ -16,20 +19,15 @@ upload-widget {
   font-size: 2rem;
 
   label {
-    color: $color-primary;
-    font-weight: bold;
+    color: $color-blue;
+    font-weight: $font-weight-bold;
     display: inline;
+    text-decoration: underline;
     cursor: pointer;
   }
 
   label:hover {
-    text-decoration: underline;
-  }
-
-  input:focus + div.upload-chooser label,
-  input:focus + div.upload-current label {
-    outline: 1px dotted $color-black;
-    outline: -webkit-focus-ring-color auto 5px;
+    text-decoration: none;
   }
 
   .upload-changer {
@@ -40,7 +38,7 @@ upload-widget {
 
   &.dragged-over {
     background-color: $color-green-lightest;
-    border: 2px dashed $color-green;
+    border: 2px dashed $color-green-darkest;
     .upload-chooser {
       * {
         visibility: hidden;
@@ -48,10 +46,10 @@ upload-widget {
       &:before {
         content: "Drop file here!";
         font-weight: $font-weight-bold;
-        color: $color-primary;
+        color: $color-gray-darkest;
         display: block;
         position: absolute;
-        margin-top: 0rem;
+        margin-top: 0;
       }
     }
   }
@@ -87,7 +85,7 @@ upload-widget[aria-live] {
 
 // Rules specific to non-JS-upgraded widgets.
 upload-widget:not([aria-live]) {
-  font-size: 1.3rem;
+  font-size: $medium-font-size;
   display: block;
   border: none;
   padding-top: 1em;
@@ -96,7 +94,7 @@ upload-widget:not([aria-live]) {
   input {
     border: none;
     font-size: 1.3rem;
-    color: $color-primary;
+    color: $color-blue;
     font-weight: $font-weight-bold;
     padding: 1.5rem 0 1rem;
     // TODO: This is just clearing out the margin-bottom from our standard

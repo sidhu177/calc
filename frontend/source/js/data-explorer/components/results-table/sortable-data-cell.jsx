@@ -6,6 +6,7 @@ const getDataCellClasses = (key, sort) => ({
   cell: true,
   sorted: sort.key === key,
   [`column-${key}`]: true,
+  number: key === 'current_price',
 });
 
 export const createDataCellConnector = key => (Component) => {

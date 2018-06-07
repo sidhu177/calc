@@ -95,6 +95,8 @@ if sys.platform != 'win32':
     # If the Docker host is running on Windows, we don't need this
     # module, so it's OK to not import it.
     import pwd
+else:
+    pwd = None
 
 if False:
     # This is just needed so mypy will work; it's never executed.
@@ -257,7 +259,10 @@ def does_username_exist(username):  # type: (str) -> bool
     '''
 
     try:
-        pwd.getpwnam(username)
+        if pwd:
+            pwd.getpwnam(username)
+        else:
+            return False
         return True
     except KeyError:
         return False
@@ -269,7 +274,10 @@ def does_uid_exist(uid):  # type: (int) -> bool
     '''
 
     try:
-        pwd.getpwuid(uid)
+        if pwd:
+            pwd.getpwuid(uid)
+        else:
+            return False
         return True
     except KeyError:
         return False
@@ -320,7 +328,8 @@ def entrypoint(argv):  # type: (List[str]) -> None
                 dirname
             ])
 
-        os.environ['HOME'] = '/home/%s' % pwd.getpwuid(HOST_UID).pw_name
+        if pwd is not None:
+            os.environ['HOME'] = '/home/%s' % pwd.getpwuid(HOST_UID).pw_name
         os.setuid(HOST_UID)
 
     if VENV_DIR:

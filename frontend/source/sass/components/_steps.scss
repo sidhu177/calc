@@ -1,8 +1,11 @@
+// The "steps" widget that displays when uploading a price list.
+// Read more: https://calc-dev.app.cloud.gov/styleguide/#steps-widget
+
 @import '../base/variables';
 
 @keyframes step-fade-in {
   to {
-    background-color: $color-primary;
+    background-color: $color-blue-dark;
     color: $color-white;
   }
 }
@@ -14,7 +17,7 @@
     animation-name: step-fade-in;
     animation-fill-mode: forwards;
     background-color: $color-white;
-    color: $color-primary;
+    color: $color-blue-dark;
   }
 }
 
@@ -24,7 +27,7 @@
     margin-top: 0.2rem;
     font-size: 1.4rem;
     line-height: 1.2;
-    color: $color-primary;
+    color: $color-blue-dark;
     font-weight: $font-weight-bold;
   }
 }
@@ -46,7 +49,7 @@ ol.steps {
 
   li {
     list-style: none;
-    border-top: 2px solid $color-primary;
+    border-top: 2px solid $color-blue-dark;
     padding-top: 14px;
     position: relative;
     float: left;
@@ -61,10 +64,10 @@ ol.steps {
       position: absolute;
       top: -12px;
       left: 0px;
-      background-color: $color-primary;
+      background-color: $color-blue-dark;
       color: $color-white;
       border-radius: 30px;
-      border: 2px solid $color-primary;
+      border: 2px solid $color-blue-dark;
       text-align: center;
       font-size: 80%;
       font-weight: 700;
@@ -72,7 +75,7 @@ ol.steps {
 
     &.current ~ li::before {
       background-color: $color-white;
-      color: $color-primary;
+      color: $color-blue-dark;
     }
 
     &:last-child {

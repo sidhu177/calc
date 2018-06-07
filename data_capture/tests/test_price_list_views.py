@@ -7,7 +7,7 @@ from model_mommy import mommy
 from django.test import override_settings
 from django.utils import timezone
 
-from hourglass.tests.common import ProtectedViewTestCase
+from calc.tests.common import ProtectedViewTestCase
 from ..models import SubmittedPriceList
 from ..management.commands.initgroups import PRICE_LIST_UPLOAD_PERMISSION
 from .common import FAKE_SCHEDULE, uploaded_csv_file

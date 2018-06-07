@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from hourglass.site_utils import absolutify_url
+from calc.site_utils import absolutify_url
 
 
 # Timeout, in seconds, after we give up on Slack. Since Slack isn't
@@ -22,8 +22,7 @@ def post_to_webhook(payload: Dict[str, str]):
     res = requests.post(
         settings.SLACKBOT_WEBHOOK_URL,
         data={'payload': json.dumps(payload)},
-        timeout=TIMEOUT,
-        )
+        timeout=TIMEOUT)
     res.raise_for_status()
 
 

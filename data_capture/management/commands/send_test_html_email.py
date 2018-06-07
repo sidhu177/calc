@@ -5,7 +5,7 @@ import socket
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from hourglass.site_utils import absolutify_url
+from calc.site_utils import absolutify_url
 from data_capture import email
 
 

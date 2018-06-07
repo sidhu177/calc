@@ -13,6 +13,11 @@ environment variables on cloud.gov, see
 boolean value, if the variable exists with *any* value (even the empty
 string), the boolean is true; otherwise, it's false.
 
+### Local development settings
+
+These settings are likely to only be useful during local development
+and/or the deployment of non-production instances of CALC.
+
 * `DEBUG` is a boolean value that indicates whether debugging is enabled
   (this should always be false in production).
 
@@ -28,6 +33,30 @@ string), the boolean is true; otherwise, it's false.
   various development and debugging affordances in the UI, such as the
   [Django Debug Toolbar][]. This can be useful when demoing or user testing
   a debug build.
+
+* `REDIS_TEST_URL` is the redis URL to use when running tests.
+  When `DEBUG` is true *and* `REDIS_URL` isn't defined, it defaults to
+  `redis://localhost:6379/1`.
+
+* `FORCE_DISABLE_SECURE_SSL_REDIRECT` is a boolean value that indicates
+  whether to disable redirection from http to https. Because such
+  redirection is enabled by default when `DEBUG` is false, this option
+  can be useful when you want to simulate *almost* everything about a
+  production environment without having to setup SSL.
+
+* `USE_POLLING` is a boolean; if true, this will force all the watchers
+  to use filesystem polling instead of OS notifications, which works
+  better with some configurations, such as Windows, VirtualBox, and
+  NFS mounts.
+
+* `NON_PROD_INSTANCE_NAME` is an optional instance name that when specified
+  will cause a banner to be shown at the top of every page to let users know
+  that they are viewing a non-production instance of CALC. This value
+  can contain HTML, so it's possible to e.g. wrap the value in a hyperlink.
+
+### Deployment settings
+
+These are useful for any kind of deployment of CALC.
 
 * `SECRET_KEY` is a large random value corresponding to Django's
   [`SECRET_KEY`][] setting. It is automatically set to a known, insecure
@@ -60,18 +89,8 @@ string), the boolean is true; otherwise, it's false.
 * `REDIS_URL` is the URL for redis, which is used by the task queue.
   When `DEBUG` is true, it defaults to `redis://localhost:6379/0`.
 
-* `REDIS_TEST_URL` is the redis URL to use when running tests.
-  When `DEBUG` is true *and* `REDIS_URL` isn't defined, it defaults to
-  `redis://localhost:6379/1`.
-
 * `ENABLE_SEO_INDEXING` is a boolean value that indicates whether to
   indicate to search engines that they can index the site.
-
-* `FORCE_DISABLE_SECURE_SSL_REDIRECT` is a boolean value that indicates
-  whether to disable redirection from http to https. Because such
-  redirection is enabled by default when `DEBUG` is false, this option
-  can be useful when you want to simulate *almost* everything about a
-  production environment without having to setup SSL.
 
 * `UAA_CLIENT_ID` is your cloud.gov/Cloud Foundry UAA client ID. It
   defaults to `calc-dev`.
@@ -90,27 +109,12 @@ string), the boolean is true; otherwise, it's false.
   for the associated Google Analytics account.
   It will default to the empty string if not found in the environment.
 
-* `NON_PROD_INSTANCE_NAME` is an optional instance name that when specified
-  will cause a banner to be shown at the top of every page to let users know
-  that they are viewing a non-production instance of CALC. This value
-  can contain HTML, so it's possible to e.g. wrap the value in a hyperlink.
-
 * `NEW_RELIC_LICENSE_KEY` is the private New Relic license key for this project.
   If it is present, then the WSGI app will be wrapped with the  New Relic agent.
-
 
 * `SLACKBOT_WEBHOOK_URL` is the URL of a [Slack incoming webhook][] that
   will be sent messages whenever certain kinds of
   [events](../slackbot/signals.py) occur in the app.
-
-* `ESLINT_CHILL_OUT` is a boolean; if true, it will change the behavior
-  of gulp's watch mode such that it doesn't run `eslint` every time a
-  file changes.
-
-* `USE_POLLING` is a boolean; if true, this will force all the watchers
-  to use filesystem polling instead of OS notifications, which works
-  better with some configurations, such as Windows, VirtualBox, and
-  NFS mounts.
 
 [`SECRET_KEY`]: https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key
 [`DEFAULT_FROM_EMAIL`]: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-DEFAULT_FROM_EMAIL

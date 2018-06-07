@@ -1,5 +1,5 @@
 {% extends 'data_capture/step.html' %}
-{% block card_class %}secondary-step card--no-header{% endblock %}
+{% block main_class %}secondary-step card--collapse-header{% endblock %}
 
 {% block subtitle %}Errors in price list upload{% endblock %}
 {% block step_heading %}<h2>Review errors</h2>{% endblock %}
@@ -8,7 +8,7 @@
 
       {% with total=rows|length %}
 
-      <div class="message message-error no-bg" role="alert">
+      <div class="usa-alert usa-alert-error alert__no-bg" role="alert">
         {% if not gleaned_data.valid_rows %}
           <h3>No valid rows found!</h3>
           <p>
@@ -62,9 +62,9 @@
       {{ form.file }}
 
       <div class="form-button-row clearfix">
-        <a href="{% url 'data_capture:step_3' %}" class="usa-button usa-button-outline button-previous">Previous</a>
+        <a href="{% url 'data_capture:step_3' %}" class="usa-button usa-button-secondary button-previous">Previous</a>
 
-        <button type="submit" class="usa-button-primary">
+        <button type="submit" class="usa-button usa-button-primary">
           Upload revised price list
         </button>
 
@@ -85,6 +85,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+    <button type="submit" class="usa-button usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
   </form>
 {% endblock %}

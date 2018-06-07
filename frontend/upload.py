@@ -1,3 +1,5 @@
+from typing import Dict
+
 from django import forms
 from django.forms.utils import flatatt
 from django.utils.html import escape
@@ -26,7 +28,7 @@ class UploadWidget(forms.widgets.FileInput):
         self.existing_filename = existing_filename
 
     def render(self, name, value, attrs=None):
-        final_attrs = {}
+        final_attrs: Dict[str, str] = {}
         if attrs:
             final_attrs.update(attrs)
 

@@ -9,7 +9,7 @@ from django.template.defaultfilters import pluralize
 from django.conf import settings
 
 from frontend import email_css
-from hourglass.site_utils import absolute_reverse
+from calc.site_utils import absolute_reverse
 from .models import SubmittedPriceList
 
 
@@ -122,7 +122,9 @@ def email_sender(template, example_ctx):
         def wrapped(*args, **kwargs):
             return func(template, *args, **kwargs)
 
-        wrapped.example_ctx = example_ctx
+        # We're ignoring the type checking here due to:
+        # https://github.com/python/mypy/issues/2087
+        wrapped.example_ctx = example_ctx  # type: ignore
 
         return wrapped
     return wrap

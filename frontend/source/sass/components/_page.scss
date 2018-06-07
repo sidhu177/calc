@@ -1,6 +1,9 @@
+// Some styles to dictate basic page layouts. This could probably be considered
+// a "base" file. Primarily styles the "card" layout: https://calc-dev.app.cloud.gov/styleguide/#card-layout
+
 @import '../base/variables';
 @import '../base/grid';
-$background-color: $color-gray-lightest;
+$background-color: $color-gray-lighter;
 
 body {
   display: flex;
@@ -17,44 +20,6 @@ main {
 
 .secondary-step h1 {
   font-size: $h3-font-size;
-}
-
-/* Top level classes go in {% body_class %} */
-.content--narrow {
-  header,
-  main,
-  footer {
-    @include span-columns(8);
-    @include shift(2);
-  }
-}
-
-.card {
-  background-color: $color-white;
-  padding: $space-8x 0;
-  border-bottom: $space-half solid $background-color;
-
-  /* This will only apply to cards that do not have a .card__footer.
-   * That class applies these styles as a top border to approximate the same thing. */
-  &:last-child {
-    border-bottom-color: $color-gray-light;
-    margin-bottom: $space-10x;
-  }
-}
-
-.card__footer {
-  border-top: $space-half solid $color-gray-light; // same as if the .card:last-child class had been applied
-  margin-bottom: $space-10x; // same as .card:last-child
-  margin-top: -$space-half; // to account for border on the bottom of the preceding card
-  padding: $space-half 0;
-  > * {
-    //padding-top: $space-10x;
-  }
-  button.usa-button-link {
-    margin-top: $space-half;
-    font-size: $small-font-size;
-    padding: 0;
-  }
 }
 
 header,
@@ -75,6 +40,8 @@ footer {
   }
 }
 
+
+// A top-level body class.
 .content--skinny {
   header,
   main {
@@ -102,12 +69,10 @@ footer {
   }
 }
 
-.card .content:first-child h2:first-child {
-  margin-top: 0;
-}
-
-/* Also a "body class." Used in conjunction with the above. */
-.card--no-header {
+/* Applied to "main" element on some steps of data capture to create the appearance
+ * of a unified card (despite being composed of two separate "card" DOM elements).
+ * Used in conjunction with the standard card classes above. */
+.card--collapse-header {
   .card:first-child {
     border-bottom: none;
     padding-bottom: 0;
@@ -121,10 +86,37 @@ footer {
   }
 }
 
-.card--half-padding {
-  .card {
-    padding: $space-4x 0;
+.card {
+  background-color: $color-white;
+  padding: $space-8x 0;
+  border-bottom: $space-half solid $background-color;
+
+  /* This will only apply to cards that do not have a .card__footer.
+   * That class applies these styles as a top border to approximate the same thing. */
+  &:last-child {
+    border-bottom-color: $color-gray-light;
+    margin-bottom: $space-10x;
   }
+  // When the first thing in the card's content is a heading, it needs no top margin
+  .content > h1:first-child {
+    margin-top: 0;
+  }
+}
+
+.card__footer {
+  border-top: $space-half solid $color-gray-light; // same as if the .card:last-child class had been applied
+  margin-bottom: $space-10x; // same as .card:last-child
+  margin-top: -$space-half; // to account for border on the bottom of the preceding card
+  padding: $space-half 0;
+  button.usa-button-link {
+    margin-top: $space-half;
+    font-size: $small-font-size;
+    padding: 0;
+  }
+}
+
+.card .content:first-child h2:first-child {
+  margin-top: 0;
 }
 
 .price-list__status-header {

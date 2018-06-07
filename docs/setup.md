@@ -1,125 +1,95 @@
 ## Setup
 
-Setting up CALC locally without Docker is possible, but it requires
-quite a few prerequisites. If the following instructions seem daunting,
-you may want to check out our alternative [Docker instructions](docker.md).
+CALC is primarily a [Django] project.
+
+CALC uses [Docker][] and [Docker Compose][] to make setting up a development environment easier.
+
+If you are unfamiliar with Docker or Docker Compose, read their docs as well as the [18F Docker guide][].
 
 ### Prerequisites
 
-You'll need the following tools and services installed to run CALC
-locally:
+First, install [Docker](https://docs.docker.com/install/), as well as [Docker Compose](https://docs.docker.com/compose/install/) if it's not included in your system's Docker installation.
 
-* [Python 3.6](https://www.python.org/)
-  * If not using the [Docker-based development workflow](docker.md), make sure your system `python` command runs Python 3. You can check this by running `python --version`.
-* [Node 6.13](https://nodejs.org/)
-* [yarn](https://yarnpkg.com)
-  * Install globally via `npm install -g yarn` or via another method described at [https://yarnpkg.com/lang/en/docs/install/](https://yarnpkg.com/lang/en/docs/install/).
-* [Postgres 9.5](https://www.postgresql.org/)
-  * It's easiest to have a local instance of it running on its default
-    port, as this requires no extra configuration on the CALC side.
-* [Redis](https://redis.io/)
-  * It's easiest to have a local instance of it running on its default
-    port, as this requires no extra configuration on the CALC side.
-  * For guidance on installing Redis, see
-    [Installing Redis on Mac OSX][redis-osx] or
-    [Installing Redis on Ubuntu][redis-ubuntu].
+Check that both are installed by running:
+
+```sh
+docker -v
+docker-compose -v
+```
+
+which will output the version numbers of each tool if the installation worked as expected.
 
 ### Configuration
 
-CALC is a [Django] project. You can configure everything by running:
+During development, the project reads environment variables from a `.env` file, which
+you can create by running:
 
 ```sh
 cp .env.sample .env
 ```
 
-Edit the `.env` file to your tastes. If all your services are on their
-default ports, you shouldn't need to change much here; if not, see
-[Environment variables](environment.md) for details on
-configuration.
+Edit the `.env` file to your tastes. You shouldn't need to change much here; but if you'd like to see the available options, see [Environment variables](environment.md) for details on configuration.
 
-### Creating the database
-
-Assuming you haven't changed the database mentioned in the
-your `.env` file's `DATABASE_URL` value from its default value,
-you can create the Postgres database by running:
+You'll also need to symlink `docker-compose.local.yml` to `docker-compose.override.yml`. On Linux and OS X, this can be done via:
 
 ```sh
-createdb hourglass
+ln -sf docker-compose.local.yml docker-compose.override.yml
 ```
 
-### Running the update script
-
-Now run:
+However, if you're on Windows, use:
 
 ```sh
-./update.sh
+mklink docker-compose.override.yml docker-compose.local.yml
 ```
 
-This script will install/update all Python and Node dependencies,
-as well as apply any necessary database migrations.
+If that doesn't work, you will have to copy the file instead of symlinking it.
 
-You'll also want to run this script whenever you update your repository
-via commands like `git pull` or `git checkout`.
+### Installing or updating dependencies
+
+Run
+
+```sh
+./docker-update.sh
+```
+
+This script will install/update all Python and Node dependencies, as well as apply any necessary database migrations.
+
+You'll also want to run this script whenever you update your local repository via commands like `git pull` or `git checkout`.
 
 ### Loading data (optional)
 
-After that, you can optionally load data by running:
+You can optionally load some data into your dockerized database with:
 
 ```sh
-./manage.py load_api_data --end-page=5
+docker-compose run app python manage.py load_api_data --end-page=5
 ```
 
-This will load about 1000 rates from the production CALC instance
-into your local CALC instance.  You can increase the value passed
-to the `--end-page` argument to increase the amount of data
-that is copied over, or you can leave out the argument entirely
-to transfer all of CALC's data, but it may take some time.
+This will load about 1000 rates from the production CALC instance into your local CALC instance.  You can increase the value passed to the `--end-page` argument to increase the amount of data that is copied over, or you can leave out the argument entirely to transfer all of CALC's data, but it may take some time.
 
 ### Starting the development server
 
 Now you can start the development server:
 
 ```sh
-./manage.py runserver
+docker-compose up
 ```
 
-Don't visit it just yet, though--first you'll need to start the static
-asset build pipeline.
-
-### Starting the static asset generator
-
-In another terminal, you will also need to run `gulp` to watch and rebuild
-static assets:
+This will start up all required servers in containers and output their log information to `stdout`. It might take a couple minutes for all the front end assets to be built, but once you see a message that looks something like this:
 
 ```sh
-yarn gulp
+gulp_1          | [19:15:54] -----------------------------------------
+gulp_1          | [19:15:54] Visit your CALC at: http://localhost:8000
+gulp_1          | [19:15:54] -----------------------------------------
 ```
 
-### Starting the task runner
+You can visit http://localhost:8000/ to see your local CALC instance.
 
-Also, in yet another terminal, you will want to run
-the following to process all the tasks in the task queue:
+### More information
 
-```sh
-python manage.py rqworker
-```
-
-### Starting the task scheduler (optional)
-
-You can also start CALC's task scheduler in a separate terminal,
-though it's not required:
-
-```sh
-IS_RQ_SCHEDULER=yup python manage.py rqscheduler
-```
-
-### Visiting the development server
-
-Now you're ready to visit your local development site! Load
-http://localhost:8000/ in your browser.
-
-[redis-ubuntu]: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
-
-[redis-osx]: https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298#.fa2s6i1my
+For more information on interacting with CALC's dockerized development environment, see the [Using Docker](docker.md) section of our docs.
 
 [Django]: https://www.djangoproject.com/
+[18F Docker guide]: https://github.com/18F/development-guide/blob/master/project_setup/docker/README.md
+[Docker]: https://www.docker.com/
+[Docker Compose]: https://docs.docker.com/compose/
+[docker-machine-cloud]: https://docs.docker.com/machine/get-started-cloud/

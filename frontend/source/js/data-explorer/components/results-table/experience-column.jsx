@@ -4,7 +4,7 @@ import createSortableColumn from './sortable-column';
 
 const column = createSortableColumn({
   key: 'min_years_experience',
-  title: 'Experience',
+  title: 'Exper.',
   description: 'Minimum years of experience',
 });
 

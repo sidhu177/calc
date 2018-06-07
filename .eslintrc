@@ -4,6 +4,16 @@
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],
     "no-plusplus": [0],
+    "quotes": [0],
+    "comma-dangle": [0],
+    "no-multi-assign": [0],
+    "no-trailing-spaces": [0],
+    "dot-notation": [0],
+    "no-param-reassign": [0],
+    "no-alert": [0],
+    "new-cap": [0],
+    "strict": [0],
+    "import/prefer-default-export": [0],
     # disabled per https://github.com/benmosher/eslint-plugin-import/issues/544#issuecomment-244976007
     "import/no-named-as-default": [0],
     "react/forbid-prop-types": [0],

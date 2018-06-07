@@ -6,6 +6,6 @@ exports[`<ExportData> matches snapshot 1`] = `
   href="/api/rates/csv/?hi=james"
   title="Click to export your search results to an Excel file (CSV)"
 >
-  ⬇ Export Data (CSV)
+  ⬇ Export data (CSV)
 </a>
 `;

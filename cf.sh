@@ -13,4 +13,4 @@ if [ $CF_INSTANCE_INDEX = "0" ]; then
     python manage.py initgroups
 fi
 echo "------ Starting APP ------"
-gunicorn hourglass.wsgi:application
+gunicorn calc.wsgi:application

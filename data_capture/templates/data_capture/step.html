@@ -20,7 +20,7 @@
 
           <form method="post">
             {% csrf_token %}
-            <button type="submit" name="cancel" class="usa-button-outline" formnovalidate>Exit this replay</button>
+            <button type="submit" name="cancel" class="usa-button usa-button-secondary" formnovalidate>Exit this replay</button>
           </form>
         </div>
       {% endif %}
@@ -31,7 +31,7 @@
 
       <h1>
         {% block page_heading %}{% endblock %}
-        <span class="sr-only">{{ step.description }}</span>
+        <span class="usa-sr-only">{{ step.description }}</span>
       </h1>
       {% block step_heading %}{% endblock %}
     </div><!--content -->
@@ -65,12 +65,12 @@
         </p>
 
         <div class="dialog-buttons">
-          <button class="usa-button-primary" data-a11y-dialog-hide>
+          <button class="usa-button usa-button-primary" data-a11y-dialog-hide>
             No, keep working
           </button>
           <form method="post">
             {% csrf_token %}
-            <button type="submit" name="cancel" class="usa-button-secondary">
+            <button type="submit" name="cancel" class="usa-button usa-button-secondary">
               Yes, discard my work
             </button>
           </form>

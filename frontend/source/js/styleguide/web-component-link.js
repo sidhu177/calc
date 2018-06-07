@@ -1,5 +1,4 @@
 /* global window, document */
-/* eslint no-alert: "off" */
 
 class WebComponentLink extends window.HTMLAnchorElement {
   attachedCallback() {

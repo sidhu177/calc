@@ -4,6 +4,7 @@
 *.swp
 *.swo
 *.DS_Store
+.mypy_cache
 .coverage
 coverage.xml
 htmlcov

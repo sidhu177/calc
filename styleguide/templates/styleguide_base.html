@@ -5,18 +5,14 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'frontend/built/style/data_capture.min.css' %}">
-<link rel="stylesheet" href="{% static 'styleguide/styleguide.css' %}">
+<link rel="stylesheet" href="{% static 'frontend/built/style/styleguide.min.css' %}">
 <link rel="stylesheet" href="{% static 'styleguide/vendor/prism.css' %}">
 {% endblock %}
 
 {% block body %}
-<div class="container">
+{% block header_nav %}{% endblock %}
 <div class="row">
-  <div class="card">
-    <div class="content">
-    {% block styleguide_body %}{% endblock %}
-    </div>
-  </div>
+  {% block styleguide_body %}{% endblock %}
 </div>
 
 {% if not is_safe_mode_enabled %}

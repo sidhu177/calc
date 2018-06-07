@@ -1,0 +1,74 @@
+// Variable overrides for the U.S. Web Design Standards.
+// These names should not be changed unless the WDS names change.
+
+@import 'rem';
+
+// Set the base path for assets (used for font and image paths)
+$asset-path: '../vendor/uswds/' !default;
+
+// Color overrides
+// Addtional colors specific to CALC are defined in _variables.scss
+$color-blue:                 #0770b5;
+$color-blue-darker:          #0c4c6f;
+$color-blue-darkest:         #0a2d39;
+
+$color-green:                #bbcb70;
+$color-green-light:          #cddc86;
+$color-green-lighter:        #dae6a3;
+$color-green-lightest:       #e6edc2;
+$color-green-bright:         #ccde61;
+
+$color-primary:              #136b94; // $color-blue-dark, which is not a USWDS variable
+$color-primary-darker:       $color-blue-darker;
+$color-primary-darkest:      $color-blue-darker;
+$color-secondary:            $color-green-bright;
+$color-primary-alt:          $color-green-bright;
+
+$color-red-dark:             #BC1630;
+$color-red-darkest:          #981b1e; // No change from USWDS, including for visual reference
+$color-red-lightest:         #ffe0e0;
+
+$color-white:                #ffffff; // No change from USWDS, including for visual reference
+$color-base:                 #021014;
+$color-black:                $color-base;
+
+$color-gray-dark:            #436a79;
+$color-gray:                 #547d8c;
+$color-gray-medium:          #7da1b0;
+$color-gray-light:           #c5d6de;
+$color-gray-lighter:         #dfe7ee;
+$color-gray-lightest:        #f0f6fa;
+
+$color-gold:                 #fdb81e; // No change from USWDS, including for visual reference
+
+$color-gold-lightest:        #fbeebe;
+$color-visited:              $color-blue;
+
+// Mobile First Breakpoints
+$small-screen:      481px;
+$medium-screen:     600px;
+$large-screen:      1201px;
+
+// Magic Numbers
+$border-radius: 3px;
+$button-border-radius: $border-radius;
+$box-shadow: 0 0 2px rgba(#000, 0.3);
+
+$input-max-width: 46rem;
+
+// Fonts
+$font-sans:'Libre Franklin', 'Helvetica', 'Arial', sans-serif;
+
+$em-base:             10px;
+$base-font-size:      rem(16px);
+$medium-font-size:    rem(14px);
+$small-font-size:     rem(12px);
+$h1-font-size:        rem(34px);
+$h2-font-size:        rem(28px);
+$h3-font-size:        rem(22px);
+$h4-font-size:        rem(18px);
+$h5-font-size:        rem(16px);
+$h6-font-size:        rem(12px);
+
+$base-line-height:    1.5;
+$heading-line-height: 1.3;

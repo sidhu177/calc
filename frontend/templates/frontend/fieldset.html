@@ -2,7 +2,7 @@
   {{ field.errors }}
   {% if use_legend %}
     {# <legend>s are difficult/impossible to style but are great for screen readers, so we'll make them invisible to sighted users. #}
-    <legend class="sr-only">{{ field.label }}</legend>
+    <legend class="usa-sr-only">{{ field.label }}</legend>
     <label aria-hidden="true">{{ field.label }}</label>
   {% else %}
     {{ field.label_tag }}

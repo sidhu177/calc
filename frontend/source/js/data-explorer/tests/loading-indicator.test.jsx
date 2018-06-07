@@ -14,7 +14,7 @@ describe('<LoadingIndicator>', () => {
   it('renders correctly', () => {
     const { wrapper } = setup();
     expect(wrapper.find('.loading-indicator').exists()).toBeTruthy();
-    expect(wrapper.find('.sr-only').exists()).toBeTruthy();
+    expect(wrapper.find('.usa-sr-only').exists()).toBeTruthy();
   });
 
   it('matches snapshot', () => {
@@ -25,7 +25,7 @@ describe('<LoadingIndicator>', () => {
   it('renders error message', () => {
     const { wrapper } = setup({ error: 'an error message' });
     expect(wrapper.find('.error-message').text()).toBe('an error message');
-    expect(wrapper.find('.sr-only').text())
+    expect(wrapper.find('.usa-sr-only').text())
       .toBe('An error occurred when loading results: an error message');
   });
 
@@ -36,9 +36,9 @@ describe('<LoadingIndicator>', () => {
 
   it('changes aria status based on inProgress', () => {
     let { wrapper } = setup({ inProgress: false, error: null });
-    expect(wrapper.find('.sr-only').text()).toBe('Results loaded.');
+    expect(wrapper.find('.usa-sr-only').text()).toBe('Results loaded.');
 
     ({ wrapper } = setup({ inProgress: true }));
-    expect(wrapper.find('.sr-only').text()).toBe('Loading results');
+    expect(wrapper.find('.usa-sr-only').text()).toBe('Loading results');
   });
 });

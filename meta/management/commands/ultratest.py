@@ -103,10 +103,10 @@ TESTTYPES_TO_REPORT_COVERAGE_ON = ['py.test']
 TestType = namedtuple('TestType', ['name', 'cmd'])
 
 TESTTYPES = [
-    TestType(name='flake8', cmd='flake8 --exclude=node_modules,migrations .'),
-    TestType(name='eslint', cmd='yarn failable-eslint'),
+    TestType(name='flake8', cmd='flake8 .'),
+    TestType(name='eslint', cmd='yarn eslint'),
     TestType(name='bandit', cmd='bandit -r .'),
-    TestType(name='mypy', cmd='mypy @mypy-files.txt'),
+    TestType(name='mypy', cmd='mypy .'),
     TestType(name='typescript', cmd='yarn typescript'),
     TestType(name='jest', cmd='yarn test'),
     TestType(name='py.test',

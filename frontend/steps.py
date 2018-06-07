@@ -1,5 +1,6 @@
 from functools import wraps
 from collections import namedtuple
+from typing import List, Any
 from django.conf.urls import url
 from django.template.loader import render_to_string
 from django.shortcuts import render
@@ -116,7 +117,7 @@ class Steps:
         self.extra_ctx_vars = extra_ctx_vars or {}
         self.extra_ctx_processors = extra_ctx_processors or []
         self.template_format = template_format
-        self._views = []
+        self._views: List[Any] = []
 
     def _build_step_view(self, func, label=None):
         step_number = self.num_steps + 1
@@ -132,7 +133,10 @@ class Steps:
             kwargs['step'] = self.get_step_renderer(step_number)
             return func(*args, **kwargs)
 
-        wrapper.label = label
+        # We're ignoring the type checking here due to:
+        # https://github.com/python/mypy/issues/2087
+        wrapper.label = label  # type: ignore
+
         self._views.append(wrapper)
         return wrapper
 

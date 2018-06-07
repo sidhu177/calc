@@ -1,0 +1,109 @@
+{# adapted from https://github.com/django/django/blob/stable/1.8.x/django/contrib/admin/templates/admin/base.html #}
+{# Copyright (c) Django Software Foundation and individual contributors. License: https://github.com/django/django/blob/stable/1.8.x/LICENSE #}
+{% load staticfiles %}
+{% load i18n admin_static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>{% block title %}{% endblock %}</title>
+{% include '_head.html' %}
+
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "frontend/built/style/admin/overrides.min.css" %}{% endblock %}" />
+{% block extrastyle %}{% endblock %}
+
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+<script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
+<script type="text/javascript">window.__admin_utc_offset__ = "{% filter escapejs %}{% now "Z" %}{% endfilter %}";</script>
+
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}card--wide{% block bodyclass %}{% endblock %}">
+
+  {% include "_banner.html" %}
+
+  {% if not is_popup %}
+  <header>
+    <div class="container">
+    {% include "_header.html" %}
+    {% include "_nav.html" %}
+    </div>
+  </header>
+
+    <main>
+      <div class="container">
+        {% endif %}
+
+        {% block messages %}
+            {% if messages %}
+            <div class="row card">
+              <ul class="messagelist content">
+              {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+              {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+        {% endblock messages %}
+
+        <!-- Content -->
+        <div id="content" class="row card">
+          <div class="content">
+
+            <!-- Section nav -->
+            <div class="container">
+                <div id="branding">
+                {% block branding %}{% endblock %}
+                </div>
+                {% block usertools %}
+                {% if has_permission %}
+                <div id="user-tools">
+                    <ul>
+                      <li><a href="{% url 'admin:index' %}">{% trans 'Admin home' %}</a></li>
+                    {% block userlinks %}
+                        {% if site_url %}
+                            <li><a href="{{ site_url }}">{% trans 'View site' %}</a></li>
+                        {% endif %}
+                        {% if user.is_active and user.is_staff %}
+                            {% url 'django-admindocs-docroot' as docsroot %}
+                            {% if docsroot %}
+                                <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
+                            {% endif %}
+                        {% endif %}
+                        {% if user.has_usable_password %}
+                        <li><a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a></li>
+                    {% endblock %}
+                  </ul>
+                </div>
+                {% endif %}
+                {% endblock %}
+                {% block nav-global %}{% endblock %}
+            </div>
+            <!-- END Section nav -->
+
+            {% block pretitle %}{% endblock %}
+            {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+            {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+            {% endblock %}
+            {% block sidebar %}{% endblock %}
+          </div>
+        </div>
+        <div class="row card__footer">
+          {% block card_footer %}{% endblock %}
+        </div>
+      </div>
+    </main>
+  <!-- END Content -->
+
+  {% block footer %}
+    {% include "_footer.html" %}
+  {% endblock %}
+
+</body>
+</html>

@@ -1,6 +1,7 @@
-// Old WDS had a pixels-to-rem function that we use extensively. New versions have stripped that out. This duplicates it.
+// Earlier copies of the U.S. Web Design System had a pixels-to-rem function
+// we use extensively. New versions have stripped that out. This duplicates it.
 
-$em-base:             10px;
+$em-base: 10px;
 
 // Strips the unit from a number.
 

@@ -14,7 +14,7 @@ exports[`<LaborCategory> matches snapshot 1`] = `
     value=""
   />
   <label
-    className="sr-only"
+    className="usa-sr-only"
     htmlFor="zzz_labor_category"
   >
     Type a labor category

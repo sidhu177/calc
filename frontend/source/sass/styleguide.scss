@@ -1,0 +1,167 @@
+// Styles specifically for our styleguide.
+
+@import 'base/variables';
+@import 'components/sidenav';
+@import 'components/swatch';
+
+h3.styleguide-section {
+  margin-top: 0;
+}
+
+.styleguide-section {
+  &:hover a {
+    opacity: 1;
+  }
+  a {
+    color: $color-gray-light;
+    text-decoration: none;
+    margin-left: -0.8em;
+    padding-right: 2px;
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.25s;
+    &:before {
+      content: '#';
+    }
+  }
+}
+
+.styleguide-example {
+  border: 1px solid $color-gray-light;
+  margin-bottom: 2.5rem;
+  .rendering {
+    padding: 1em 2.5em;
+    .example-heading {
+      font-size: 1em;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: $color-gray;
+      letter-spacing: 1px;
+    }
+  }
+  a[target="_blank"] {
+    display: inline-block;
+    padding-left: 1em;
+    min-height: 1em;
+    background-image: url('../../images/icon-external-link.svg');
+    background-size: 1em;
+    background-repeat: no-repeat;
+  }
+  .example-heading a[target="_blank"] {
+    float: right;
+  }
+  // Prism overrides for making code samples use our colors
+  :not(pre) > code[class*="language-"] {
+  	background-color: $color-gray-lightest;
+  }
+  pre[class*="language-"] {
+  	background-color: $color-gray-lightest;
+  }
+  .language-css .token.string,
+  .style .token.string {
+    color: #a67f59; /* TODO: revisit this color */
+    background: hsla(0, 0%, 100%, .5);
+  }
+  .token {
+  	color: $color-black;
+    &.comment,
+    &.prolog,
+    &.doctype,
+    &.cdata {
+  	   color: $color-gray-medium;
+    }
+    &.punctuation {
+    	color: $color-gray-medium;
+    }
+    &.property,
+    &.tag,
+    &.boolean,
+    &.number,
+    &.constant,
+    &.symbol,
+    &.deleted {
+    	color: $color-red-darkest;
+    }
+    &.selector,
+    &.attr-name,
+    &.string,
+    &.char,
+    &.builtin,
+    &.inserted {
+    	color: $color-green-darkest;
+    }
+    &.operator,
+    &.entity,
+    &.url {
+      color: #a67f59; /* TODO: revisit this color */
+      background: hsla(0, 0%, 100%, .5);
+    }
+    &.atrule,
+    &.attr-value,
+    &.keyword {
+    	color: $color-blue-darker;
+    }
+    &.function {
+    	color: #DD4A68; /* TODO: revisit this color */
+    }
+    &.regex,
+    &.important,
+    &.variable {
+    	color: #e90; /* TODO: revisit this color */
+    }
+  }
+}
+
+/* This selector looks weird because we're waging a war on
+ * two fronts between CodeClimate's CSS linter and
+ * Prism's default CSS. */
+html .styleguide-example pre {
+  margin: 0;
+}
+
+.styleguide-example pre > code {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+code > a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* http://www.jimmyscode.com/css-styling-for-kbd-tags/ */
+kbd {
+  padding:0.1em 0.6em;
+  border:1px solid $color-gray-light;
+  font-size:11px;
+  font-family:Arial,Helvetica,sans-serif;
+  background-color:$color-white;
+  color:$color-gray;
+  -moz-box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px $color-white inset;
+  -webkit-box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px $color-white inset;
+  box-shadow:0 1px 0px rgba(0, 0, 0, 0.2),0 0 0 2px $color-white inset;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  border-radius:3px;
+  display:inline-block;
+  margin:0 0.1em;
+  text-shadow:0 1px 0 $color-white;
+  line-height:1.4;
+  white-space:nowrap;
+}
+
+.fullpage-example-wrapper {
+  height: 475px;
+  overflow: hidden;
+}
+
+.fullpage-example {
+  width: 132.5%;
+  transform: scale(0.75);
+  transform-origin: 0 0;
+  height: 600px;
+  border: 1px solid $color-gray;
+}

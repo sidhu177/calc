@@ -166,7 +166,7 @@ def replace_step_2(request, id, step):
             'uploaded_filename']
 
         price_list.serialized_gleaned_data = json.dumps(
-                registry.serialize(gleaned_data))
+            registry.serialize(gleaned_data))
 
         # delete the old rows
         price_list.rows.all().delete()

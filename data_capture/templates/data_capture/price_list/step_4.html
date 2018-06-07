@@ -1,5 +1,5 @@
 {% extends 'data_capture/step.html' %}
-{% block card_class %}secondary-step{% endblock %}
+{% block main_class %}secondary-step{% endblock %}
 {% block subtitle %}Verify data{% endblock %}
 
 {% block step_heading %}
@@ -39,7 +39,7 @@
       <button type="submit" class="usa-button usa-button-primary" name="save-changes">Save changes</button>
     </div>
 
-    <a type="submit" class="usa-button usa-button-outline" href="{{ step_4_without_edit_url }}">Discard changes</a>
+    <a type="submit" class="usa-button usa-button-secondary" href="{{ step_4_without_edit_url }}">Discard changes</a>
   </div>
 
 </div>
@@ -115,11 +115,11 @@
 <div class="row">
   <div class="twelve columns form-button-row clearfix">
     {% if prev_url %}
-      <a href="{{ prev_url }}" class="usa-button usa-button-outline button-previous">Previous</a>
+      <a href="{{ prev_url }}" class="usa-button usa-button-secondary button-previous">Previous</a>
     {% elif gleaned_data.invalid_rows %}
-      <a href="{% url 'data_capture:step_3_errors' %}" class="usa-button usa-button-outline button-previous">Previous</a>
+      <a href="{% url 'data_capture:step_3_errors' %}" class="usa-button usa-button-secondary button-previous">Previous</a>
     {% else %}
-      <a href="{% url 'data_capture:step_3' %}" class="usa-button usa-button-previous">Previous</a>
+      <a href="{% url 'data_capture:step_3' %}" class="usa-button usa-button-secondary button-previous">Previous</a>
     {% endif %}
 
     {% if gleaned_data.valid_rows %}
@@ -145,6 +145,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+    <button type="submit" class="usa-button usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
   </form>
 {% endblock %}

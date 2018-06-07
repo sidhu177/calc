@@ -1,19 +1,28 @@
+'''
+This module contains BasePriceList, the abstract base class for
+price lists being imported into CALC.
+
+Different schedules will need different kinds of business logic for
+parsing their particular kinds of price lists and adding them to CALC;
+BasePriceList contains a variety of extension points to accommodate
+for these specifics while providing a common interface to clients.
+'''
+
 import re
 import abc
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
+
 from django.template.loader import render_to_string
 from django.core.validators import (
     MinValueValidator, RegexValidator)
 from django.http import HttpRequest
 from django.utils.safestring import SafeString, mark_safe
+from django.forms import Form
 from django.core.files.uploadedfile import UploadedFile
 
 from contracts.loaders.region_10 import FEDERAL_MIN_CONTRACT_RATE
 from ..models import SubmittedPriceList
 
-if False:
-    from django.forms import Form  # NOQA
-    from typing import List  # NOQA
 
 min_price_validator = MinValueValidator(
     FEDERAL_MIN_CONTRACT_RATE,
@@ -37,16 +46,19 @@ class ConcreteBasePriceListMethods:
 
     # Path to the template used for presenting an example of
     # what to upload.
-    upload_example_template = None  # type: Optional[str]
+    upload_example_template: Optional[str] = None
+
+    # This is a list of Django Form objects representing
+    # valid rows in the price list.
+    valid_rows: List[Form]
+
+    # This is a list of Django Form objects representing
+    # invalid rows in the price list.
+    invalid_rows: List[Form]
 
     def __init__(self) -> None:
-        # This is a list of Django Form objects representing
-        # valid rows in the price list.
-        self.valid_rows = []  # type: List[Form]
-
-        # This is a list of Django Form objects representing
-        # invalid rows in the price list.
-        self.invalid_rows = []  # type: List[Form]
+        self.valid_rows = []
+        self.invalid_rows = []
 
     def is_empty(self) -> bool:
         '''
@@ -91,7 +103,7 @@ class BasePriceList(ConcreteBasePriceListMethods, metaclass=abc.ABCMeta):
     title = 'Unknown Schedule'
 
     # Extra instructions text to use for the upload widget.
-    upload_widget_extra_instructions = None  # type: Optional[str]
+    upload_widget_extra_instructions: Optional[str] = None
 
     @abc.abstractmethod
     def add_to_price_list(self, price_list: SubmittedPriceList) -> None:

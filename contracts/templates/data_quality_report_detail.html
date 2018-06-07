@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Data quality report: {{ metric.verbose_name }}{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="card">
+    <div class="content">
+      <h1>Data quality report: {{ metric.verbose_name }}</h1>
+
+      <p>
+        <strong>{{ metric.count }}</strong> {{ metric.desc_html }}
+      </p>
+
+      {% if metric.footnote %}
+        <p>{{ metric.footnote_html }}</p>
+      {% endif %}
+
+      {% if examples %}
+      <h2>Examples</h2>
+
+      <p>
+        Below are some of the {{ metric.verbose_name }} currently in the database.
+      </p>
+
+      <div style="overflow-x: scroll; max-height: 90vh">
+        <table>
+          <thead>
+            <tr>
+              {% for field in EXAMPLE_FIELDS %}
+                <th>{{ field }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in examples %}
+              <tr>
+              {% for value in row %}
+                <td>{% if value == None %}<em>None</em>{% else %}{{ value }}{% endif %}</td>
+              {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      <p><a href="{% url 'data_quality_report' %}">Go back</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

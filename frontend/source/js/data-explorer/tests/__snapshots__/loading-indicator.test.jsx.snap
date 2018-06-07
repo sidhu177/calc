@@ -4,7 +4,7 @@ exports[`<LoadingIndicator> matches snapshot 1`] = `
 <div>
   <div
     aria-live="polite"
-    className="sr-only"
+    className="usa-sr-only"
     role="status"
   >
     Results loaded.

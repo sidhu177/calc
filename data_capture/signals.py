@@ -1,12 +1,14 @@
 import logging
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, m2m_changed
+from django.core.signals import setting_changed
 from django.contrib.auth.models import User, Group
 from django.contrib.admin.models import (
     LogEntry, ADDITION, CHANGE, DELETION
 )
 
 from .models import SubmittedPriceList
+from .schedules import registry
 
 
 logger = logging.getLogger('calc')
@@ -58,3 +60,14 @@ def log_m2m_change(sender, instance, action, reverse, model, pk_set, **kwargs):
     elif action == 'post_clear':
         logger.info("All %s removed from %s '%s'", model_name, instance_model,
                     instance)
+
+
+@receiver(setting_changed)
+def repopulate_registry(setting, **kwargs):
+    '''
+    Django signal handler to re-populate the registry whenever anything
+    (presumably a test case) modifies settings.DATA_CAPTURE_SCHEDULES.
+    '''
+
+    if setting == "DATA_CAPTURE_SCHEDULES":
+        registry.populate_from_settings()

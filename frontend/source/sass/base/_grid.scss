@@ -1,10 +1,25 @@
+// This is largely a reimplementation of the US Web Design System's grid.
+// At the time this was created, the WDS was incompatible with this project,
+// having an old version of the Skeleton CSS framework in place. The naming
+// conventions come from swapping that project out but retaining old code.
+
 @import 'variables.scss';
 @import 'neat';
 
 .container {
   margin-left: auto;
   margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
   max-width: $max-width;
+  width: 100%;
+}
+
+@media (min-width: 980px) {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .columns {

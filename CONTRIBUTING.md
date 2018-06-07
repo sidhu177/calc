@@ -28,26 +28,19 @@ integration, such as [linter-pep8](https://atom.io/packages/linter-pep8) for Ato
 For front end JavaScript, we use [eslint][] to lint our source files.
 We recommend using an editor plugin (such as [linter-eslint][] for Atom)
 to automatically lint JavaScript files. If you do not wish to use an editor plugin,
-you can run `yarn eslint` from the command line.
+you can run `docker-compose run app yarn eslint` from the command line.
 
 CALC also provides a custom Django management command to run all linters and unit tests:
 
 ```sh
-python manage.py ultratest
+docker-compose run app python manage.py ultratest
 ```
 
 You can run specific linters or tests via ultratest by specifying their name(s), for example:
 
 ```sh
-python manage.py ultratest flake8
-python manage.py ultratest flake8 eslint
-```
-
-If you are using our docker-compose based development environment, make sure
-to run ultratest within the docker context:
-
-```sh
-docker-compose run app python manage.py ultratest
+docker-compose run app python manage.py ultratest flake8
+docker-compose run app python manage.py ultratest flake8 eslint
 ```
 
 [PEP8]: https://www.python.org/dev/peps/pep-0008/

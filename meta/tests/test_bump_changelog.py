@@ -4,8 +4,8 @@ from pathlib import Path
 from click.testing import CliRunner
 
 from ..management.commands import bump_changelog
-from hourglass import changelog
-from hourglass.tests.test_changelog import UtilTests
+from calc import changelog
+from calc.tests.test_changelog import UtilTests
 
 
 def patch_new_version(version):
@@ -28,7 +28,7 @@ class BumpChangelogTests(TestCase):
     @patch_changelog_contents(UtilTests.BEFORE_BUMP)
     def test_it_reports_error_if_new_version_is_invalid(self):
         result = CliRunner().invoke(bump_changelog.command)
-        self.assertIn('Please change hourglass/version.py', result.output)
+        self.assertIn('Please change calc/version.py', result.output)
         self.assertNotEqual(result.exit_code, 0)
 
     @patch_new_version('9.0.0')

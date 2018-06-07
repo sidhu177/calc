@@ -1,5 +1,6 @@
-import xlrd
+from typing import List, Optional
 
+import xlrd
 from xlrd.book import XL_CELL_DATE
 from xlrd.xldate import xldate_as_datetime
 
@@ -57,7 +58,7 @@ class Region10SpreadsheetConverter():
         '''
         try:
             self.get_heading_indices_map(raises=True)
-        except:
+        except Exception:
             return False
 
         return True
@@ -85,7 +86,8 @@ class Region10SpreadsheetConverter():
 
         # skip the heading row, process the rest
         for rx in range(1, sheet.nrows):
-            row = [None] * len(self.xl_heading_to_csv_idx_map)  # init row
+            row: List[Optional[str]] = \
+                [None] * len(self.xl_heading_to_csv_idx_map)  # init row
 
             for heading, xl_idx in heading_indices.items():
                 # item_val = cval(xl_idx)

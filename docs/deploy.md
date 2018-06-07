@@ -228,10 +228,14 @@ cf unmap-route calc-maintenance
 ### Logs
 
 Logs in cloud.gov-deployed applications are generally viewable by running
-`cf logs <APP_NAME> --recent`
+`cf logs <APP_NAME> --recent`.
 
 Note that the web application and the `rq` worker application have separate
 logs, so you will need to look at each individually.
+
+If more detailed log analysis is needed, Kibana can be used to generate
+a variety of visualizations and dashboards. For more details, see the
+[cloud.gov Logs documentation](https://cloud.gov/docs/apps/logs/).
 
 ### Initial superuser
 

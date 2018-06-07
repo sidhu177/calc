@@ -1,4 +1,23 @@
-/* global window */
+// @ts-check
+/* eslint-env browser */
+
+/**
+ * This is DAP's weird exported Google Analytics function, documented
+ * at:
+ *
+ *     https://github.com/digital-analytics-program/gov-wide-code
+ *
+ * If DAP wasn't included at the top of the page, however, we'll just no-op
+ * so that code which calls it still works, allowing DAP to be an optional
+ * dependency.
+ */
+export function gas(...args) {
+  const origGas = window['gas'];
+  if (typeof origGas === 'function') {
+    return origGas.apply(this, args);
+  }
+  return undefined;
+}
 
 /**
  * This is just a wrapper around Google Analytics' ga() function, which
@@ -7,12 +26,97 @@
  * so that code which calls it still works, allowing GA to be an optional
  * dependency.
  */
-
-function ga(...args) {
-  if (typeof window.ga === 'function') {
-    return window.ga.apply(this, args);
+export function ga(...args) {
+  const origGa = window['ga'];
+  if (typeof origGa === 'function') {
+    return origGa.apply(this, args);
   }
   return undefined;
 }
 
-module.exports = ga;
+/**
+ * Track a "virtual pageview" using Google Analytics. Typically
+ * used in single-page apps and such. For more details, see:
+ * 
+ *   https://developers.google.com/analytics/devguides/collection/analyticsjs/pages
+ *
+ * @param {string} [url] The URL of the page to track, e.g. '/boop'.
+ *   Defaults to the current page's URL, including the current
+ *   search query.
+ */
+export function trackVirtualPageview(url) {
+  ga('set', 'page', url || location.pathname + location.search);
+  ga('send', 'pageview');
+  gas('send', 'pageview', url);
+}
+
+
+/**
+ * Track a custom event. For more details, see:
+ * 
+ *   https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+ *
+ * @param {string} category The event category; typically the object that
+ *   was interacted with, e.g. 'download-graph'.
+ * @param {string} action The type of interaction, e.g. 'click'.
+ * @param {string} [label] Optional label for the event, useful for
+ *   categorization.
+ */
+export function trackEvent(category, action, label) {
+  ga('send', 'event', category, action, label);
+  gas('send', 'event', category, action, label);
+}
+
+/**
+ * This is a list of local URL prefixes that, when the target of
+ * a link, imply that following the link will download
+ * something to the user's system (e.g. a CSV file or Excel
+ * spreadsheet).
+ */
+const LOCAL_DOWNLOAD_URLS = [
+  '/api/',
+  '/static/',
+];
+
+/**
+ * If the given element is an "interesting" link, tracks it in GA.
+ * Otherwise, this function does nothing.
+ * 
+ * By "interesting" we mean either a link that points to an external
+ * site, or a link that will trigger a local download.
+ * 
+ * @param {any} el The element that might be an interesting link.
+ */
+function trackInterestingLink(el) {
+  if (!(el instanceof HTMLAnchorElement)) {
+    return;
+  }
+
+  const isExternal = el.host !== window.location.host;
+
+  if (isExternal) {
+    // Note that the format of this event corresponds to
+    // how DAP tracks outbound links. This is intentional, as it
+    // means that anyone who wants to e.g. track statistics about
+    // outbound links across all federal properties can do so,
+    // and statistics from CALC will be included.
+    trackEvent('Outbound', el.hostname, el.pathname);
+  } else {
+    const isLocalDownload = LOCAL_DOWNLOAD_URLS.some(
+      url => el.pathname.indexOf(url) === 0
+    );
+
+    if (isLocalDownload) {
+      trackEvent('Local Download', el.pathname, el.href);
+    }
+  }
+}
+
+/**
+ * Auto-track all interesting link clicks made on the current page.
+ */
+export function autoTrackInterestingLinks() {
+  document.documentElement.addEventListener('click', (e) => {
+    trackInterestingLink(e.target);
+  }, true);
+}

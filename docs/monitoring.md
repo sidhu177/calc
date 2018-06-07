@@ -36,7 +36,11 @@ returned object has the following keys:
   the value of `is_everything_ok` will be `false`.
 
 For more details on the `/healthcheck/` endpoint, see
-[hourglass/healthcheck.py](../hourglass/healthcheck.py).
+[calc/healthcheck.py](../calc/healthcheck.py).
+
+On production, we've also configured a [New Relic Synthetics][]
+monitor to ping `/healthcheck/` on a regular basis, so that
+administrators are notified if CALC is ever unhealthy.
 
 ### Production tests
 
@@ -45,4 +49,13 @@ checking that the production site is properly configured.
 
 These tests are run nightly as a workflow build in CircleCI.
 
+### New Relic
+
+The server side supports New Relic integration via the
+`NEW_RELIC_LICENSE_KEY` environment variable.  If set, the
+[New Relic Python agent][] will instrument a variety of
+CALC's internals to help identify and solve performance issues.
+
 [rq]: http://python-rq.org/
+[New Relic Python agent]: https://docs.newrelic.com/docs/agents/python-agent
+[New Relic Synthetics]: https://docs.newrelic.com/docs/synthetics/new-relic-synthetics/getting-started/introduction-new-relic-synthetics

@@ -1,83 +1,44 @@
+// The variables in this file are created following the naming conventions
+// established by the USWDS variables in _uswds-variables.scss
+// (and https://github.com/uswds/uswds/blob/develop/src/stylesheets/core/_variables.scss)
+// New variables added to the project should go here.
+
 @import '../../../../node_modules/uswds/src/stylesheets/core/_utilities.scss';
 @import 'rem';
+@import 'uswds_variables';
 
-// Set the base path for assets (used for font and image paths)
-$asset-path: '../vendor/uswds/' !default;
+// Colors
+$color-blue-dark:            $color-primary;
+$color-green-darkest:        #61701c;
+$color-green-dark:           #a0ad64;
 
-// Color
-$color-primary:              #2D6580;
-$color-primary-darker:       #274E60;
-$color-primary-darkest:      #092D39;
+$color-green-bright:         $color-secondary;
 
-$color-primary-alt:          #ccde61;
-$color-primary-alt-lightest: #c5d6de;
+$color-blue-lightest:        #d4f6fe;
 
-$color-secondary:            #e31c3d;
-$color-secondary-dark:       #BC1630;
-$color-secondary-darkest:    #981b1e;
-$color-secondary-lightest:   #fad0d0;
+$color-gray-darkest:         #092d39;
+$color-gray-darker:          #2d4d59;
 
-$color-white:                #ffffff;
-$color-base:                 #021014;
-$color-black:                #021014;
-$color-gray-dark:            #2d4d59;
-$color-gray-medium-dark:     #436a79;
-$color-gray:                 #547d8c;
-$color-gray-medium:          #7da1b0;
-$color-gray-light:           #dfe8ed;
-$color-gray-lighter:         #f5f8fa;
-$color-gray-lightest:        #f5f8fa;
-
-$color-gold:                 #fdb81e;
 $color-gold-darkest:         #825c1e;
-$color-gold-lightest:        #fbeebe;
 
-$color-green:                #61701c;
-$color-green-light:          $color-green; // for wds compat
-$color-green-lightest:       #e6edc2;
-
-$color-focus:                $color-primary-alt;
-$color-visited:              #4c2c92;
-
-$color-error-bg: #fad0d0;
+// Mobile First Breakpoints
+// WDS' breakpoints go from 600px to 1201px.
+// We really need a breakpoint in between.
+$medium-large-screen: 900px;
 
 // Fonts
-$em-base:             10px;
-$base-font-size:      rem(16px);
-$medium-font-size:    rem(14px);
-$small-font-size:     rem(12px);
-$display-font-size:   rem(40px);
-$h1-font-size:        rem(34px);
-$h2-font-size:        rem(28px);
-$h3-font-size:        rem(22px);
-$h4-font-size:        rem(18px);
-$h5-font-size:        rem(16px);
-$h6-font-size:        rem(12px);
-
-$line-length-max-width: rem(720px); // not in WDS; 75% of Skeleton's container max-width
-
-$base-line-height:    1.5;
-$heading-line-height: 1.3;
-$small-line-height: 1.3;
-
 $font-family-main: 'Libre Franklin', 'Helvetica', 'Arial', sans-serif;
-$font-sans: $font-family-main;
-$font-family-mono: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+$font-family-mono: 'Roboto Mono', 'Liberation Mono', 'Source Code Pro', Courier, monospace;
+
 $font-weight-bold: 700;
 $font-weight-normal: 400;
 $font-weight-light: 200;
 
-// Mobile First Breakpoints
-$small-screen:      481px;
-$medium-screen:     600px;
-$medium-large-screen: 900px;
-$large-screen:      1201px;
+$display-font-size:   rem(40px);
 
-// Magic Numbers
-$border-radius: 3px;
-$button-border-radius: $border-radius;
-$box-shadow: 0 0 2px rgba(#000, 0.3);
-$focus-shadow: 0 0 3px $color-focus, 0 0 7px $color-focus;
+$small-line-height: 1.3;
+
+$line-length-max-width: rem(720px); // 75% of container max-width
 
 // Neat grid overrides
 $column: 5rem;
@@ -97,4 +58,3 @@ $space-10x: $base-spacing-unit * 10; // 80px
 
 // Form variable overrides
 $form-width: 100%; // was 32rem, but causes weirdness on main page
-$input-max-width: 46rem;

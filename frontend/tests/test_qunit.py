@@ -1,6 +1,6 @@
 from django.test import override_settings
 
-from hourglass.urls import urlpatterns, tests_url
+from calc.urls import urlpatterns, tests_url
 from .test_selenium import SeleniumTestCase
 
 
