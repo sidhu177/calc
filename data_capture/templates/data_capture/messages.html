@@ -1,7 +1,7 @@
 {% if messages %}
 <alerts-widget>
   {% for message in messages %}
-    <div class="message message-{{ message.tags }}">
+    <div class="usa-alert usa-alert-{{ message.tags }}">
       <h3>{{ message }}</h3>
     </div>
   {% endfor %}

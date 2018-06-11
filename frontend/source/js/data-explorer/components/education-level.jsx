@@ -107,7 +107,7 @@ export class EducationLevel extends React.Component {
     if (levels.length === 0) {
       linkContent = (
         <span className="eduSelect">Select
-          <span className="sr-only"> to reveal Education Level options</span>
+          <span className="usa-sr-only"> to reveal Education Level options</span>
         </span>
       );
     } else {
@@ -145,7 +145,7 @@ export class EducationLevel extends React.Component {
           <dd>
             <div className="multiSelect">
               <fieldset>
-                <legend className="sr-only">Education level:</legend>
+                <legend className="usa-sr-only">Education level:</legend>
 
                 <SlideyPanel
                   component="ul"

@@ -2,14 +2,15 @@
 {% load styleguide %}
 
 {% block styleguide_body %}
-  <h1>CALC Style Guide</h1>
 
   {% guide %}
-
-  {% guide_section "Introduction" %}
+  <div class="sidenav-layout__content">
+  <div class="card">
+  <div class="content">
+  <h1>CALC Style Guide</h1>
 
   <p>
-    Welcome to the CALC Style Guide!
+    Welcome to the CALC Style Guide! Here you’ll find the design building blocks of the site, from basics like typography and colors, to components such as form elements, to sample page layouts. This guide assumes knowledge of html, css, and other technologies used to build this website.
   </p>
 
   <p>
@@ -21,8 +22,9 @@
   <p>
     CALC uses <a href="http://bourbon.io/">Bourbon</a> and
     <a href="http://neat.bourbon.io/">Neat</a> as the foundation
-    for its styles, with alterations based on the
-    <a href="https://designsystem.digital.gov/">U.S. Web Design System (USWDS)</a>.
+    for its grid. Its visual styles are based on the
+    <a href="https://designsystem.digital.gov/">U.S. Web Design System (USWDS)</a>,
+    with alterations where deemed appropriate for branding and functionality.
   </p>
 
   <p>
@@ -38,6 +40,11 @@
 </li>
     <li>Apply no style before its time.</li>
   </ol>
+
+  {% guide_section "Accessibility" %}
+  <p>
+  We think CALC should be usable by anyone (and as a federal website, it’s also the <a href="https://www.section508.gov/content/learn/laws-and-policies" target="_blank">law</a>). Therefore, we stick to the requirements laid down in the <a href ="https://accessibility.18f.gov/index.html"  target="_blank">18F accessibility guide</a>. Based upon the <a href="https://www.w3.org/TR/WCAG20/"  target="_blank">WCAG2.0 AA</a> standard, the guide includes pointers for such things as minimum <a href="https://accessibility.18f.gov/color/" target="_blank">color contrast</a> for text, <a href="https://accessibility.18f.gov/keyboard/" target="_blank">keyboard access</a>, <a href="https://accessibility.18f.gov/forms/" target="_blank">form creation</a>, and more. There’s also a handy <a href="https://accessibility.18f.gov/checklist/"  target="_blank">checklist</a> to help you ensure that any new content you create for CALC is fully accessible.
+  </p>
 
   {% guide_section "Typography" %}
 
@@ -60,6 +67,327 @@
     <li>Order from chaos</li>
   </ul>
   {% endexample %}
+
+  {% guide_section "Colors" %}
+
+  <p>
+    Our color palette is grounded in a subtly gradated bluish gray, with shades of bright green for accent.
+  </p>
+
+  <p>
+    In order to ensure that text on the site is <a href="#accessibility">accessible</a> (as mandated by Section 508 of the Rehabilitation Act), all text must have a <strong>minimum contrast ratio of 4.5:1</strong> with its background color.
+  </p>
+
+  <p class="swatch__contrast-ok"> <strong>Text in a color with this symbol is okay to pair with white.</strong>
+  </p>
+  <p class="swatch__contrast-bad"> <strong>Do not pair text in one of these colors with white.</strong>
+  </p>
+
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-black"></div>
+      <div class="label-mono">
+        <p>$color-black</p>
+        <p>$color-base</p>
+        <p class="swatch__hex">#021014</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-white"></div>
+      <div class="label-mono">
+        <p>$color-white</p>
+        <p class="swatch__hex">#ffffff</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-darkest"></div>
+      <div class="label-mono">
+        <p>$color-gray-darkest</p>
+        <p class="swatch__hex">#092d39</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-darker"></div>
+      <div class="label-mono">
+        <p>$color-gray-darker</p>
+        <p class="swatch__hex">#2d4d59</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-dark"></div>
+      <div class="label-mono">
+        <p>$color-gray-dark</p>
+        <p class="swatch__hex">#436a79</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray"></div>
+      <div class="label-mono">
+        <p>$color-gray</p>
+        <p class="swatch__hex">#547d8c</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-medium"></div>
+      <div class="label-mono">
+        <p>$color-gray-medium</p>
+        <p class="swatch__hex">#7da1b0</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-light"></div>
+      <div class="label-mono">
+        <p>$color-gray-light</p>
+        <p class="swatch__hex">#c5d6de</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-lighter"></div>
+      <div class="label-mono">
+        <p>$color-gray-lighter</p>
+        <p class="swatch__hex">#ebf1f5</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gray-lightest"></div>
+      <div class="label-mono">
+        <p>$color-gray-lightest</p>
+        <p class="swatch__hex">#f2f7fa</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-green-darkest"></div>
+      <div class="label-mono">
+        <p>$color-green-darkest</p>
+        <p class="swatch__hex">#61701c</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-green-medium"></div>
+      <div class="label-mono">
+        <p>$color-green-dark</p>
+        <p class="swatch__hex">#a0ad64</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-green"></div>
+      <div class="label-mono">
+        <p>$color-green</p>
+        <p class="swatch__hex">#bbcb70</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-green-light"></div>
+      <div class="label-mono">
+        <p>$color-green-light</p>
+        <p class="swatch__hex">#ccdc86</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-green-lighter"></div>
+      <div class="label-mono">
+        <p>$color-green-lighter</p>
+        <p class="swatch__hex">#dae6a3</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-green-bright"></div>
+      <div class="label-mono">
+        <p>$color-green-bright</p>
+        <p class="swatch__hex">#ccde61</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-blue-darkest"></div>
+      <div class="label-mono">
+        <p>$color-blue-darkest</p>
+        <p class="swatch__hex">0a2d39</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-blue-darker"></div>
+      <div class="label-mono">
+        <p>$color-blue-darker</p>
+        <p class="swatch__hex">#0c4c6f</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-blue-dark"></div>
+      <div class="label-mono">
+        <p>$color-blue-dark</p>
+        <p class="swatch__hex">#136b94</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-blue"></div>
+      <div class="label-mono">
+        <p>$color-blue</p>
+        <p class="swatch__hex">#0770b5</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-blue-lightest"></div>
+      <div class="label-mono">
+        <p>$color-blue-lightest</p>
+        <p class="swatch__hex">#d4f6fe</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-red-darkest"></div>
+      <div class="label-mono">
+        <p>$color-red-darkest</p>
+        <p class="swatch__hex">#981b1e</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-red-dark"></div>
+      <div class="label-mono">
+        <p>$color-red-dark</p>
+        <p class="swatch__hex">#bc1630</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-red-lightest"></div>
+      <div class="label-mono">
+        <p>$color-red-lightest</p>
+        <p class="swatch__hex">#ffe0e0</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-gold"></div>
+      <div class="label-mono">
+        <p>$color-gold</p>
+        <p class="swatch__hex">#fdb81e</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+    <div class="swatch columns three">
+      <div class="swatch__color color-gold-darkest"></div>
+      <div class="label-mono">
+        <p>$color-gold-darkest</p>
+        <p class="swatch__hex">#825c1e</p>
+        <p class="contrast-ok">OK with white</p>
+      </div>
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="swatch columns three">
+      <div class="swatch__color color-gold-lightest"></div>
+      <div class="label-mono">
+        <p>$color-gold-lightest</p>
+        <p class="swatch__hex">#fbeebe</p>
+        <p class="contrast-bad">Insuff. contrast</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Color combinations used for typography</h3>
+  <h4>Over white background</h4>
+  <p><strong>$color-black</strong> over white is the default style for the website. Only on rare occasions should type be colored differently than this.</p>
+  <div class="color-combos">
+    <div class="columns twelve background-fill color-white">
+    <p class="color-name black">$color-black ($color-base)</p>
+    <p class="color-name color-gray-dark">$color-gray-dark</p>
+    </div>
+    <p class="label-mono">Background-color: $color-white</p>
+  </div>
+
+  <h4>Special situations: over colored backgrounds</h4>
+  <p>These more colorful combinations are used sparingly in the CALC design, such as in the header and footer. They are included here primarily for the sake of completeness.</p>
+  <div class="color-combos">
+    <div class="columns twelve background-fill color-gray-darkest">
+      <p class="color-name color-white">$color-white</p>
+      <p class="color-name color-gray-light">$color-gray-light</p>
+      <p class="color-name color-green-bright">$color-green-bright</p>
+    </div>
+    <p class="label-mono">Background-color: $color-gray-darkest</p>
+  </div>
+  <div class="color-combos">
+    <div class="columns twelve background-fill color-green-light">
+      <p class="color-name color-black">$color-black</p>
+    </div>
+    <p class="label-mono">Background-color: $color-green-light</p>
+  </div>
+  <div class="color-combos">
+    <div class="columns twelve background-fill color-gray-lighter">
+      <p class="color-name color-black">$color-black</p>
+      <p class="color-name color-gray-darker">$color-gray-darker</p>
+    </div>
+    <p class="label-mono">Background-color: $color-gray-lighter</p>
+  </div>
+
+  {% guide_section "Header" %}
+
+  <p>Part of the base template. New pages should extend {% pathname "data_explorer/templates/base.html" %} to include the header, which is visible for reference purposes only below.</p>
+  <p>The header is made up of a few separate file includes and blocks in {% pathname "data_explorer/templates/base.html" %}.</p>
+  <p>The "official government website" banner file can be found at {% pathname "data_explorer/templates/_banner.html" %}.</p>
+  <p>The slim header for sub-pages consists of the logo and user menu, and is at {% pathname "data_explorer/templates/_header.html" %}.</p>
+  <p>The <code>header_extension</code> block is used to add extra things to the header, such as the content in the header on the data explorer.</p>
+  <p>The <code>header_nav</code> block is used to include the default navigation. Some pages don't need this.</p>
+  {% fullpage_example "header" show_html=False %}
+
+  {% guide_section "Footer" %}
+  <p>Part of the base template. New pages should extend {% pathname "data_explorer/templates/base.html" %} to include the footer, which is visible for reference purposes only below.
+  {% fullpage_example "footer" show_html=False %}
+
+  {% guide_section "Card Layout" %}
+
+  <p>Defined in {% scss "components/_page.scss" %}. The card layout is used on every page, and there are some general rules, detailed below, for using the styles successfully.</p>
+
+  <p>Basic layout:</p>
+
+  {% fullpage_example "card" %}
+
+  <p>By default, the cards are too wide for text-only and most form-based sections, so you may need to use the <code>content--skinny</code> body class.</p>
+
+  {% fullpage_example "card-skinny" %}
+
+  <p>Some pages display a bit of information below the last card. Use the <code>card__footer</code> class here. Note the markup needs to go inside the top-level <code>container</code> to work properly.</p>
+
+  {% fullpage_example "card-footer" %}
+
+  <p>The data capture {% pathname "data_capture/templates/data_capture/step.html" %} template is set up to expect step headings to occur in their own card; however, the designs for some steps call for a single-card look. To create this look, use the <code>card--collapse-header</code> class on <code>main</code>, which will remove the bottom border of the heading card and reduce the amount of padding applied to the second card.</p>
+
+  {% fullpage_example "card-collapse-header" %}
 
   {% guide_section "Ajax Form + Upload Widget" %}
 
@@ -201,14 +529,13 @@
 
   {% example %}
   <button>Default button</button>
-  <a class="usa-button usa-button-primary" href="#">Link</a>
-  <button class="usa-button-primary">Button</button>
-  <input class="usa-button-primary" type="button" value="Input">
-  <input class="usa-button-primary" type="submit" value="Submit">
-  <button class="usa-button-disabled">Disabled button</button>
-  <button class="usa-button-secondary">Secondary button</button>
-  <button class="usa-button-gray">Gray button</button>
-  <button class="usa-button-link">Link button</button>
+  <button class="usa-button usa-button-primary">Button</button>
+  <input class="usa-button usa-button-primary" type="button" value="Input">
+  <input class="usa-button usa-button-primary" type="submit" value="Submit">
+  <button class="usa-button usa-button-disabled">Disabled</button>
+  <button class="usa-button usa-button-secondary">Secondary</button>
+  <button class="button-green">Green</button>
+  <button class="usa-button usa-button-link">Link button</button>
   {% endexample %}
 
   {% guide_section "Steps Widget" %}
@@ -286,7 +613,7 @@
 
   <p>Defined in {% scss "components/_tables.scss" %}.</p>
 
-  <p>When displaying data in tables, be sure to add the <code>number</code> class to cells that contain numbers. This will monospace and right-align those columns. For dollar amounts, you'll need to also add the <code>currency</code> class to get the dollar sign to appear. You can add a highlight-on-hover effect to a table's rows by including the <code>hoverable</code> class on the table.</p>
+  <p>When displaying data in tables, be sure to add the <code>number</code> class to cells that contain numbers. This will monospace and right-align those columns. For dollar amounts, you'll need to also add the <code>number--currency</code> class to get the dollar sign to appear. You can add a highlight-on-hover effect to a table's rows by including the <code>hoverable</code> class on the table.</p>
   {% example %}
     <table class="hoverable">
       <thead>
@@ -304,7 +631,7 @@
           <td>Project Manager</td>
           <td>Bachelors</td>
           <td class="number">5</td>
-          <td class="number currency">115.99</td>
+          <td class="number number--currency">115.99</td>
         </tr>
         <tr>
           <td>132-17</td>
@@ -499,11 +826,11 @@
 
   {% example %}
   <div class="form-button-row clearfix">
-    <a href="#" class="usa-button usa-button-outline button-previous">Previous</a>
+    <a href="#" class="usa-button usa-button-secondary button-previous">Previous</a>
 
 
     <div class="submit-group">
-      <button type="submit" class="usa-button-primary">Next</button>
+      <button type="submit" class="usa-button usa-button-primary">Next</button>
       <span class="submit-label">
         Provide details about the contract.
       </span>
@@ -525,7 +852,7 @@
 
   {% example %}
   <expandable-area>
-    <h6>Why are computers so hard to use?</h6>
+    <p><strong>Why are computers so hard to use?</strong></h6>
     <p>Here is a paragraph of explanatory text.</p>
     <p>Here is another paragraph of explanatory text.</p>
   </expandable-area>
@@ -592,7 +919,7 @@
         </p>
 
         <div class="dialog-buttons">
-          <button class="usa-button-primary" data-a11y-dialog-hide>
+          <button class="usa-button usa-button-primary" data-a11y-dialog-hide>
             Dismiss dialog
           </button>
         </div>
@@ -669,11 +996,14 @@
     on this page via the button below.
   </p>
 
-  <button class="usa-button-secondary"
+  <button class="usa-button usa-button-secondary"
           onclick="throw new Error('I am an intentional error')">
     Trigger JavaScript Error
   </button>
   {% endif %}
 
   {% endguide %}
+</div><!--content-->
+</div><!--card-->
+</div><!--sidenav-layout__content-->
 {% endblock %}

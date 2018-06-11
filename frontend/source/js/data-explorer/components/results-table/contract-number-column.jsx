@@ -13,7 +13,7 @@ const DOCUMENT_SVG = (
 
 const column = createSortableColumn({
   key: 'idv_piid',
-  title: 'Contract #',
+  title: 'Contract',
   description: 'Contract number',
 });
 

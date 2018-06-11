@@ -1,7 +1,7 @@
 {% extends 'data_capture/step.html' %}
 {% load frontend %}
 {% block body_class %}content--skinny{% endblock %}
-{% block card_class %}secondary-step{% endblock %}
+{% block main_class %}secondary-step{% endblock %}
 {% block subtitle %}Enter vendor details{% endblock %}
 
 {% block step_heading %}<h2>Enter details for this price list</h2>
@@ -26,10 +26,10 @@
   {% fieldset form.escalation_rate %}
 
   <div class="form-button-row clearfix">
-    <a href="{% url 'data_capture:step_1' %}" class="usa-button usa-button-outline button-previous">Previous</a>
+    <a href="{% url 'data_capture:step_1' %}" class="usa-button usa-button-secondary button-previous">Previous</a>
 
     <div class="submit-group">
-      <button type="submit" class="usa-button-primary">Next</button>
+      <button type="submit" class="usa-button usa-button-primary">Next</button>
       <span class="submit-label">
         Choose the awarded price list to upload.
       </span>
@@ -43,6 +43,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+    <button type="submit" class="usa-button usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
   </form>
 {% endblock %}

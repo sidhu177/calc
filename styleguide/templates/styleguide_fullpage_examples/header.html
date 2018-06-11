@@ -1,0 +1,27 @@
+{% extends "styleguide_fullpage_example.html" %}
+
+{% block body %}
+{# BEGIN SNIPPET #}
+<body class="content--skinny">
+  {% include '_banner.html' %}
+  <header>
+    <div class="container">
+        <div class="row">
+        {% include '_header.html' %}
+        {# Extended header should be placed in this block in descendant templates #}
+        {% block header_extension %}{% endblock %}
+        {% block header_nav %}
+          {% include '_nav.html' %}
+        {% endblock %}
+        </div>
+    </div>
+  </header>
+  <main id="main" class="{% block main_class %}{% endblock %}">
+      <div class="container">
+        <div class="card">
+        </div>
+      </div>
+    </main>
+</body>
+{# END SNIPPET #}
+{% endblock %}

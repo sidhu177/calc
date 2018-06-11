@@ -1,3 +1,6 @@
+// The expandable area component is a progressively enhanced, accordion-like component.
+// Read more: https://calc-dev.app.cloud.gov/styleguide/#expandable-area
+
 @import '../base/variables';
 
 @keyframes expandable-area-fade-in {
@@ -13,12 +16,13 @@
 @media screen {
   expandable-area > *[role="button"] {
     cursor: pointer;
-    color: $color-primary;
+    color: $color-blue;
     text-decoration: underline;
 
     &[aria-expanded="false"] {
       &:before {
         content: '\25B6';
+        font-size: $medium-font-size;
         padding-right: 4px;
         display: inline-block;
       }
@@ -31,6 +35,7 @@
     &[aria-expanded="true"] {
       &:before {
         content: '\25BC';
+        font-size: $medium-font-size;
         padding-right: 4px;
         display: inline-block;
       }

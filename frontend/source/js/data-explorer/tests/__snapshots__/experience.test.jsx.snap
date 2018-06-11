@@ -52,7 +52,7 @@ exports[`<Experience> matches snapshot 1`] = `
       className="experience_range"
     >
       <label
-        className="sr-only"
+        className="usa-sr-only"
         htmlFor="zzz_min"
       >
         Minimum Years
@@ -133,7 +133,7 @@ exports[`<Experience> matches snapshot 1`] = `
       </select>
        - 
       <label
-        className="sr-only"
+        className="usa-sr-only"
         htmlFor="zzz_max"
       >
         Maximum Years

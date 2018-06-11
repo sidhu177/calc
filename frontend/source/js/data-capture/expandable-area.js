@@ -4,7 +4,7 @@ import 'document-register-element';
 
 import * as supports from './feature-detection';
 
-import ga from '../common/ga';
+import { trackEvent } from '../common/ga';
 
 import dispatchBubbly from './custom-event';
 
@@ -52,9 +52,9 @@ class ExpandableArea extends window.HTMLElement {
     const newVal = this.expander.getAttribute('aria-expanded') === 'true'
                    ? 'false' : 'true';
     this.expander.setAttribute('aria-expanded', newVal);
-    ga('send', 'event', 'expandable area',
-       newVal === 'true' ? 'expand' : 'collapse',
-       this.expander.textContent);
+    trackEvent('expandable area',
+               newVal === 'true' ? 'expand' : 'collapse',
+               this.expander.textContent);
   }
 }
 

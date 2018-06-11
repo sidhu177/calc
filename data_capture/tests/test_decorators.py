@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.test import TestCase, override_settings
 
 from ..decorators import handle_cancel
-from hourglass.urls import urlpatterns
+from calc.urls import urlpatterns
 
 
 @handle_cancel

@@ -1,0 +1,261 @@
+@import '../base/variables';
+
+.swatch {
+  float: left;
+  margin-bottom: 32px;
+}
+
+.swatch__color {
+  height: 15rem;
+  width: 100%;
+  margin-bottom: 6px;
+
+  &.color-black {
+    background-color: $color-black;
+  }
+
+  &.color-white {
+    background-color: $color-white;
+    border: 1px solid $color-gray-light;
+  }
+
+  &.color-gray-darkest {
+    background-color: $color-gray-darkest;
+  }
+
+  &.color-gray-darker {
+    background-color: $color-gray-darker;
+  }
+
+  &.color-gray-dark {
+    background-color: $color-gray-dark;
+  }
+
+  &.color-gray {
+    background-color: $color-gray;
+  }
+
+  &.color-gray-medium {
+    background-color: $color-gray-medium;
+  }
+
+  &.color-gray-light {
+    background-color: $color-gray-light;
+  }
+
+  &.color-gray-lighter {
+    background-color: $color-gray-lighter;
+  }
+
+  &.color-gray-lightest {
+    background-color: $color-gray-lightest;
+  }
+
+  &.color-green-darkest {
+    background-color: $color-green-darkest;
+  }
+
+  &.color-green-medium {
+    background-color: $color-green-dark;
+  }
+
+  &.color-green {
+    background-color: $color-green;
+  }
+
+  &.color-green-light {
+    background-color: $color-green-light;
+  }
+
+  &.color-green-lighter {
+    background-color: $color-green-lighter;
+  }
+
+  &.color-green-bright {
+    background-color: $color-green-bright;
+  }
+
+  &.color-red-darkest {
+    background-color: $color-red-darkest;
+  }
+
+  &.color-red-dark {
+    background-color: $color-red-dark;
+  }
+
+  &.color-red-lightest {
+    background-color: $color-red-lightest;
+  }
+
+  &.color-blue-darkest {
+    background-color: $color-blue-darkest;
+  }
+
+  &.color-blue-darker {
+    background-color: $color-blue-darker;
+  }
+
+  &.color-blue-dark {
+    background-color: $color-blue-dark;
+  }
+
+  &.color-blue {
+    background-color: $color-blue;
+  }
+
+  &.color-blue-lightest {
+    background-color: $color-blue-lightest;
+  }
+
+  &.color-gold-darkest {
+    background-color: $color-gold-darkest;
+  }
+
+  &.color-gold {
+    background-color: $color-gold;
+  }
+
+  &.color-gold-lightest {
+    background-color: $color-gold-lightest;
+  }
+
+  &.color-visited {
+    background-color: $color-visited;
+  }
+}
+
+.swatch__contrast-ok {
+  color: $color-green-darkest;
+  &::before {
+    content: "";
+    background-image: url('/static/frontend/images/icon-checkmark.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 2rem;
+    display: block;
+    float: left;
+    width: 2.6rem;
+    height: 2rem;
+  }
+}
+
+.contrast-ok {
+  color: $color-green-darkest;
+  &::before {
+    content: "";
+    background-image: url('/static/frontend/images/icon-checkmark.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 1.3rem;
+    display: block;
+    float: left;
+    width: 1.8rem;
+    height: 1.3rem;
+  }
+}
+
+.contrast-bad {
+  color: $color-red-dark;
+  &::before {
+    content: "";
+    background-image: url('/static/frontend/images/icon-warning.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 1.3rem;
+    display: block;
+    float: left;
+    width: 1.8rem;
+    height: 1.3rem;
+  }
+}
+
+.swatch__contrast-bad {
+  color: $color-red-dark;
+  margin-bottom: $space-3x;
+  &::before {
+    content: "";
+    background-image: url('/static/frontend/images/icon-warning.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 2rem;
+    display: block;
+    float: left;
+    width: 2.6rem;
+    height: 2rem;
+  }
+}
+
+.label-mono {
+  font-family: $font-family-mono;
+  color: $color-gray;
+
+  p {
+    font-size: $medium-font-size;
+    line-height: $small-line-height;
+    margin-top: .5rem;
+    margin-bottom: 0;
+  }
+
+  .contrast-bad,
+  .contrast-ok,
+  .swatch__hex {
+    font-size: $small-font-size;
+  }
+}
+
+
+.color-combos {
+
+  .background-fill {
+    padding: 3rem;
+
+    &.color-white {
+      background-color: $color-white;
+      border: 1px solid $color-gray-light;
+    }
+    &.color-gray-darkest {
+      background-color: $color-gray-darkest;
+    }
+    &.color-gray-lighter {
+      background-color: $color-gray-lighter;
+    }
+    &.color-green-light {
+      background-color: $color-green-light;
+    }
+  }
+
+  p.label-mono {
+    font-size: $medium-font-size;
+    padding-top: .5rem;
+  }
+}
+
+.color-name {
+  font-size: $h4-font-size;
+  font-weight: $font-weight-bold;
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.color-white {
+    color: $color-white;
+  }
+  &.color-black {
+    color: $color-base;
+  }
+  &.color-gray-darker {
+    color: $color-gray-darker;
+  }
+  &.color-gray-dark {
+    color: $color-gray-dark;
+  }
+  &.color-gray-light {
+    color: $color-gray-light;
+  }
+  &.color-green-bright {
+    color: $color-green-bright;
+  }
+}

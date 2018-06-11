@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.contrib.auth.models import User
 
-from hourglass.tests.common import ProtectedViewTestCase
+from calc.tests.common import ProtectedViewTestCase
 from contracts.models import BulkUploadContractSource
 
 

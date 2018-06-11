@@ -1,3 +1,4 @@
+// @ts-check
 /* global $, window, document */
 
 import ReactDOM from 'react-dom';
@@ -7,7 +8,7 @@ import { Provider } from 'react-redux';
 
 import App from './components/app';
 
-import ga from '../common/ga';
+import { trackVirtualPageview } from '../common/ga';
 
 import appReducer from './reducers';
 
@@ -44,9 +45,7 @@ $.fn.tooltipster('setDefaults', {
 });
 
 historySynchronizer.initialize(store, () => {
-  ga('set', 'page', window.location.pathname +
-                    window.location.search);
-  ga('send', 'pageview');
+  trackVirtualPageview();
 });
 
 // Load the React app once the document is ready

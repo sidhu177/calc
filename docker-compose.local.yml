@@ -9,6 +9,9 @@ services:
       - WD_CHROME_ARGS=--headless --no-sandbox --disable-setuid-sandbox
     links:
       - mailcatcher
+    # The following are for pdb support.
+    tty: true
+    stdin_open: true
   gulp:
     extends:
       file: docker-services.yml
@@ -23,6 +26,9 @@ services:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
     links:
       - mailcatcher
+    # The following are for pdb support.
+    tty: true
+    stdin_open: true
   rq_scheduler:
     volumes:
       - .:/calc:delegated
@@ -30,6 +36,9 @@ services:
       - DEFAULT_DEBUG_EMAIL_URL=smtp://mailcatcher:25/
     links:
       - mailcatcher
+    # The following are for pdb support.
+    tty: true
+    stdin_open: true
   mailcatcher:
     image: tophfr/mailcatcher:latest
     ports:

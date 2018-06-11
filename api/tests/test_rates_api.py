@@ -562,7 +562,6 @@ class GetRatesTests(TestCase):
             Contract,
             id=4,
             idv_piid="ABC1234",
-            piid="1234",
             vendor_name="BACME Corp.",
             labor_category="Legal Services",
             min_years_experience=0,
@@ -920,8 +919,8 @@ class GetRatesTests(TestCase):
     def test_query_type__match_exact(self):
         self.make_test_set()
         get_contract_recipe().make(
-                _quantity=1,
-                labor_category='Professional Legal Services I'
+            _quantity=1,
+            labor_category='Professional Legal Services I'
         )
         resp = self.c.get(
             self.path, {'q': 'legal services', 'query_type': 'match_exact'})
@@ -1028,7 +1027,6 @@ class GetRatesTests(TestCase):
             dict(
                 id=1,
                 idv_piid="ABC123",
-                piid="123",
                 vendor_name="ACME Corp.",
                 labor_category="Legal Services",
                 min_years_experience=10,
@@ -1038,7 +1036,6 @@ class GetRatesTests(TestCase):
             dict(
                 id=2,
                 idv_piid="ABC234",
-                piid="234",
                 vendor_name="Numbers R Us",
                 labor_category="Accounting, CPA",
                 education_level='MA',
@@ -1049,7 +1046,6 @@ class GetRatesTests(TestCase):
             dict(
                 id=3,
                 idv_piid="ABC345",
-                piid="345",
                 vendor_name="Word Power Co.",
                 labor_category="Writer/Editor",
                 education_level='BA',
@@ -1060,7 +1056,6 @@ class GetRatesTests(TestCase):
             dict(
                 id=4,
                 idv_piid="ABC456",
-                piid="456",
                 vendor_name="Big Bob's Design Corral",
                 labor_category="Designer, Extra Cool",
                 education_level='BA',

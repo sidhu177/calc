@@ -1,20 +1,5 @@
 ---
 version: 2
-plugins:
-  eslint:
-    enabled: true
-    channel: "eslint-3"
-    checks:
-      import/no-unresolved:
-        enabled: false
-      import/extensions:
-        enabled: false
-    config:
-      extensions:
-      - .js
-      - .jsx
-  pep8:
-    enabled: true
 
 exclude_patterns:
 - "frontend/source/js/vendor/*"

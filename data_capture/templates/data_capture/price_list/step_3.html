@@ -1,6 +1,6 @@
 {% extends 'data_capture/step.html' %}
 {% block body_class %}content--skinny{% endblock %}
-{% block card_class %}secondary-step card--no-header{% endblock %}
+{% block main_class %}secondary-step card--collapse-header{% endblock %}
 
 {% block subtitle %}Upload price list{% endblock %}
 {% block step_heading %}
@@ -16,6 +16,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+    <button type="submit" class="usa-button usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
   </form>
 {% endblock %}

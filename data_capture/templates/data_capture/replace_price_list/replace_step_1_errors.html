@@ -7,7 +7,7 @@
 {% block step_body %}
   {% with rows=gleaned_data.invalid_rows %}
     {% with total=rows|length %}
-      <div class="message message-error" role="alert">
+      <div class="usa-alert usa-alert-error alert__no-bg" role="alert">
         {% if not gleaned_data.valid_rows %}
           <h3>No valid rows found!</h3>
           <p>
@@ -48,7 +48,7 @@
     {{ form.file }}
 
     <div class="form-button-row clearfix">
-      <button type="submit" class="usa-button-primary">
+      <button type="submit" class="usa-button usa-button-primary">
         Upload revised price list
       </button>
 
@@ -67,6 +67,6 @@
 {% block card_footer %}
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel</button>
+    <button type="submit" class="usa-button usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel</button>
   </form>
 {% endblock card_footer %}

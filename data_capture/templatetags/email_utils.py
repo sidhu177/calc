@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from hourglass.site_utils import absolutify_url
+from calc.site_utils import absolutify_url
 
 
 register = template.Library()

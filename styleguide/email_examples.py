@@ -1,3 +1,4 @@
+from typing import List
 from django.utils.text import slugify
 from django.http import HttpResponse
 from django.conf.urls import url
@@ -52,7 +53,7 @@ class ExampleEmail:
 
     @staticmethod
     def get_urlpatterns(examples):
-        urls = []
+        urls: List[url] = []
         for example in examples:
             urls += example.urls
         return urls

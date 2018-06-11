@@ -73,7 +73,7 @@ export class ProposedPrice extends React.Component {
 
     return (
       <div className="proposed-price">
-        <label htmlFor={id} className="sr-only">Proposed price</label>
+        <label htmlFor={id} className="usa-sr-only">Proposed price</label>
         <input
           id={id} type="text" name="proposed-price"
           className="form__inline"

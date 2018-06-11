@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django import forms
 from django.core.exceptions import ValidationError
 from uswds_forms import UswdsRadioSelect, UswdsDateField
@@ -237,7 +238,7 @@ class Step4Form(PriceListDetailsForm):
         earlier steps to obtain an instance of this form.
         '''
 
-        combined_post_data = {}
+        combined_post_data: Dict[str, Any] = {}
         for post_data in post_datas:
             combined_post_data.update(post_data)
         return cls(combined_post_data)

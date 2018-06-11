@@ -11,10 +11,28 @@
           This is a development version of CALC.
         {% endif %}
       </p>
-      <p id="site-status">
+
+      <div class="developer-nav">
         <a href="{% url 'styleguide:index' %}">Style guide</a> |
         <a href="/docs/">Docs</a>
-      </p>
+        {% if show_debug_ui %}
+        |
+        <details>
+          <summary>Switch user&hellip;</summary>
+          <ul>
+            {% for su in SAMPLE_USERS %}
+              <li>
+                <a href="{% url 'login_sample_user' username=su.username %}?next={{ request.path|urlencode }}">
+                  {{ su.desc }}<br>
+                  <span class="email">{{ su.email }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </details>
+        {% endif %}
+      </div>
+
       {% if canonical_url != request.build_absolute_uri %}
         <br>
         <p>

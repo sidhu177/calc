@@ -1,6 +1,6 @@
 import djclick as click
 
-from hourglass import changelog
+from calc import changelog
 
 
 @click.command()

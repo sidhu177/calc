@@ -68,7 +68,7 @@ export class ResultsTable extends React.Component {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={COLUMNS.length}>
+            <td colSpan={COLUMNS.length} className="results-table_return-link">
               <a href={idHref}>Return to the top</a>
             </td>
           </tr>

@@ -111,7 +111,7 @@ test('amsr scrolls to last scrollTop on DOMContentLoaded', (assert) => {
     sessionStorage: { visit_201_scrollTop: '20' },
   }));
   assert.equal(win.getScrollTop(), 0);
-  win.listeners.DOMContentLoaded();   // eslint-disable-line new-cap
+  win.listeners.DOMContentLoaded();
   assert.equal(win.getScrollTop(), 20);
 });
 

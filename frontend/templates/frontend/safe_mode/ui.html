@@ -2,7 +2,7 @@
 <aside class="safe-mode safe-mode-disable">
   <form method="post" action="{% url 'safe_mode:disable' %}">
     {% csrf_token %}
-    <button class="usa-button-primary" type="submit">Deactivate compatibility mode</button>
+    <button class="usa-button usa-button-primary" type="submit">Deactivate compatibility mode</button>
     This site is currently in <strong>compatibility mode</strong>. For an enhanced
     experience, you can disable it, but this may cause compatibility issues
     with your current browser.
@@ -12,7 +12,7 @@
 <aside id="safe-mode-enable" class="safe-mode" style="display: none" tabindex="-1" role="alert">
   <form method="post" action="{% url 'safe_mode:enable' %}">
     {% csrf_token %}
-    <button class="usa-button-primary" type="submit">Activate compatibility mode</button>
+    <button class="usa-button usa-button-primary" type="submit">Activate compatibility mode</button>
     Having problems using this page? We're sorry for the inconvenience.
     Activate this site's <strong>compatibility mode</strong> for a better
     experience.

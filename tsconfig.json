@@ -2,11 +2,12 @@
   "compilerOptions": {
     "allowJs": true,
     "noEmit": true,
-    "strict": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "jsx": "react",
   },
   "include": [
     "frontend/source/js/**/*.js"

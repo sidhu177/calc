@@ -1,3 +1,6 @@
+// This is the slider widget that appears in the filter section of
+// the data explorer.
+
 @import '../base/variables';
 @import 'rc-slider/assets/index';
 
@@ -9,18 +12,18 @@
   }
 
   .rc-slider-track {
-    background-color: $color-primary;
+    background-color: $color-blue-dark;
     height: 6px;
   }
 
   .rc-slider-handle {
     margin-top: -4px;
-    border-color: $color-primary;
-    background-color: $color-primary;
+    border-color: $color-blue-dark;
+    background-color: $color-blue-dark;
 
     &:hover {
-      border-color: $color-primary;
-      background-color: $color-primary;
+      border-color: $color-blue-darker;
+      background-color: $color-blue-darker;
     }
   }
 

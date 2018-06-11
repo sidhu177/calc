@@ -1,3 +1,5 @@
+// Status labels for a user's price lists
+
 @import '../base/variables';
 
 .label {
@@ -28,7 +30,7 @@
   }
   &.label--approved {
     background-color: $color-green-lightest;
-    color: $color-green;
+    color: $color-green-darkest;
     &:before {
       background-image: url('../../images/icon-approved-61701C.svg');
       background-repeat: no-repeat;
@@ -38,8 +40,8 @@
   }
   &.label--rejected,
   &.label--retired {
-    background-color: $color-secondary-lightest;
-    color: $color-secondary-dark;
+    background-color: $color-red-lightest;
+    color: $color-red-dark;
     &:before {
       background-image: url('../../images/icon-rejected-BC1630.svg');
       background-repeat: no-repeat;

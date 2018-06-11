@@ -19,7 +19,7 @@ export function LoadingIndicator({ error, inProgress }) {
       {/* Note that in order for this aria-live region to work
         * across most screen readers, it needs to be in the DOM
         * on page load! */}
-      <div className="sr-only" role="status" aria-live="polite">
+      <div className="usa-sr-only" role="status" aria-live="polite">
         {ariaStatus}
       </div>
       {/* CSS for the following element was originally designed with

@@ -241,11 +241,11 @@ def step_3_errors(request):
     return render(request,
                   'data_capture/price_list/step_3_errors.html',
                   step.context({
-                    'form': form,
-                    'gleaned_data': gleaned_data,
-                    'is_preferred_schedule': isinstance(gleaned_data,
-                                                        preferred_schedule),
-                    'preferred_schedule_title': preferred_schedule.title,
+                      'form': form,
+                      'gleaned_data': gleaned_data,
+                      'is_preferred_schedule': isinstance(gleaned_data,
+                                                          preferred_schedule),
+                      'preferred_schedule_title': preferred_schedule.title,
                   }, request))
 
 

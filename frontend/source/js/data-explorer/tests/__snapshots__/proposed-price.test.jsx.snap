@@ -5,7 +5,7 @@ exports[`<ProposedPrice> matches snapshot 1`] = `
   className="proposed-price"
 >
   <label
-    className="sr-only"
+    className="usa-sr-only"
     htmlFor="zzz_proposed-price"
   >
     Proposed price

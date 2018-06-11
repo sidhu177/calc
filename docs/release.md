@@ -6,7 +6,7 @@ release for CALC.
 It assumes you want to create release `0.0.4`.
 
 If this isn't the case, simply replace this value for your own. Or
-alternatively, run `python manage.py releasehelp` to generate a
+alternatively, run `docker-compose run app python manage.py releasehelp` to generate a
 customized version of these instructions just for you.
 
 **Note:** When following these instructions, ensure that no one else is
@@ -42,7 +42,7 @@ To release version 0.0.4 of CALC:
     command:
 
     ```
-    python manage.py unreleased_changelog | pbcopy
+    docker-compose run app python manage.py unreleased_changelog | pbcopy
     ```
 
 4.  Make sure that all automated QA services (CircleCI, etc) think
@@ -51,11 +51,11 @@ To release version 0.0.4 of CALC:
 5.  Wait for the stakeholders to sign-off on the release if there are
     functional or product changes.
 
-6.  Update the version number in `hourglass/version.py` to `0.0.4` and then
+6.  Update the version number in `calc/version.py` to `0.0.4` and then
     run:
 
     ```
-    python manage.py bump_changelog
+    docker-compose run app python manage.py bump_changelog
     ```
 
     This will create a new entry for the new version in `CHANGELOG.md`,

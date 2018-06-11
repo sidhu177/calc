@@ -1,8 +1,6 @@
 FROM python:3.6.4
 
 ENV NODE_VERSION=6
-ENV CHROME_VERSION=67
-ENV CHROMEDRIVER_VERSION=2.37
 
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 
@@ -16,8 +14,11 @@ RUN apt-get update && \
   postgresql-client \
   # This is some kind of dependency for headless chrome; See https://crbug.com/795759.
   libgconf-2-4 \
-  # Install latest chrome dev package and dependencies.
-  google-chrome-unstable=${CHROME_VERSION}.* ttf-freefont \
+  # Install latest chrome stable package and dependencies.
+  # Note that ideally we'd explicitly specify the version of Chrome to use,
+  # but there are complications; see https://github.com/18F/calc/issues/1964
+  # for more details.
+  google-chrome-stable ttf-freefont \
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /src/*.deb
@@ -28,7 +29,12 @@ WORKDIR /calc
 
 RUN npm install -g yarn
 
-RUN wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
+# Hopefully the latest stable ChromeDriver is compatible with the latest
+# stable Chrome. I wish there were more consistently reproducible &
+# reliable ways around this, but there don't seem to be; see
+# https://github.com/18F/calc/issues/1964 for more details.
+RUN wget -N https://chromedriver.storage.googleapis.com/LATEST_RELEASE && \
+  wget -N https://chromedriver.storage.googleapis.com/`cat LATEST_RELEASE`/chromedriver_linux64.zip \
   && unzip chromedriver_linux64.zip \
   && chmod +x chromedriver \
   && mv chromedriver /usr/local/bin/chromedriver

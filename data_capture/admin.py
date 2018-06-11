@@ -258,6 +258,14 @@ class UndeletableModelAdmin(admin.ModelAdmin):
         return False
 
 
+def short_description(desc: str):
+    def decorator(func):
+        func.short_description = desc
+        return func
+
+    return decorator
+
+
 class BaseSubmittedPriceListAdmin(UndeletableModelAdmin):
     list_display = ('contract_number', 'vendor_name', 'submitter',
                     'tz_created_at', 'status_changed_by_email',
@@ -294,13 +302,12 @@ class BaseSubmittedPriceListAdmin(UndeletableModelAdmin):
         SubmittedPriceListRowInline
     ]
 
+    @short_description('Status changed by')
     def status_changed_by_email(self, instance):
         '''
         custom field to show the email address of the status_changed_by user
         '''
         return instance.status_changed_by.email
-
-    status_changed_by_email.short_description = 'Status changed by'
 
     def current_status(self, instance):
         content = instance.get_status_display() + "<br>"
@@ -321,25 +328,21 @@ class BaseSubmittedPriceListAdmin(UndeletableModelAdmin):
 
         return mark_safe(content)  # nosec
 
+    @short_description('Created at')
     def tz_created_at(self, instance):
         return tz_timestamp(instance.created_at)
 
-    tz_created_at.short_description = 'Created at'
-
+    @short_description('Updated at')
     def tz_updated_at(self, instance):
         return tz_timestamp(instance.updated_at)
 
-    tz_updated_at.short_description = 'Updated at'
-
+    @short_description('Status changed at')
     def tz_status_changed_at(self, instance):
         return tz_timestamp(instance.status_changed_at)
 
-    tz_status_changed_at.short_description = 'Status changed at'
-
+    @short_description('Schedule')
     def schedule_title(self, instance):
         return registry.get_class(instance.schedule).title
-
-    schedule_title.short_description = 'Schedule'
 
     def has_add_permission(self, request):
         return False

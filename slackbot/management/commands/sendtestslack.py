@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.management.base import CommandError
 
 from slackbot.bot import sendmsg
-from hourglass.site_utils import absolutify_url
+from calc.site_utils import absolutify_url
 
 
 @click.command()

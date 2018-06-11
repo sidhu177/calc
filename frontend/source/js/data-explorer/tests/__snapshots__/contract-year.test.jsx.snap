@@ -27,7 +27,7 @@ exports[`<ContractYear> matches snapshot 1`] = `
       </Tooltip>
     </span>
     <h3
-      className="sr-only"
+      className="usa-sr-only"
     >
       Contract Year
     </h3>
@@ -58,7 +58,7 @@ exports[`<ContractYear> matches snapshot 1`] = `
             Current
           </span>
           <span
-            className="sr-only"
+            className="usa-sr-only"
           >
             Current year
           </span>
@@ -88,7 +88,7 @@ exports[`<ContractYear> matches snapshot 1`] = `
             +1
           </span>
           <span
-            className="sr-only"
+            className="usa-sr-only"
           >
             One year out
           </span>
@@ -118,7 +118,7 @@ exports[`<ContractYear> matches snapshot 1`] = `
             +2
           </span>
           <span
-            className="sr-only"
+            className="usa-sr-only"
           >
             Two years out
           </span>

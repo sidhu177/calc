@@ -1,4 +1,7 @@
+// A variety of table styles.
+
 @import '../base/variables';
+
 table {
   width: 100%;
   margin-top: 2rem;
@@ -52,21 +55,21 @@ table {
         position: relative;
         vertical-align: top;
         color: $color-gray;
-        border-bottom: 1px solid;
+        border-bottom: 2px solid;
+        border-top: 2px solid;
         &.sortable {
           text-decoration: underline;
           cursor: pointer;
           padding-right: 1.5em;
+          padding-bottom: 1.3em;
           &:after {
             display: inline-block;
             line-height: 1em;
             height: 1em;
             position: absolute;
-            bottom: .4em;
-            right: 0;
+            padding-right: 0;
             margin-top: -.5em;
             margin-right: .25em;
-            content: "▽";
             font-weight: normal;
             font-size: .9em;
           }
@@ -80,10 +83,13 @@ table {
           position: relative;
           &:after {
             content: "▲";
-            font-size: 1em;
+            font-size: .9em;
+            padding-left: $space-half;
+            position: relative;
           }
           &.descending:after {
             content: "▼";
+            position: relative;
           }
         }
       }
@@ -108,11 +114,16 @@ table {
   th:first-child,
   th:last-child {
     position: relative;
-    padding: $space-2x $space-1x $space-1x;
+    padding: $space-2x $space-1x;
   }
   td {
     vertical-align: top;
   }
+}
+
+.results-table_return-link {
+  font-weight: $font-weight-bold;
+  text-align: right;
 }
 
 .sortable {
@@ -123,8 +134,8 @@ table {
   th:first-child,
   th:last-child {
     position: relative;
-    padding: $space-2x $space-1x $space-half;
-    vertical-align: bottom;
+    padding: $space-2x $space-1x;
+    vertical-align: top;
   }
 }
 
@@ -134,12 +145,12 @@ td.sorted {
 
 /* used on price list upload error page */
 td.error {
-  color: $color-secondary-dark;
+  color: $color-red-dark;
   font-weight: $font-weight-bold;
   span {
     line-height: 1.2;
     position: relative;
-    border-bottom: 1px dotted $color-secondary-dark;
+    border-bottom: 1px dotted $color-red-dark;
     &:before {
       width: 13px;
       height: 13px;
@@ -154,7 +165,7 @@ td.error {
       position: absolute;
       top: -$space-2x;
       left: -3px; /* positions the tooltip arrow over the info badge */
-      border-top: 12px solid $color-secondary-lightest;
+      border-top: 12px solid $color-red-lightest;
       border-right: 10px solid transparent;
       border-left: 10px solid transparent;
       content: " ";
@@ -179,7 +190,7 @@ td.error {
         right: 0;
         bottom: 95%;
         left: 0;
-        background-color: $color-secondary-lightest;
+        background-color: $color-red-lightest;
         border-radius: $border-radius;
       }
     }
@@ -203,13 +214,13 @@ td.error {
         right: 0;
         bottom: 95%;
         left: 0;
-        background-color: $color-secondary-lightest;
+        background-color: $color-red-lightest;
         border-radius: $border-radius;
       }
     }
   }
+  /* make tooltip readable to screen readers */
   [role=tooltip] {
-    /* make tooltip readable to screen readers */
     position: absolute;
     overflow: hidden;
     height: 1px;
@@ -221,7 +232,7 @@ td.error {
 
   }
   .errorlist {
-    color: $color-secondary-dark;
+    color: $color-red-dark;
     font-weight: $font-weight-normal;
     font-size: $small-font-size;
     border: none;
@@ -233,10 +244,10 @@ td.error {
 th.exclude a.restore {
   position: absolute;
   font-size: 1rem;
+  margin-bottom: $space-1x;
   padding: 2px 0;
   text-transform: uppercase;
   text-decoration: underline;
-  color: $color-gray;
   white-space: nowrap;
   vertical-align: bottom;
   bottom: 100%;
@@ -258,31 +269,30 @@ th.number {
   text-align: left;
 }
 
+
 td.number {
   font-family: $font-family-mono;
   text-align: right;
-}
-
-
-/* Not used because the corresponding JS conflicts with the tooltips. Only here for future reference. */
-th.collapsible {
-  position: relative;
-  &.collapsed {
-    width: 0;
-    font-size: 0;
-  }
-  &:last-child a.toggle-collapse {
-    left: auto;
-    right: 0;
-    text-align: right;
+  &.number--currency:before {
+    content: "$";
+    display: block;
+    float: left;
+    width: 1em;
+    height: $medium-font-size;
   }
 }
-th.collapsed,
-td.collapsed {
-  width: 1.5em !important;
-  border-left: 1px dotted $color-gray-lightest;
+// field-base_year_rate applies to Django admin tables
+// same styling as number/currency styles
+.field-base_year_rate {
+  font-family: $font-family-mono;
+  text-align: right;
+  &:before {
+    content: "$";
+    display: inline;
+    width: 1em;
+    height: $medium-font-size;
+  }
 }
-
 /* Some labor categories (especially the "interpreter" categories)
  * are incredibly long, so we should limit the width. */
 th.column-labor_category {

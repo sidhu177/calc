@@ -15,33 +15,27 @@ button,
   // WDS override
   margin-bottom: 0;
   margin-top: 0;
-  font-size: $small-font-size;
-  text-transform: uppercase;
-  font-size: $small-font-size; // original is $base-font, which is too large here
+  padding: 1.3rem 2rem;
+  font-size: $medium-font-size;
   font-weight: $font-weight-bold;
-  line-height: 1.7; // adjusted from 1, which makes links show funky
 
-
-  &.usa-button-outline {
-    border: 1px solid $color-gray;
-    background: $color-white;
-    color: $color-gray;
-    &:hover,
-    &.usa-button-hover {
-      border-color: $color-gray-light;
-    }
-  }
-
-  &.button-footer {
+  &.button-small_white {
     background-color: $color-white;
     border-radius: $border-radius;
-    color: $color-gray-medium;
+    color: $color-base;
 
     &:hover,
     &.button-hover {
-      background-color: $color-gray-lighter;
-      color: $color-gray-medium-dark;
+      background-color: $color-gray-lightest;
     }
+  }
+}
+
+.usa-button {
+  &[type="submit"],
+  &[type="button"] {
+    height: auto;
+    display: inline;
   }
 }
 
@@ -51,16 +45,6 @@ input[type="reset"] {
   padding-bottom: 0.9rem; //compensates for the 1px border
 }
 
-.usa-button-gray,
-.usa-button-gray:hover,
-.usa-button-gray:active,
-.usa-button-gray:focus {
-  color: $color-white;
-  border: 0;
-}
-
-// The WDS used to style secondary buttons in the secondary color,
-// but now styles them as outlines. Use the old style.
 .usa-button.usa-button-secondary,
 a.usa-button.usa-button-secondary,
 a:visited.usa-button.usa-button-secondary,
@@ -68,16 +52,21 @@ button.usa-button-secondary,
 input.usa-button-secondary[type="submit"],
 input.usa-button-secondary[type="reset"],
 input.usa-button-secondary[type="button"] {
-  background-color: $color-secondary;
-  color: $color-white;
-  box-shadow: none;
+  background-color: $color-white;
+  box-shadow: inset 0 0 0 2px $color-blue-dark;
+  color: $color-blue-dark;
   &:hover {
-    color: $color-white;
-    background-color: $color-secondary-dark;
-    box-shadow: none;
+    background-color: $color-gray-lightest;
+    box-shadow: inset 0 0 0 2px $color-blue-darker;
+    color: $color-blue-darkest;
+  }
+  &:active {
+    box-shadow: inset 0 0 0 2px $color-blue-darker;
+    background-color: $color-gray-lighter;
   }
 }
 
+// Stand-in for deprecated WDS style that we need
 button.usa-button-link,
 input.usa-button-link[type="submit"],
 input.usa-button-link[type="reset"],
@@ -88,7 +77,7 @@ input.usa-button-link[type="button"] {
   padding-bottom: 0;
   text-transform: none;
   text-decoration: underline;
-  color: $color-primary;
+  color: $color-blue-dark;
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
@@ -98,37 +87,39 @@ input.usa-button-link[type="button"] {
 
   &:hover,
   &.usa-button-hover {
-    color: $color-primary-darker;
+    color: $color-blue-dark;
     background-color: transparent;
   }
 
   &:focus,
   &.usa-button-focus {
-    color: $color-primary-darker;
-    outline: 1px dotted $color-primary-darker;
+    color: $color-blue-dark;
   }
 
   &:active,
   &.usa-button-active {
-    color: $color-primary-darker;
+    background-color: transparent;
+    color: $color-blue-darker;
   }
 }
 
 .usa-button.usa-button-disabled {
   background-color: $color-gray-lighter;
+  color: $color-gray-medium;
   cursor: default;
-  color: $color-gray;
   &:hover {
-    color: $color-gray;
+    color: $color-gray-medium;
   }
 }
 
-.usa-button.usa-button-disabled,
-button.usa-button-disabled,
-input.usa-button-disabled[type="submit"],
-input.usa-button-disabled[type="reset"],
-input.usa-button-disabled[type="button"] {
-  &:focus {
-    outline: 1px dotted $color-gray-dark;
+.button-green {
+  background-color: $color-green-bright;
+  color: $color-base;
+  &:hover {
+    color: $color-base;
+    background-color: $color-green;
+  }
+  &:active {
+    background-color: $color-green;
   }
 }

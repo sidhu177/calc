@@ -9,13 +9,8 @@ from ..schedules.fake_schedule import FakeSchedulePriceList
 from .common import FAKE_SCHEDULE, uploaded_csv_file, create_csv_content
 
 
-class RegistryTestCase(TestCase):
-    def setUp(self):
-        registry._init()
-
-
 @override_settings(DATA_CAPTURE_SCHEDULES=[FAKE_SCHEDULE])
-class FakeScheduleOnlyTests(RegistryTestCase):
+class FakeScheduleOnlyTests(TestCase):
     def test_get_choices_works(self):
         self.assertEqual(
             [choice for choice in registry.get_choices()],
@@ -79,7 +74,7 @@ FOO_SCHEDULE = '%s.FooSchedulePriceList' % __name__
 
 
 @override_settings(DATA_CAPTURE_SCHEDULES=[FAKE_SCHEDULE, FOO_SCHEDULE])
-class FooScheduleTests(RegistryTestCase):
+class FooScheduleTests(TestCase):
     def test_get_choices_works(self):
         self.assertEqual(
             [choice for choice in registry.get_choices()],
@@ -89,7 +84,7 @@ class FooScheduleTests(RegistryTestCase):
 
 
 @override_settings(DATA_CAPTURE_SCHEDULES=[FAKE_SCHEDULE, FOO_SCHEDULE])
-class SmartLoadFromUploadTests(RegistryTestCase):
+class SmartLoadFromUploadTests(TestCase):
     def test_better_matches_are_found(self):
         p = smart_load_from_upload(FOO_SCHEDULE, uploaded_csv_file())
         self.assertTrue(isinstance(p, FakeSchedulePriceList))

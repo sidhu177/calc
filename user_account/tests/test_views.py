@@ -1,6 +1,6 @@
 from model_mommy import mommy
 
-from hourglass.tests.common import ProtectedViewTestCase
+from calc.tests.common import ProtectedViewTestCase
 from data_capture.models import SubmittedPriceList
 
 

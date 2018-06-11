@@ -51,7 +51,7 @@ export function ContractYear({ idPrefix, contractYear, setContractYear }) {
             className={className}
             aria-hidden="true"
           >{shortLabel}</span>
-          <span className="sr-only">
+          <span className="usa-sr-only">
             {CONTRACT_YEAR_LABELS[year]}
           </span>
         </label>
@@ -76,7 +76,7 @@ export function ContractYear({ idPrefix, contractYear, setContractYear }) {
           </Tooltip>
         </span>
 
-        <h3 className="sr-only">Contract Year</h3>
+        <h3 className="usa-sr-only">Contract Year</h3>
 
         <ul className="contract-year-block">
           {listItem(CONTRACT_YEAR_CURRENT)}

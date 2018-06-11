@@ -56,7 +56,7 @@ function changeHash(window, hash, cb) {
   if (currId !== newId) {
     $(window).one('hashchange', cb);
   }
-  window.location.hash = hash;  // eslint-disable-line no-param-reassign
+  window.location.hash = hash;
 }
 
 function smoothScroll(window, scrollTop, scrollMs, cb) {
@@ -150,7 +150,7 @@ export function activateManualScrollRestoration(window, scrollMs) {
   const scrollKey = () => `visit_${getOrCreateVisitId(window)}_scrollTop`;
   const scrollTop = parseInt(storage[scrollKey()], 10);
 
-  window.history.scrollRestoration = 'manual';   // eslint-disable-line no-param-reassign
+  window.history.scrollRestoration = 'manual';
 
   if (isNaN(scrollTop)) {
     smoothlyScrollToLocationHash(window, scrollMs);

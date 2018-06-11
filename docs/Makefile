@@ -25,8 +25,6 @@ html: Makefile
 # wipe out the build directory between rebuilds.
 	rm -rf $(BUILDDIR)
 
-	cp $(ROOTDIR)/CHANGELOG.md $(SOURCEDIR)/changelog.md
-
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 # Note that $(DJANGODIR) might be a mounted volume, in which case it can't

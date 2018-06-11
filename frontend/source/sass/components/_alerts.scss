@@ -1,5 +1,6 @@
+// Overrides and extensions of the U.S. Web Design System alerts
+
 @import '../base/variables';
-$color-error-bg: #fef5f5;
 .usa-alert {
   margin: 1rem 0;
   padding: 1rem 6rem 1rem 2rem;
@@ -42,16 +43,29 @@ $color-error-bg: #fef5f5;
 }
 
 .usa-alert-error {
-  border: 2px solid $color-secondary-dark;
-  background-color: $color-error-bg;
+  border: 2px solid $color-red-dark;
+  background-color: $color-red-lightest;
+  // Used for styling paragraphs of error text where a background doesn't make visual sense.
+  &.alert__no-bg {
+    background-color: transparent;
+    border: none;
+
+    h3:before {
+      width: $h3-font-size;
+      height: $h3-font-size;
+      content: url('../../images/icon-warning.svg');
+      padding-right: $space-half;
+    }
+  }
+
   h3 {
-    color: $color-secondary-dark;
+    color: $color-red-dark;
   }
 }
 
 .usa-alert-success {
   background-color: $color-green-lightest;
-  border: 2px solid $color-green; //borders added for consistency with error style
+  border: 2px solid $color-green-darkest; //borders added for consistency with error style
 }
 
 .usa-alert-warning {
@@ -60,48 +74,12 @@ $color-error-bg: #fef5f5;
 }
 
 .usa-alert-info {
-  background-color: #D2F6FF;
-  border: 2px solid $color-primary-alt; //borders added for consistency with error style
+  background-color: $color-blue-lightest;
+  border: 2px solid $color-blue-darker; //borders added for consistency with error style
 }
 
 alerts-widget:focus {
   outline: none;
-}
-
-.message-error {
-  @extend .usa-alert;
-  @extend .usa-alert-error;
-  &.no-bg {
-    background-color: transparent;
-    border: none;
-  }
-  h3,
-  p {
-    color: $color-secondary-dark;
-    font-weight: $font-weight-bold;
-  }
-  h3:before {
-    width: $h3-font-size;
-    height: $h3-font-size;
-    content: url('../../images/icon-warning.svg');
-    padding-right: $space-half;
-  }
-}
-.message-success {
-  @extend .usa-alert;
-  @extend .usa-alert-success;
-  h3 {
-    color: $color-green;
-    margin-bottom: 0;
-  }
-}
-.message-info {
-  @extend .usa-alert;
-  @extend .usa-alert-info;
-  h3 {
-    color: $color-primary-alt-darkest;
-    margin-bottom: 0;
-  }
 }
 
 .alert-submitted-price-lists {
@@ -117,7 +95,8 @@ alerts-widget:focus {
   }
 }
 
-/* for Django admin */
+// These classes are used in the Django admin. They're automatically created
+// by Django, so styling them is more straightfoward than renaming them.
 .messagelist li {
   @extend .usa-alert;
   @extend .usa-alert-info;

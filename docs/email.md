@@ -21,24 +21,21 @@ proper links back to your CALC instance. To use it, just supply
 the email addresses of the recipients like so:
 
 ```
-python manage.py send_test_html_email foo@example.org bar@example.org
+docker-compose run app python manage.py send_test_html_email foo@example.org bar@example.org
 ```
 
 You can also send "example" versions of all CALC emails to a single
 email address like so:
 
 ```
-python manage.py send_example_emails foo@example.org
+docker-compose run app python manage.py send_example_emails foo@example.org
 ```
 
 ### Reading email in development
 
-If you're using CALC's [Docker setup](docker.md), we use a container with
+As part of our [Docker setup](setup.md), we use a container with
 [MailCatcher][] to make it easy to read the emails sent by the app. You
-can view it at port 1080 of your Docker host.
-
-If you're not using Docker, email will default to being displayed
-to your console.
+can view it at port 1080: http://localhost:1080.
 
 ### Iterating on email in development
 

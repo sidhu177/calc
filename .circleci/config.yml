@@ -9,7 +9,7 @@ default-docker-config: &default-docker-config
         WD_CHROME_ARGS: --headless --no-sandbox --disable-setuid-sandbox
         SKIP_STATIC_ASSET_BUILDING: yup
         DEBUG: yup
-        DATABASE_URL: postgres://postgres@localhost/hourglass
+        DATABASE_URL: postgres://postgres@localhost/calc
 
         # Some of our integration tests either take a really long time to run or
         # are very error-prone via Selenium, so prefer RoboBrowser for now.
@@ -21,7 +21,7 @@ default-docker-config: &default-docker-config
     - image: circleci/postgres:9.5
       environment:
         POSTGRES_USER: postgres
-        POSTGRES_DB: hourglass
+        POSTGRES_DB: calc
     - image: redis:3.2-alpine
 
 jobs:

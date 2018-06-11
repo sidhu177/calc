@@ -1,4 +1,7 @@
+// Styles for the dropdown under a logged-in user's name.
 
+// We need to do some math on these numbers for positioning, so we put 'em
+// in variables to ensure everything stays in sync and is more readable.
 $usermenu-caret-size: 6px;
 $usermenu-width: 150px;
 
@@ -6,20 +9,20 @@ $usermenu-width: 150px;
   position: relative;
 
   > ul {
+    background: $color-green-lighter;
+    border-radius: $border-radius;
     display: none;
-
-    position: absolute;
-    top: $space-3x;
-    right: 0;
-    width: $usermenu-width;
-    z-index: 1;
-    text-align: left;
     font-size: $medium-font-size;
     font-weight: $font-weight-bold;
-    background: $color-gray-lightest;
-    border-radius: $border-radius;
     list-style: none;
+    margin-right: $space-6x;
     padding: $space-2x $space-3x;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    top: $space-4x;
+    width: $usermenu-width;
+    z-index: 1;
 
     li {
       margin-bottom: 0.5em;
@@ -31,10 +34,10 @@ $usermenu-width: 150px;
 
     a {
       text-decoration: none;
-      color: $color-primary-darker;
+      color: $color-blue-darker;
 
       &:hover {
-        text-decoration: underline;
+        border-bottom: 2px solid $color-blue-darker;
       }
     }
 
@@ -43,11 +46,10 @@ $usermenu-width: 150px;
       content: '';
       position: absolute;
       top: -$usermenu-caret-size;
-      // aligned in center of menu
-      right: $usermenu-width/2 - $usermenu-caret-size/2;
+      left: $usermenu-width/5 - $usermenu-caret-size/2;
       width: 0;
       height: 0;
-      border-bottom: $usermenu-caret-size solid $color-gray-lightest;
+      border-bottom: $usermenu-caret-size solid $color-green-lighter;
       border-right: $usermenu-caret-size solid transparent;
       border-left: $usermenu-caret-size solid transparent;
     }
@@ -72,19 +74,14 @@ $usermenu-width: 150px;
 }
 
 a.usermenu-trigger {
-  color: $color-primary-alt;
-  text-decoration: none;
+  color: $color-green-bright;
 
   .icon-triangle {
     margin-left: 4px;
-    fill: $color-primary-alt;
+    fill: $color-green-bright;
   }
 
   &:hover {
-    color: $color-white;
-
-    .icon-triangle {
-      fill: $color-white;
-    }
+    text-decoration: none;
   }
 }

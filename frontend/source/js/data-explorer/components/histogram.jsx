@@ -35,30 +35,30 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
 }
 
 .bars .bar rect {
-  fill: #0071bc;
+  fill: #0770b5;
 }
 
 .range-fill {
-  fill: #eeeeee;
+  fill: #f0f6fa;
 }
 
 .range-rule {
-  stroke: #5b616b;
+  stroke: #7da1b0;
   fill: none;
   stroke-dasharray: 5,5;
   stroke-width: 1;
 }
 
 .label-rule {
-  stroke: #5b616b;
+  stroke: #7da1b0;
 }
 
 .stddev-text {
-  fill: #5b616b;
+  fill: #436a79;
 }
 
 .axis .chart-label {
-  fill: #5b616b;
+  fill: #436a79;
   font-style: italic;
 }
 
@@ -66,7 +66,7 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
 .axis path {
   fill: none;
   stroke-width: 1;
-  stroke: #000;
+  stroke: #021014;
   shape-rendering: crispEdges;
 }
 
@@ -76,7 +76,7 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
 
 .stddev-text-label {
   font-size: 12px;
-  fill: #5b616b;
+  fill: #436a79;
 }
 
 .avg .value, .pp .value,
@@ -90,20 +90,20 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
 }
 
 rect {
-  fill: #999;
+  fill: #547d8c;
   stroke: #fff;
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
 
 .avg-label-box, .pp-label-box {
-  fill: #212121;
+  fill: #021014;
   stroke: none;
 }
 
 .avg line, .pp line {
   stroke-width: 1;
-  stroke: #212121;
+  stroke: #021014;
 }`;
 
 function updateHistogram(rootEl, data, proposedPrice, showTransition) {
@@ -349,10 +349,10 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
 
   t.selectAll('.bar')
     .each((d) => {
-      d.x = x(d.min); // eslint-disable-line no-param-reassign
-      d.width = x(d.max) - d.x; // eslint-disable-line no-param-reassign
-      d.height = heightScale(d.count); // eslint-disable-line no-param-reassign
-      d.y = bottom - d.height; // eslint-disable-line no-param-reassign
+      d.x = x(d.min);
+      d.width = x(d.max) - d.x;
+      d.height = heightScale(d.count);
+      d.y = bottom - d.height;
     })
     .select('rect')
       .attr('x', d => d.x)

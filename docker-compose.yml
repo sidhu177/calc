@@ -7,10 +7,10 @@ services:
     links:
       - db
       - redis
-    command: sh -c "python manage.py collectstatic --noinput ; gunicorn -b :${DOCKER_EXPOSED_PORT} hourglass.wsgi:application"
+    command: sh -c "python manage.py collectstatic --noinput ; gunicorn -b :${DOCKER_EXPOSED_PORT} calc.wsgi:application"
     ports:
       - "${DOCKER_EXPOSED_PORT}:${DOCKER_EXPOSED_PORT}"
-      - "8888:8888" # for analyze-webpack
+    mem_limit: 1G
   db:
     image: postgres:9.5.4
     volumes:
@@ -28,6 +28,7 @@ services:
       - db
       - redis
     command: python manage.py rqworker
+    mem_limit: 512M
   rq_scheduler:
     extends:
       file: docker-services.yml
@@ -38,6 +39,7 @@ services:
     command: python manage.py rqscheduler
     environment:
       - IS_RQ_SCHEDULER=yup
+    mem_limit: 512M
 volumes:
   node-modules:
   python-venv:

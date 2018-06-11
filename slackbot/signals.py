@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from .bot import sendmsg
 from data_capture.models import SubmittedPriceList
-from hourglass.site_utils import absolute_reverse
+from calc.site_utils import absolute_reverse
 
 
 @receiver(post_save, sender=SubmittedPriceList)

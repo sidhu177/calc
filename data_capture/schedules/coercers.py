@@ -58,7 +58,7 @@ def gen_sublists(arr, size):
     arr_len = len(arr)
     for i in range(arr_len):
         if i + size <= arr_len:
-            yield arr[i:i+size]
+            yield arr[i:i + size]
 
 
 def extract_min_education(text):

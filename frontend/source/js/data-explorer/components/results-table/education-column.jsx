@@ -4,7 +4,7 @@ import createSortableColumn from './sortable-column';
 
 const column = createSortableColumn({
   key: 'education_level',
-  title: 'Min Edu.',
+  title: 'Education',
   description: 'Minimum years of education',
 });
 

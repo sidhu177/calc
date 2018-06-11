@@ -11,15 +11,11 @@ body {
   -webkit-box-sizing: border-box;
 }
 
-main {
-  /*margin: 2rem 0;*/
-}
-
 a {
-  color: $color-primary;
+  color: $color-blue;
 
   &:hover {
-    color: $color-primary-darker;
+    color: $color-blue-dark;
   }
 }
 
