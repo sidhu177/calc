@@ -76,7 +76,7 @@ class App extends React.Component {
   render() {
     const prefixId = name => `${this.props.idPrefix}${name}`;
     const { hasRates, ratesInProgress, ratesReturned } = this.props;
-    
+
     return (
       <form
         id={prefixId('search')}
@@ -86,6 +86,7 @@ class App extends React.Component {
       >
         <TitleTagSynchronizer />
         <section className="search">
+        <h2>Search labor categories</h2>
           <div className="container">
             <p className="help-text">
               Enter your search terms below, separated by commas.
