@@ -75,6 +75,13 @@ def convert_to_tsquery_union(queries):
 
 
 class CurrentContractManager(models.Manager):
+    def get_schedules(self):
+        return [
+            value['schedule']
+            for value
+            in self.values('schedule').order_by('schedule').distinct('schedule')
+        ]
+
     def bulk_update_normalized_labor_categories(self):
         '''
         Iterate through all Contract models and update their

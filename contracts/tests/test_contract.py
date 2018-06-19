@@ -56,6 +56,14 @@ class NormalizeLaborCategoryTests(SimpleTestCase):
 
 
 class ContractTestCase(TestCase):
+    def test_get_schedules(self):
+        self.make_contract_with_rates(schedule='foo', _quantity=5)
+        self.make_contract_with_rates(schedule='bar', _quantity=5)
+        self.assertEqual(Contract.objects.get_schedules(), [
+            'bar',
+            'foo',
+        ])
+
     def make_contract_with_rates(self, **kwargs):
         final_kwargs = dict(
             hourly_rate_year1=100.00,
