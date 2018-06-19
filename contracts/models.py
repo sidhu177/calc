@@ -7,6 +7,8 @@ from django.db import models, connection
 from django.contrib.auth.models import User
 from django.db.models.expressions import Value
 from django.contrib.postgres.search import SearchVectorField, SearchVector
+from django.utils.safestring import mark_safe
+import markdown
 
 
 EDUCATION_CHOICES = (
@@ -517,3 +519,54 @@ class Contract(models.Model):
     def save(self, *args, **kwargs):
         self.update_normalized_labor_category()
         super().save(*args, **kwargs)
+
+
+class ScheduleMetadata(models.Model):
+    '''
+    This model represents metadata about a schedule, containing details
+    such as the schedule's SIN number and description.
+    '''
+
+    # This column corresponds to the "schedule" column of the Contract model
+    # and can essentially be viewed as an optional foreign key.
+    schedule = models.CharField(
+        help_text=(
+            'Text that appears in the "schedule" column of Contract data '
+            'to identify a labor rate as being in this schedule (e.g. "MOBIS").'
+        ),
+        unique=True,
+        db_index=True,
+        max_length=128
+    )
+
+    sin = models.CharField(
+        help_text=(
+            'The SIN number for the schedule (e.g. "874").'
+        ),
+        blank=True,
+        max_length=128
+    )
+
+    name = models.CharField(
+        help_text=(
+            'The name of the schedule as it should appear to CALC users '
+            '(e.g. "Legacy MOBIS").'
+        ),
+        max_length=128
+    )
+
+    description = models.TextField(
+        help_text=(
+            'A description of the schedule, formatted as Markdown.'
+        ),
+    )
+
+    @property
+    def full_name(self):
+        if self.sin:
+            return f'{self.sin} - {self.name}'
+        return self.name
+
+    @property
+    def description_html(self):
+        return mark_safe(markdown.markdown(self.description))  # nosec
