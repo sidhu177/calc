@@ -14,6 +14,9 @@
           </a>
         </p>
         <ul>
+          {% if user.is_staff %}
+          <li><a href="{% url 'admin:index' %}">Admin</a></li>
+          {% endif %}
           <li><a href="{% url 'user_account:index' %}">Your activity</a></li>
           <li><a href="{% url 'logout' %}">Log out</a></li>
         </ul>
