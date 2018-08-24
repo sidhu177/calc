@@ -15,9 +15,13 @@ can be found at
 
 However, if that doesn't work for some reason, the documentation is
 also available in this repository's [docs](docs/) directory.
-To get started, you'll probably want to start with either the
+
+To get started developing CALC, you'll probably want to start with either the
 [Setup guide](docs/setup.md) or the [Docker setup guide](docs/docker.md),
-depending on your preference.
+depending on your preference. 
+
+To get started with the CALC APIs, you can jump straight to the 
+[CALC API documentation](https://calc-dev.app.cloud.gov/api/docs/)
 
 You may also find the following documents useful:
 
