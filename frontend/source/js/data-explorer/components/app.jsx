@@ -206,6 +206,11 @@ Optional filters
             </div>
           </div>
         </section>
+        <div className="card__footer results-table_return-link">
+          <a href="#results-table">
+            Return to the top
+          </a>
+        </div>
       </form>
     );
   }
