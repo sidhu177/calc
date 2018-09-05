@@ -1,6 +1,5 @@
 import xlrd
 import functools
-import logging
 
 
 from django import forms
@@ -97,7 +96,7 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
 
     cats = []
 
-    heading_row = sheet.row(10)
+    heading_row = sheet.row(10) # header row
 
     col_idx_map = generate_column_index_map(heading_row,
                                             DEFAULT_FIELD_TITLE_MAP)
@@ -133,6 +132,7 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
         rownum += 1
 
     return cats
+
 
 class Schedule736PriceListRow(forms.Form):
     sin = forms.CharField(label='SIN PROPOSED')
