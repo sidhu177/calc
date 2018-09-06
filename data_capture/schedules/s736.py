@@ -1,6 +1,5 @@
 import xlrd
 import functools
-import logging
 
 
 from django import forms
@@ -133,6 +132,7 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
         rownum += 1
 
     return cats
+
 
 class Schedule736PriceListRow(forms.Form):
     sin = forms.CharField(label='SIN PROPOSED')
