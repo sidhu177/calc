@@ -35,3 +35,4 @@ calc-prod_manifest.yml
 tag-message-*.txt
 release-*-instructions.txt
 release-*-instructions.html
+~*.xls[x]

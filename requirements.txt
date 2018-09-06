@@ -27,3 +27,7 @@ semantic_version==2.6.0
 coreapi==2.3.3
 django-uswds-forms==1.0.0
 bleach==2.1.3
+
+# Needed for price list analysis
+nltk==3.2.2
+xlsxwriter==0.9.6

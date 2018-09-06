@@ -73,6 +73,18 @@ jobs:
           paths:
             - ~/venv
 
+      - restore_cache:
+          key: nltk-data-v2
+      - run:
+          name: Install NLTK data
+          command: |
+            python -m nltk.downloader averaged_perceptron_tagger -d ~/nltk_data
+      - save_cache:
+          name: Save NLTK cache
+          key: nltk-data-v2
+          paths:
+            - ~/nltk_data
+
       - run:
           name: Install nvm and node @ CI_NODE_VERSION
           command: |

@@ -1,0 +1,8 @@
+version: '3'
+services:
+  nginx:
+    env_file: .env.cloudgov-proxy
+    build: .
+    image: ${DOCKER_HUB_IMAGE}
+    ports:
+      - "8080:80"

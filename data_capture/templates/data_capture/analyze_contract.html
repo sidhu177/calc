@@ -1,0 +1,14 @@
+{% if severe %}
+This service's price is {{ preposition }} one standard
+deviation from the mean when compared to {{ count }} other
+<a href="{{ url }}" target="_blank">{{ labor_category }}</a> roles
+with similar education and experience.
+<br>
+<br>
+<span>Are you sure this price is fair and reasonable?</span>
+{% else %}
+This service's price is within {{ stddevs }} standard
+deviation{{ stddevs|pluralize }} of the mean when compared to {{ count }} other
+<a href="{{ url }}" target="_blank">{{ labor_category }}</a>
+roles with similar education and experience.
+{% endif %}
