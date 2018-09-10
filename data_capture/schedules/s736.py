@@ -96,7 +96,7 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
 
     cats = []
 
-    heading_row = sheet.row(10) # header row
+    heading_row = sheet.row(10)  # header row
 
     col_idx_map = generate_column_index_map(heading_row,
                                             DEFAULT_FIELD_TITLE_MAP)
