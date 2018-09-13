@@ -1,5 +1,7 @@
-import xlrd
 import functools
+import logging
+import re
+import xlrd
 
 
 from django import forms
@@ -8,9 +10,10 @@ from django.template.loader import render_to_string
 
 from .base import (BasePriceList, hourly_rates_only_validator,
                    min_price_validator)
-from .spreadsheet_utils import generate_column_index_map, safe_cell_str_value
-from .coercers import (strip_non_numeric, extract_min_education,
-                       extract_hour_unit_of_issue)
+from .spreadsheet_utils import (ColumnTitle, generate_column_index_map,
+                                safe_cell_str_value)
+from .coercers import (strip_non_numeric, extract_first_int,
+                       extract_min_education, extract_hour_unit_of_issue)
 from contracts.models import EDUCATION_CHOICES
 
 
@@ -43,7 +46,7 @@ EXAMPLE_SHEET_ROWS = [
     [
         r'736-5',
         r'Junior Analyst',
-        r'BA/BS',
+        r'Bachelors',
         r'2',
         r'$50.00',
         r'Hour',
@@ -65,6 +68,32 @@ EXAMPLE_SHEET_ROWS = [
     ],
 ]
 
+COLUMN_TITLES = {
+    'sin': ColumnTitle(
+        canonical_name=r'SIN(s) PROPOSED',
+        alternatives=[
+            re.compile(r'SIN.*')
+        ]
+    ),
+    'labor_category': ColumnTitle(
+        canonical_name=r'SERVICE PROPOSED (e.g. Job Title/Task)',
+        alternatives=['Labor Categories'],
+    ),
+    'education_level': ColumnTitle(
+        canonical_name=r'MINIMUM EDUCATION/ CERTIFICATION LEVEL',
+        alternatives=['MINIMUM EDUCATION']
+    ),
+    'min_years_experience': ColumnTitle(
+        canonical_name=r'MINIMUM YEARS OF EXPERIENCE',
+        alternatives=['Years of experience'],
+    ),
+    'unit_of_issue': ColumnTitle(
+        canonical_name=r'UNIT OF ISSUE (e.g. Hour, Task, Sq ft)'
+    ),
+    'price_including_iff': ColumnTitle(
+        canonical_name=r'PRICE OFFERED TO GSA (including IFF)'
+    ),
+}
 
 DEFAULT_FIELD_TITLE_MAP = {
     'sin': 'SIN PROPOSED',
@@ -74,6 +103,24 @@ DEFAULT_FIELD_TITLE_MAP = {
     'unit_of_issue': 'UNIT OF ISSUE (e.g. Hour)',
     'price_including_iff': 'PRICED OFFERED TO GSA (includingIFF)*',
 }
+
+STOP_TEXT = r'Most Favored Customer'
+
+logger = logging.getLogger('calc')
+
+
+def find_header_row(sheet, row_threshold=50):
+    first_col_heading = COLUMN_TITLES['sin']
+    row_limit = min(sheet.nrows, row_threshold)
+
+    for rx in range(row_limit):
+        val = sheet.cell_value(rx, 0)
+        if isinstance(val, str) and first_col_heading.matches(val):
+            return rx
+
+    raise ValidationError(
+        'Could not find the column {}.'.format(first_col_heading)
+    )
 
 
 def glean_labor_categories_from_file(f, sheet_name=DEFAULT_SHEET_NAME):
@@ -92,18 +139,18 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
 
     sheet = book.sheet_by_name(sheet_name)
 
-    rownum = 11  # first row of data
+    rownum = find_header_row(sheet) + 1  # add 1 to start on first data row
 
     cats = []
 
-    heading_row = sheet.row(10)
+    heading_row = sheet.row(rownum - 1)
 
     col_idx_map = generate_column_index_map(heading_row,
                                             DEFAULT_FIELD_TITLE_MAP)
 
     coercion_map = {
         'price_including_iff': strip_non_numeric,
-        'min_years_experience': int,
+        'min_years_experience': extract_first_int,
         'education_level': extract_min_education,
         'unit_of_issue': extract_hour_unit_of_issue,
     }
@@ -119,6 +166,16 @@ def glean_labor_categories_from_book(book, sheet_name=DEFAULT_SHEET_NAME):
                        float(price_including_iff) > 0)
 
         if not sin.strip() and not is_price_ok:
+            break
+
+        has_stop_text = re.match(STOP_TEXT, cval(0), re.IGNORECASE)
+
+        # We just keep going until we run into a row that either starts with
+        # STOP_TEXT or that doesn't have a SIN and price including IFF.
+        should_stop = has_stop_text or (
+            not sin.strip() and not price_including_iff.strip())
+
+        if should_stop:
             break
 
         cat = {}
@@ -216,7 +273,8 @@ class Schedule736PriceList(BasePriceList):
 
     def to_table(self):
         return render_to_string(self.table_template,
-                                {'rows': self.valid_rows})
+                                {'rows': self.valid_rows,
+                                 'header': Schedule736PriceListRow()})
 
     def to_error_table(self):
         return render_to_string(self.table_template,
@@ -241,6 +299,8 @@ class Schedule736PriceList(BasePriceList):
         except ValidationError:
             raise
         except Exception as e:
+            logger.info('Failed to glean data from %s: %s' % (f.name, e))
+
             raise ValidationError(
                 "An error occurred when reading your Excel data."
             )
