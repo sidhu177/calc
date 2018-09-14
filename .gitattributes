@@ -4,6 +4,8 @@
 *.png binary
 
 
-# Denote csv files as binary because weirdness with line endings across systems and editors
-# Ref https://github.com/18F/calc/issues/1414
+# Denote csv and xls/xlsx files as binary because weirdness with line endings across systems and editors
+# Ref https://github.com/18F/calc/issues/1414, https://github.com/18F/calc/pull/2133#issuecomment-421434119
 *.csv binary
+*.xls binary
+*.xlsx binary
