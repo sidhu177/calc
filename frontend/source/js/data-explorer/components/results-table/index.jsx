@@ -44,7 +44,6 @@ export class ResultsTable extends React.Component {
 
   render() {
     const id = `${this.props.idPrefix}results-table`;
-    const idHref = `#${id}`;
 
     return (
       <table id={id} className="results has-data sortable hoverable">
