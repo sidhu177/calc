@@ -1,0 +1,32 @@
+{% load static %}
+
+<p>
+  For 03FAC, this is your completed Price Proposal Template.
+  We'll only read the <strong>{{ sheet_name }}</strong> tab. It
+  should look like this:
+</p>
+
+<div class="excel-wrapper">
+  <table class="excel excel-schedule-736">
+    {% for row in sheet_rows %}
+    <tr>
+      {% for column in row %}
+        <td>{{ column }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<p>
+  If you're not using a spreadsheet like this, please download and
+  fill out the <a href="{% static 'data_capture/03FAC_template.xls' %}">03FAC Price List Template</a>.
+</p>
+
+{% if show_debug_ui %}
+<div class="dev-note">
+  <strong>Developers:</strong>
+  Download <a href="{% static 'data_capture/03FAC_example.xlsx' %}"><code>03FAC_example.xlsx</code></a>
+  to use as an example.
+</div>
+{% endif %}
