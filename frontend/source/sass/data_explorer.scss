@@ -408,6 +408,7 @@ label[for=schedule] {
 }
 
 .table-container {
+  border-bottom: 4px solid $color-gray-light;  // Emulates .card border
   width: 100%;
   overflow-x: auto;
   clear: both;
