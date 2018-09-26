@@ -135,9 +135,19 @@ table {
   }
 }
 
-.results-table_return-link {
+#results-table {
+  margin: 0;
+}
+
+.results-table__return-link {
+  font-size: $small-font-size;
   font-weight: $font-weight-bold;
+  display: inline-block;
+  margin-top: $space-2x;
+  margin-bottom: $space-6x;
   text-align: right;
+  float: right;
+  clear: both;
 }
 
 .sortable {

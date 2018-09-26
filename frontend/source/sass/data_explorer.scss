@@ -361,10 +361,6 @@ h5.proposed-price-highlight {
   margin: 5px 0 5px 0;
 }
 
-.results {
-  padding: 1rem 0;
-}
-
 .results h4 {
   margin-bottom: 0;
   float: left;
@@ -413,7 +409,7 @@ label[for=schedule] {
 
 .table-container {
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
   clear: both;
 }
 
