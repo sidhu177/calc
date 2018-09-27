@@ -51,25 +51,13 @@ table {
   &.price-list-table,
   &#result_list {
     thead {
-      .umbrella-header th {
-        border-bottom: none;
-        border-top: none;
-        color: $color-gray;
-        font-size: $small-font-size;
-        &:first-child,
-        &:last-child {
-          padding-bottom: $space-half;
-          padding-left: 0;
-        }
-      }
       th {
-        color: $color-gray-dark;
         position: relative;
         vertical-align: top;
+        color: $color-blue;
         border-bottom: 2px solid $color-gray-medium;
         border-top: 2px solid $color-gray-medium;
         &.sortable {
-          color: $color-blue;
           text-decoration: none;
           cursor: pointer;
           padding-bottom: 1.3em;
@@ -153,42 +141,8 @@ table {
   }
 }
 
-.table-gap {
-  border-right: 8px solid white;
-}
-
 td.sorted {
   background: $color-gray-lightest;
-}
-
-/* price analysis results styles */
-.analysis {
-  td {
-    border-bottom: 3px solid white;
-    &:first-of-type {
-      font-weight: $font-weight-bold;
-    }
-    span {
-      font-weight: $font-weight-normal;
-    }
-  }
-  td.table-error-severe {
-    background-color: $color-red-lightest;
-    font-weight: $font-weight-bold;
-    padding-left: 1.5rem;
-    span {
-      font-weight: $font-weight-normal;
-    }
-    &:before {
-      background-color: $color-red-dark;
-      content: '';
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 4px;
-    }
-  }
 }
 
 /* used on price list upload error page */
@@ -293,7 +247,6 @@ th.exclude a.restore {
   position: absolute;
   font-size: 1rem;
   margin-bottom: $space-1x;
-  margin-left: $space-2x;
   padding: 2px 0;
   text-transform: uppercase;
   text-decoration: underline;
@@ -319,8 +272,7 @@ th.number {
 }
 
 
-td.number,
-.number {
+td.number {
   font-family: $font-family-mono;
   text-align: right;
   &.number--currency:before {

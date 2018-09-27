@@ -9,16 +9,6 @@ find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
 echo "----- Updating Python Dependencies -----"
 python -m pip install -r requirements-dev.txt
 
-echo "----- Downloading NLTK Data -----"
-
-if [ -d "${NLTK_DATA_DIR}" ]; then
-  NLTK_OPTS="-d ${NLTK_DATA_DIR}"
-else
-  NLTK_OPTS=""
-fi
-
-python -m nltk.downloader averaged_perceptron_tagger ${NLTK_OPTS}
-
 echo "----- Updating Node Dependencies -----"
 yarn
 

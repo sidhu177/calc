@@ -73,18 +73,6 @@ jobs:
           paths:
             - ~/venv
 
-      - restore_cache:
-          key: nltk-data-v2
-      - run:
-          name: Install NLTK data
-          command: |
-            python -m nltk.downloader averaged_perceptron_tagger -d ~/nltk_data
-      - save_cache:
-          name: Save NLTK cache
-          key: nltk-data-v2
-          paths:
-            - ~/nltk_data
-
       - run:
           name: Install nvm and node @ CI_NODE_VERSION
           command: |
@@ -108,10 +96,12 @@ jobs:
           command: |
             npm install -g gulp@next
 
+      - restore_cache:
+          key: v1-node-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install node dependencies
           command: |
-            yarn --frozen-lockfile
+            yarn --pure-lockfile
       - save_cache:
           name: Save node deps cache
           key: v1-node-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -136,7 +126,7 @@ jobs:
           name: Build front end and run front end tests
           command: |
             yarn gulp build
-            yarn test --runInBand
+            yarn test
 
       - run:
           name: CodeClimate before-build

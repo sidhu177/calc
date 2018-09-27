@@ -198,7 +198,7 @@ dl.contract-details {
     &[type].form__inline {
       flex-grow: 6;
       max-width: 100%; // WDS override
-      border-radius: $border-radius 0 0 $border-radius;
+      border-radius: $border-radius;
       border-top: 1px solid $color-gray;
       border-right: none;
       border-left: 1px solid $color-gray;
@@ -252,10 +252,6 @@ input[type].form__inline,
   input.select-across ~ button[type=submit] {
     border-radius: 0 $border-radius $border-radius 0;
   }
-}
-
-label[for=query_type_match_exact] {
-  max-width: 13rem;
 }
 
 .html-dropdown {

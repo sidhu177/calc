@@ -82,7 +82,7 @@ class ContractTestCase(TestCase):
         self.assertEqual(c1._normalized_labor_category, 'lol foo')
         self.assertEqual(c2._normalized_labor_category, 'lol bar')
 
-        results = Contract.objects.all().multi_phrase_search('lol foo')
+        results = Contract.objects.multi_phrase_search('lol foo')
         self.assertEqual([r.labor_category for r in results], ['foo'])
 
     def test_update_normalized_labor_category_returns_bool(self):
@@ -95,7 +95,7 @@ class ContractTestCase(TestCase):
         c2 = get_contract_recipe().prepare(labor_category='engineer')
         Contract.objects.bulk_create([c1, c2])
 
-        results = Contract.objects.all().multi_phrase_search('person')
+        results = Contract.objects.multi_phrase_search('person').all()
         self.assertEqual([r.labor_category for r in results], ['jr person'])
 
     def test_bulk_create_updates_normalized_labor_category(self):
@@ -368,7 +368,7 @@ class ContractSearchTestCase(BaseContractSearchTestCase):
     ]
 
     def test_multi_phrase_search_works_with_single_word_phrase(self):
-        results = Contract.objects.all().multi_phrase_search('interpretation')
+        results = Contract.objects.multi_phrase_search('interpretation')
         self.assertCategoriesEqual(results, [
             u'Sign Language Interpretation',
             u'Interpretation Services Class 4: Afrikan,Akan,Albanian',
@@ -377,7 +377,7 @@ class ContractSearchTestCase(BaseContractSearchTestCase):
         ])
 
     def test_multi_phrase_search_works_with_multi_word_phrase(self):
-        results = Contract.objects.all().multi_phrase_search(
+        results = Contract.objects.multi_phrase_search(
             'interpretation services'
         )
         self.assertCategoriesEqual(results, [
@@ -387,7 +387,7 @@ class ContractSearchTestCase(BaseContractSearchTestCase):
         ])
 
     def test_multi_phrase_search_works_with_multiple_phrases(self):
-        results = Contract.objects.all().multi_phrase_search(
+        results = Contract.objects.multi_phrase_search(
             'interpretation services, disposal'
         )
         self.assertCategoriesEqual(results, [
@@ -435,14 +435,14 @@ class NormalizedContractSearchTestCase(BaseContractSearchTestCase):
     ]
 
     def test_search_for_junior_finds_jr(self):
-        results = Contract.objects.all().multi_phrase_search('junior')
+        results = Contract.objects.multi_phrase_search('junior')
         self.assertCategoriesEqual(results, [
             'Jr. Language Interpreter',
             'Junior Language Interpreter',
         ])
 
     def test_search_for_jr_finds_junior(self):
-        results = Contract.objects.all().multi_phrase_search('jr')
+        results = Contract.objects.multi_phrase_search('jr')
         self.assertCategoriesEqual(results, [
             'Jr. Language Interpreter',
             'Junior Language Interpreter',

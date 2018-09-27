@@ -69,14 +69,10 @@ export function Schedule({
 }
 
 Schedule.propTypes = {
-  selectedSchedule: PropTypes.string,
+  selectedSchedule: PropTypes.string.isRequired,
   setSchedule: PropTypes.func.isRequired,
   setQueryBy: PropTypes.func.isRequired,
   queryBy: PropTypes.string.isRequired,
-};
-
-Schedule.defaultProps = {
-  selectedSchedule: '',
 };
 
 export default connect(
