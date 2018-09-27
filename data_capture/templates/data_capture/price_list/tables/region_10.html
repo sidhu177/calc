@@ -1,0 +1,47 @@
+<table class="price-list-table">
+  <thead>
+    <tr>
+      <th>SIN(s) proposed</th>
+      <th>Service Proposed (e.g. Labor Category or Job Title/Task)</th>
+      <th>Minimum Education / Certification Level</th>
+      <th >Minimum Years of Experience (cannot be a range)</th>
+      <th>Unit of Issue (e.g. Hour, Task, Sq Ft)</th>
+      <th>Price Offered to GSA (including IFF)</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in rows %}
+    <tr>
+      <td class="{% if row.sin.errors %}error{% endif %}">
+        {{ row.sin.value }}
+        {{ row.sin.errors }}
+      </td>
+      <td class="{% if row.labor_category.errors %}error{% endif %}">
+        {{ row.labor_category.value }}
+        {{ row.labor_category.errors }}
+      </td>
+      <td class="{% if row.education_level.errors %}error{% endif %}">
+        {{ row.education_level.value }}
+        {{ row.education_level.errors }}
+      </td>
+      <td class="number {% if row.min_years_experience.errors %}error{% endif %}">
+        {{ row.min_years_experience.value }}
+        {{ row.min_years_experience.errors }}
+      </td>
+
+      <td class="{% if row.unit_of_issue.errors %}error{% endif %}">
+        {{ row.unit_of_issue.value }}
+        {{ row.unit_of_issue.errors }}
+      </td>
+      <td class="number {% if row.price_including_iff.errors %}error{% else %}currency{% endif %}">
+        {% if row.price_including_iff.errors %}
+          {{ row.price_including_iff.value }}
+          {{ row.price_including_iff.errors }}
+        {% else %}
+          {{ row.price_including_iff.value|floatformat:2 }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

@@ -9,15 +9,31 @@
   &.align-left {
     text-align: left;
   }
+  &.align-center {
+    text-align: center;
+  }
 
   .button-previous {
     float: left;
   }
   button,
   button[type="submit"],
-  .usa-button {
+  .usa-button,
+  .usa-button-primary {
     display: inline-block;
     margin: 0 2em 0 0;
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+
+  .download-group {
+    float: left;
+    text-align: left;
+
+    .ghost-button {
+    margin: 0 .3rem 0 -.75rem; // Negative margin to properly align ghost button
+    }
   }
 
   .submit-group {
@@ -35,7 +51,7 @@
     height: 38px;
     color: $color-gray-medium;
     margin-right: $space-2x;
-    max-width: 110px; // hacky magic number
+    max-width: 130px; // hacky magic number
     font-size: $small-font-size;
     line-height: $small-line-height;
   }

@@ -1,0 +1,89 @@
+{% extends 'data_capture/step.html' %}
+
+{% block body_class %}secondary-step card--wide card--no-header{% endblock %}
+
+{% block step_heading %}
+  <h2>Price list analysis</h2>
+  {% if gleaned_data.valid_rows %}
+    <p>Here's how the rates in your proposed contract compare with CALC data. Click on any link in the table to view the full search results for a proposed service, at the specified education and experience levels.</p>
+    {% endif %}
+{% endblock %}
+{% block step_body %}
+  {% if gleaned_data.valid_rows %}
+    <table class="price-list-table analysis">
+        <colgroup span="4"></colgroup>
+        <colgroup span="4"></colgroup>
+        <thead>
+          <tr class="umbrella-header">
+            <th id="your-data" class="table-gap" colspan="4" scope="colgroup">Uploaded price list data</th>
+            <th id="our-data" colspan="4" scope="colgroup">CALC analysis</th>
+          </tr>
+          <tr>
+            <th id="proposed-service" scope="col">Proposed service<br /><span>(# of CALC results)</span></th>
+            <th id="min-edu" scope="col">Min.<br />edu.</th>
+            <th id="min-exp" scope="col">Min.<br />exper.</th>
+            <th id="proposed-price" class="table-gap" scope="col">Proposed<br />price</th>
+            <th id="avg-price" scope="col">Average<br />price</th>
+            <th id="plus-minus-dollars" scope="col">+/- avg.</th>
+            <th id="plus-minus-percent" scope="col">% +/- avg.</th>
+            <th id="plus-minus-std-dev" scope="col">+/- std.<br />deviation</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for row in analyzed_rows %}
+          <tr>
+            <td headers="your-data proposed-service"><a href={{ row.analysis.url }} target="_blank">{{ row.labor_category }}<span> ({{ row.analysis.count }})</span></a></td>
+            <td headers="your-data min-edu">{{ row.education_level }}</td>
+            <td headers="your-data min-exp">{{ row.min_years_experience }}</td>
+            <td headers="your-data proposed-price" class="table-gap number">${{ row.price|floatformat:2 }}</td>
+            <td headers="our-data avg-price">${{ row.analysis.avg|floatformat:2 }}</td>
+            <td headers="our-data plus-minus-dollars">
+             {% if row.analysis.preposition == 'above' %}
+                +
+              {% elif row.analysis.preposition == 'below' %}
+                -
+              {% endif %}
+              <span class="number">
+                ${{ row.analysis.dist_from_avg|floatformat:2 }}
+              </span>
+            </td>
+            <td headers="our-data plus-minus-percent">
+              {% if row.analysis.preposition == 'above' %}
+                +
+              {% elif row.analysis.preposition == 'below' %}
+                -
+              {% endif %}
+              <span class="number">
+                {{ row.analysis.dist_from_avg_percent|floatformat:2 }}%
+              </span>
+            </td>
+            <td headers="our-data plus-minus-std-dev" {% if row.analysis.severe %}class="table-error-severe"{% endif %}>
+             {% if row.analysis.preposition == 'above' %}
+                +
+              {% elif row.analysis.preposition == 'below' %}
+                -
+              {% endif %}
+              {{ row.analysis.stddevs }} std. devs.
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  {% endif %}
+
+  <div class="form-button-row clearfix">
+    <div class="download-group">
+      <label>Download analysis:</label>
+      <a href="{% url 'data_capture:export_analysis' %}?f=csv" class="usa-button ghost-button csv" download>
+        CSV file
+      </a>
+
+      <a href="{% url 'data_capture:export_analysis' %}?f=xlsx" class="usa-button ghost-button csv" download>
+        Excel file
+      </a>
+    </div>
+
+    <a href="{% url 'index' %}" class="usa-button usa-button-secondary">CALC home</a>
+    <a href="{% url 'data_capture:analyze_step_1' %}" class="usa-button usa-button-primary">Analyze another price list</a>
+  </div>
+{% endblock %}

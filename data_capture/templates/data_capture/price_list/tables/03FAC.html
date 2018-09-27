@@ -1,0 +1,33 @@
+<table class="price-list-table">
+  <caption class="usa-sr-only">Review submitted price list data</caption>
+  <thead>
+    <tr>
+      {% for field in header %}
+        <th {% if field.name == 'price_including_iff' %}class="number"{% endif %}>
+          {{ field.label }}
+          {% if field.help_text %}<span>({{ field.help_text }})</span>{% endif %}
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in rows %}
+    {% with row_count=forloop.counter %}
+    <tr>
+    {% for col in row %}
+      <td class="{% if col.errors %}error{% endif %} {% if col.name == 'price_including_iff' %}number{% endif %}" {% if col.errors %}tabindex="0"{% endif %}>
+        <span {% if col.errors %}aria-describedby="error__row-{{ row_count}}__col-{{ forloop.counter }}"{% endif %}>
+          {% if col.name == 'price_including_iff' and col.value %}
+            ${{ col.value|floatformat:2 }}
+          {% elif col.value %}
+            {{ col.value }}
+          {% endif %}
+        </span>
+        {% if col.errors %}<div class="error__tooltip" role="tooltip" id="error__row-{{ row_count}}__col-{{ forloop.counter }}">{{ col.errors }}</div>{% endif %}
+      </td>
+    {% endfor %}
+    </tr>
+    {% endwith %}
+  {% endfor %}
+  </tbody>
+</table>

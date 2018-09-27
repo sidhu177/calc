@@ -63,7 +63,7 @@ EXAMPLE_SHEET_ROWS = [
 
 def render_r10_spreadsheet_example(request=None):
     return render_to_string(
-        'data_capture/price_list/upload_examples/region_10.html',
+        'data_capture/price_list/upload_examples/region_10_bulk.html',
         {'sheet_rows': EXAMPLE_SHEET_ROWS},
         request=request)
 

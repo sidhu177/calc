@@ -1,19 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Description> matches snapshot 1`] = `
-<p
-  className=""
+<div
+  id="description"
 >
-  Showing 101 of 
-  <span
-    className="total"
-  >
-    5,000
-  </span>
-   results with 
-  <span
-    className="filters"
-  >
+  <h4>
+    Hourly rate data
+    <span>
+       for 
+    </span>
     <DescriptionFilter
       extraClassName={null}
       key="lab"
@@ -21,44 +16,57 @@ exports[`<Description> matches snapshot 1`] = `
     >
       Systems Analyst
     </DescriptionFilter>
-    <DescriptionFilter
-      extraClassName="education-filter"
-      key="edu"
-      label="education level"
-    />
-    <DescriptionFilter
-      extraClassName={null}
-      key="exp"
-      label="experience"
+  </h4>
+  <p>
+    Showing 101 of 
+    <span
+      className="total"
     >
-      5
-       
-      -
-      10
-       
-      years
-    </DescriptionFilter>
-    <DescriptionFilter
-      extraClassName={null}
-      key="sit"
-      label="worksite"
+      5,000
+    </span>
+     results with 
+    <span
+      className="filters"
     >
-      both
-    </DescriptionFilter>
-    <DescriptionFilter
-      extraClassName={null}
-      key="bus"
-      label="business size"
-    >
-      small business
-    </DescriptionFilter>
-    <DescriptionFilter
-      extraClassName={null}
-      key="sch"
-      label="schedule"
-    >
-      132 - IT 70
-    </DescriptionFilter>
-  </span>
-</p>
+      <DescriptionFilter
+        extraClassName="education-filter"
+        key="edu"
+        label="education level"
+      />
+      <DescriptionFilter
+        extraClassName={null}
+        key="exp"
+        label="experience"
+      >
+        5
+         
+        -
+        10
+         
+        years
+      </DescriptionFilter>
+      <DescriptionFilter
+        extraClassName={null}
+        key="sit"
+        label="worksite"
+      >
+        both
+      </DescriptionFilter>
+      <DescriptionFilter
+        extraClassName={null}
+        key="bus"
+        label="business size"
+      >
+        small business
+      </DescriptionFilter>
+      <DescriptionFilter
+        extraClassName={null}
+        key="sch"
+        label="schedule"
+      >
+        132 - IT 70
+      </DescriptionFilter>
+    </span>
+  </p>
+</div>
 `;

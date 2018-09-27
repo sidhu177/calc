@@ -3,7 +3,7 @@
   <thead>
     <tr>
       {% for field in header %}
-        <th {% if field.name == 'price_including_iff' %}class="number"{% endif %}>
+        <th>
           {{ field.label }}
           {% if field.help_text %}<span>({{ field.help_text }})</span>{% endif %}
         </th>

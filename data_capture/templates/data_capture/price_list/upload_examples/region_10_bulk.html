@@ -1,0 +1,26 @@
+{% load static %}
+
+<p>
+  You should upload an exported spreadsheet from the Region 10 pricing database.
+  We'll only read the first sheet of the workbook, which should look like this:
+</p>
+
+<div class="excel-wrapper">
+  <table class="excel">
+    {% for row in sheet_rows %}
+    <tr>
+      {% for column in row %}
+        <td>{{ column }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% if show_debug_ui %}
+  <p class="dev-note">
+    <strong>Developers:</strong>
+    Download <a href="{% static 'data_capture/r10_export_sample.xlsx' %}"><code>r10_export_sample.xlsx</code></a>
+    to use as an example Region 10 bulk export to load.
+  </p>
+{% endif %}

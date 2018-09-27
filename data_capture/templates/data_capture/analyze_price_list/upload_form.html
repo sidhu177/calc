@@ -1,0 +1,28 @@
+<form enctype="multipart/form-data" method="post"
+      is="ajax-form"
+      action="{% url 'data_capture:analyze_step_2' %}">
+
+{% csrf_token %}
+
+{% if request.is_ajax %}
+{% include 'data_capture/messages.html' %}
+{% endif %}
+
+{{ form.non_field_errors }}
+
+{{ form.file.errors }}
+
+{{ form.file }}
+
+<div class="form-button-row clearfix">
+  <a href="{% url 'data_capture:analyze_step_1' %}" class="usa-button usa-button-secondary button-previous">Previous</a>
+
+  <div class="submit-group">
+    <button type="submit" class="button-primary">Next</button>
+    <span class="submit-label">
+      See CALC's analysis of your price list.
+    </span>
+  </div>
+</div>
+
+</form>

@@ -2,7 +2,13 @@
     <ul>
       <li><a href="{% url 'index' %}">Explore data</a></li>
       {% if perms.data_capture.add_submittedpricelist %}
+      {# I would prefer to use ANALYZE_PRICES_PERMISSION here, but the magic of django.contrib.auth doesn't seem to allow that, so this will need to be manually changed if ANALYZE_PRICES_PERMISSION ever diverges from data_capture.add_submittedpricelist #}
+      <li{% if current_selected_tab == 'analyze_price_data'%} class="selected"{% endif %}><a href="{% url 'data_capture:analyze_step_1' %}">Analyze prices</a></li>
+      {% endif %}
+      {% if perms.data_capture.add_submittedpricelist %}
       <li{% if current_selected_tab == 'upload_price_data'%} class="selected"{% endif %}><a href="{% url 'data_capture:step_1' %}">Add price data</a></li>
+      {% else %}
+      <li{% if current_selected_tab == 'upload_price_data'%} class="selected"{% endif %}><a href="{% url 'data_capture:tutorial' %}">Add price data</a></li>
       {% endif %}
       <li{% if current_selected_tab == 'about'%} class="selected"{% endif %}><a href="{% url 'about' %}">About CALC</a></li>
     </ul>

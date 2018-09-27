@@ -16,9 +16,9 @@ import { trackEvent } from '../../common/ga';
 import Description from './description';
 import Highlights from './highlights';
 import Histogram from './histogram';
-import ProposedPrice from './proposed-price';
 import ExportData from './export-data';
 import ResultsTable from './results-table';
+import ProposedPrice from './proposed-price';
 import QueryType from './query-type';
 import LoadableOptionalFilters from './optional-filters/loadable-optional-filters';
 import LaborCategory from './labor-category';
@@ -138,15 +138,8 @@ class App extends React.Component {
                 height="280"
               />
 
-              <div id={prefixId('description')}>
-                <Description />
-              </div>
+              <Description />
 
-              <h4>
-Hourly rate data
-              </h4>
-
-              <ProposedPrice />
               <LoadingIndicator />
 
               <div className="graph">
@@ -155,24 +148,21 @@ Hourly rate data
                 </div>
               </div>
 
-              <Highlights />
+              <div className="highlights-container">
+                <Highlights />
+                <ProposedPrice />
+              </div>
 
-              <div className="download-buttons row">
-                <div className="four columns">
-                  <a
-                    className="usa-button usa-button-primary"
-                    id={prefixId('download-histogram') /* Selenium needs it. */}
-                    href=""
-                    onClick={this.handleDownloadClick}
-                  >
-                    ⬇ Download graph
-                  </a>
-                </div>
-
-                <div>
-                  <ExportData />
-                </div>
-
+              <div className="">
+                <a
+                  className="usa-button usa-button-primary"
+                  id={prefixId('download-histogram') /* Selenium needs it. */}
+                  href=""
+                  onClick={this.handleDownloadClick}
+                >
+                  ⬇ Download graph
+                </a>
+                <ExportData />
                 <p className="help-text">
                   The rates shown here are fully burdened, applicable
                   {' '}

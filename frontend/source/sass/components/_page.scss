@@ -69,6 +69,25 @@ footer {
   }
 }
 
+.card .content:first-child {
+  h1, h2, h3 {
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  // The first header on a card has too much space.
+}
+
+.card .content:first-child h2:first-child {
+  // The first header on a card has too much space.
+  margin-top: 0;
+}
+
+.card .content:first-child h3:first-child {
+  // The first header on a card has too much space.
+  margin-top: 0;
+}
+
 /* Applied to "main" element on some steps of data capture to create the appearance
  * of a unified card (despite being composed of two separate "card" DOM elements).
  * Used in conjunction with the standard card classes above. */
@@ -140,4 +159,17 @@ footer {
   h1, p {
     flex: 1 100%;
   }
+}
+
+.tutorial .arrow {
+  background-image: url('../../images/arrow-triangle.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  margin: 12px auto;
+}
+
+.tutorial p.img-wrapper {
+  text-align: center;
 }

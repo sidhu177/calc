@@ -13,7 +13,12 @@ body {
 // temp styles to mimic .card without indenting the table
 .graph-block {
   margin-right: 0;
-  margin-left: $space-8x;
+  margin-left: 84px; // Hacky number to approximate card margin value
+  p {
+    color: $color-gray;
+    font-weight: $font-weight-normal;
+    margin-top: $space-2x;
+  }
 }
 
 .search-header {
@@ -36,14 +41,18 @@ section.search .container {
   padding: 0;
 }
 
+#search .card {
+  padding-bottom: $space-4x;
+  }
+  .secondary {
+    border-bottom: none;
+    padding-top: $space-6x;
+}
+
 @media only screen and (max-width: $medium-large-screen) {
 .graph-block {
     margin-left: $space-3x;
   }
-}
-
-.help-text.columns.nine {
-  padding-top: $space-8x;
 }
 
 // to fake selection of home link
@@ -135,29 +144,31 @@ span.dollars {
   font-size: 70%;
 }
 
-.filter-title {
+h5.filter-title {
   padding-bottom: 0;
-  margin: 1em 0 1.5em 0;
+  margin: 0 0 1.5rem 0;
 }
 
 .filter-block {
   background: $color-gray-lightest;
   border-radius: $border-radius;
-  margin-right: $space-1x;
+  margin-right: $space-2x;
   margin-bottom: 0;
-  padding: 1rem 2rem;
+  padding: 2rem;
 
   legend {
     font-size: $small-font-size;
   }
 }
 
+#search .help-text {
+  margin-bottom: 0;
+  font-size: $medium-font-size;
+}
 
 @media (min-width: 550px) {
   .filter-container {
     float: right;
-    margin-top: 1rem;
-    margin-bottom: 1em;
   }
 }
 
@@ -270,7 +281,7 @@ input[type="checkbox"]:checked ~ label {
 
 .highlights-container {
   margin-bottom: 2em;
-  margin-top: 1em;
+  margin-top: 2em;
   text-align: center;
   position: relative;
   display: flex;
@@ -279,9 +290,9 @@ input[type="checkbox"]:checked ~ label {
 
 .price-block {
   background: $color-gray-lightest;
-  border: 1px solid $color-gray-lighter;
   border-radius: $border-radius;
   flex-grow: 9;
+  padding: 1.8rem .4rem 2rem 0;
   .row {
     display: flex;
     align-items: flex-end;
@@ -300,26 +311,28 @@ input[type="checkbox"]:checked ~ label {
 .standard-deviation-block {
   display: inline-block;
   margin: 0 auto;
-  padding: .4em;
   text-align: center;
+  padding: 0 .4em;
+}
+
+.avg-price-block {
+  border-right: 3px solid $color-white;
+  border-left: 3px solid $color-white;
 }
 
 .proposed-price-block {
   background: $color-gray-lightest;
-  border: 1px solid $color-gray-lighter;
   border-radius: $border-radius;
-  padding: 0.4em 1.8em;
-  margin-left: 3rem;
-  float: right;
-  display: none;
-  flex-grow: 1;
+  padding: .4em .8em .8em .8em;
+  margin-left: 1em;
+  margin-right: 3em;
 }
 
 .proposed-price {
-  float: right;
-  input {
-    margin: 0;
-    width: 155px;
+  input[type].form__inline,
+  button[type].button-primary {
+    margin: .2rem 0 0 0;
+    max-width: 80px;
     display: inline-block;
   }
   .go {
@@ -334,27 +347,34 @@ input[type="checkbox"]:checked ~ label {
 .standard-deviation-block,
 .proposed-price-block {
   h5 {
+    font-size: $medium-font-size;
+    font-weight: $font-weight-normal;
+    line-height: 2.5rem; // to standardize the height of larger and smaller h5s used
     margin-top: 0;
     margin-bottom: 0;
-    font-weight: 300;
-    line-height: 3.12rem; // to standardize the height of larger and smaller h5s used
   }
 }
 
 .avg-price-block {
-    border-right: 1px solid $color-gray-lighter;
-    border-left: 1px solid $color-gray-lighter;
   h5 {
-    font-size: 2.4rem;
+    font-size: $base-font-size;
+    font-weight: $font-weight-bold;
   }
 }
 
-.avg-price-highlight,
+h5.avg-price-highlight,
 h5.sd-highlight,
 h5.proposed-price-highlight {
-  color: $color-blue-dark;
-  font-weight: 400;
-  font-size: 2.4rem;
+  font-size: 2.2rem;
+}
+
+h5.avg-price-highlight {
+  font-weight: $font-weight-bold;
+}
+
+h5.proposed-price-title {
+  font-weight: $font-weight-bold;
+  text-align: left;
 }
 
 .slider {
@@ -478,6 +498,10 @@ a.focus-input {
   }
 }
 
+.filter.contract-year {
+  padding-top: 2.5rem; // Hacky number to vertically align with highlights block
+}
+
 .contract-year-block {
   background-color: $color-white;
   border: 1px solid $color-gray-lighter;
@@ -510,10 +534,17 @@ a.focus-input {
 }
 
 #description {
-  color: $color-gray-dark;
   font-weight: normal;
-  font-size: 2rem;
+  padding-right: $space-3x;
   overflow: hidden;
+  h4 {
+    margin-top: 0;
+  }
+  p {
+    color: $color-base;
+    font-size: $base-font-size;
+    margin-top: 0;
+  }
 
   .total {
     font-weight: bold;
@@ -534,7 +565,7 @@ a.focus-input {
 /* graph container */
 .graph {
   position: relative;
-  margin: 1rem 0;
+  margin-top: .8rem;
 }
 
 svg.graph {
@@ -660,4 +691,16 @@ input[type=checkbox]:focus+.checkbox-focus {
 
 .contract-year legend {
   float: left;
+}
+
+#description {
+  h4 {
+    font-size: $h3-font-size;
+  }
+  p {
+    color: $color-gray-dark;
+  }
+  span {
+    font-weight: $font-weight-normal;
+  }
 }

@@ -13,8 +13,7 @@ button,
 [type="button"],
 [type="image"]{
   // WDS override
-  margin-bottom: 0;
-  margin-top: 0;
+  margin: 0 1em 0 0;
   padding: 1.3rem 2rem;
   font-size: $medium-font-size;
   font-weight: $font-weight-bold;
@@ -121,5 +120,61 @@ input.usa-button-link[type="button"] {
   }
   &:active {
     background-color: $color-green;
+  }
+}
+
+.button-gray-icon {
+  background-color: $color-gray-lighter;
+  color: $color-gray-darker;
+  font-size: $medium-font-size;
+  height: 3.2rem;
+  padding: 1rem 1rem 1rem 3rem;
+  span {
+    font-weight: $font-weight-normal;
+  }
+  &:hover {
+    background-color: $color-gray-light;
+    color: $color-gray-darker;
+  }
+  &.graph {
+    background-image: url('../../images/icon-graph-gray.svg');
+    background-position: $base-spacing-unit 50%;
+    background-repeat: no-repeat;
+  }
+  &.csv {
+    background-image: url('../../images/icon-spreadsheet-gray.svg');
+    background-position: $base-spacing-unit 50%;
+    background-repeat: no-repeat;
+  }
+}
+
+.ghost-button {
+  background: transparent;
+  color: $color-blue;
+  font-size: $medium-font-size;
+  margin: 0 .3rem 0 -.75rem; // Negative margin to properly align ghost button
+  padding: .8rem 1rem .7rem 3.2rem;
+  span {
+    font-weight: $font-weight-normal;
+  }
+  &:hover {
+    background-color: $color-blue-lightest;
+    color: $color-blue-darker;
+  }
+  &.graph {
+    background-image: url('../../images/icon-graph-blue.svg');
+    background-position: 10% center;
+    background-repeat: no-repeat;
+    &:hover {
+      background-image: url('../../images/icon-graph-blue-dark.svg');
+    }
+  }
+  &.csv {
+    background-image: url('../../images/icon-spreadsheet-blue.svg');
+    background-position: 10% center;
+    background-repeat: no-repeat;
+    &:hover {
+      background-image: url('../../images/icon-spreadsheet-blue-dark.svg');
+    }
   }
 }

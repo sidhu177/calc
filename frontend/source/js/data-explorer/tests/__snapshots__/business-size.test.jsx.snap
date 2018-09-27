@@ -17,6 +17,7 @@ exports[`<BusinessSize> matches snapshot 1`] = `
     value="contractor"
   >
     <option
+      key=""
       value=""
     >
       (all)

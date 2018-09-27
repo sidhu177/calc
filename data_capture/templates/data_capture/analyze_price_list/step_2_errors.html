@@ -1,0 +1,76 @@
+{% extends 'data_capture/step.html' %}
+
+{% block body_class %}secondary-step card--wide{% endblock %}
+
+{% block main_class %}card--collapse-header{% endblock %}
+
+{% block step_heading %}
+  <h2>Review errors</h2>
+{% endblock %}
+{% block step_body %}
+  {% if gleaned_data.invalid_rows %}
+    {% with rows=gleaned_data.invalid_rows %}
+      {% with total=rows|length %}
+
+        <div class="message message-error" role="alert">
+          {% if not gleaned_data.valid_rows %}
+            <h3>No valid rows found!</h3>
+            <p>
+              Your uploaded price list contains no valid rows. Please fix the errors
+              shown below in the original file and <a href="{% url 'data_capture:analyze_step_2' %}">try uploading it again</a>.
+            </p>
+          {% else %}
+            <h3>We found errors in {{ total }} row{{ total|pluralize }} of your data</h3>
+            <p>
+              The row{{ total|pluralize }} below appear{{ total|pluralize:"s," }} to be
+              invalid.
+              If you'd like, you may correct {{ total|pluralize:"this row,these rows" }}
+              in your original spreadsheet and <a href="{% url 'data_capture:analyze_step_2' %}">try uploading it again</a>.
+            </p>
+            <p>
+              Otherwise, we'll discard the rows with problems when we analyze
+              your original spreadsheet.
+            </p>
+          {% endif %}
+        </div>
+      {% endwith %}
+      {{ gleaned_data.to_error_table|safe }}
+    {% endwith %}
+  {% endif %}
+  </div><!--content-->
+</div><!--card-->
+<div class="card">
+  <div class="content">
+    <h2 id="upload" tabindex="-1">Upload replacement (optional)</h2>
+
+    <form enctype="multipart/form-data" method="post"
+    is="ajax-form"
+    action="{% url 'data_capture:analyze_step_2' %}">
+
+      {% csrf_token %}
+
+      {% if request.is_ajax %}
+      {% include 'data_capture/messages.html' %}
+      {% endif %}
+
+      {{ form.file }}
+
+      <div class="form-button-row clearfix">
+        <a href="{% url 'data_capture:analyze_step_1' %}" class="usa-button usa-button-secondary button-previous">Previous</a>
+
+        <button type="submit" class="usa-button usa-button-primary">
+          Upload revised price list
+        </button>
+
+        {% if gleaned_data.valid_rows %}
+          <a href="{% url 'data_capture:analyze_step_3' %}" class="usa-button usa-button-secondary">
+            Continue without these rows
+          </a>
+        {% else %}
+          <div class="submit-group">
+            <div class="usa-button usa-button-disabled">Continue without these rows</div>
+          </div>
+        {% endif %}
+      </div>
+    </form>
+{% endblock %}

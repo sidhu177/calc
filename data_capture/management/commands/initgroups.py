@@ -6,6 +6,7 @@ from calc.utils import get_permissions_from_ns_codenames
 
 BULK_UPLOAD_PERMISSION = 'contracts.add_bulkuploadcontractsource'
 PRICE_LIST_UPLOAD_PERMISSION = 'data_capture.add_submittedpricelist'
+ANALYZE_PRICES_PERMISSION = PRICE_LIST_UPLOAD_PERMISSION  # May change later.
 VIEW_ATTEMPT_PERMISSION = 'data_capture.change_attemptedpricelistsubmission'
 
 ROLES = {}
@@ -14,6 +15,7 @@ ROLES = {}
 # the "Authentication and Authorization" section of docs/auth.md.
 
 ROLES['Data Administrators'] = set([
+    ANALYZE_PRICES_PERMISSION,
     'auth.add_user',
     'auth.change_user',
     BULK_UPLOAD_PERMISSION,
@@ -29,6 +31,7 @@ ROLES['Data Administrators'] = set([
 ])
 
 ROLES['Contract Officers'] = set([
+    ANALYZE_PRICES_PERMISSION,
     PRICE_LIST_UPLOAD_PERMISSION,
     'data_capture.add_submittedpricelistrow',
 ])

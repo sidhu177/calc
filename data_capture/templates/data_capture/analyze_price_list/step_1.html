@@ -1,0 +1,31 @@
+{% extends 'data_capture/step.html' %}
+{% load frontend %}
+{% block body_class %}content--skinny{% endblock %}
+
+{% block page_heading %}
+Analyze a price list
+{% endblock %}
+{% block step_heading %}
+<p>
+  Now you can upload a proposed service contract and CALC will tell you how the rates for all of the services in it compare with prices for similar labor categories in our database of approved contracts.
+</p>
+{% endblock %}
+
+{% block step_body %}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  {% fieldset form.schedule %}
+
+  <div class="form-button-row clearfix">
+    <div class="submit-group">
+      <span class="submit-label">
+        Provide some basic details about the contract.
+      </span>
+      <button type="submit" class="button-primary">Next</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

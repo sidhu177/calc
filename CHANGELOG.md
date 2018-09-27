@@ -7,6 +7,24 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+### Added
+- Schedule 70 contracting officers with login credentials can now have CALC
+  analyze price lists and provide summary stats about them. (#997)
+- The data upload process now has an overview and walkthrough of the process
+  on the first page. (#1460)
+
+### Changed
+- Fixed a bug that caused CircleCI to time out on Jest tests. (#2149, #2155)
+- Moved the data explorer's proposed price entry box down to be with the
+  rest of the pricing summary numbers. (#2178)
+- Changed the data explorer's summary hierarchy (#2178)
+- Updated the design of the data explorer graph to match site colors. (#2143)
+- Made some updates and language changes to the deployment documentation. (#2139)
+- Removed some unused template tags from the header in the admin section that
+  were rendering oddly. (#2162)
+- Fixed a bug that made the "exact match" checkbox too wide. (#2141)
+
+
 ## [3.1.0][] - 2018-09-19
 
 ### Added

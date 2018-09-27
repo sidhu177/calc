@@ -114,6 +114,56 @@ class CurrentContractManager(models.Manager):
         self.filter(pk__in=[c.pk for c in contracts]).update_search_index()
         return contracts
 
+    def search(self, *args, **kwargs):
+        return self.get_queryset().search(*args, **kwargs)
+
+    def get_queryset(self):
+        return ContractsQuerySet(self.model, using=self._db)\
+            .filter(current_price__gt=0)\
+            .exclude(current_price__isnull=True)
+
+
+class ContractsQuerySet(models.QuerySet):
+
+    def search(self, query):
+        return self.filter(search_index=query)
+
+    def update_search_index(self):
+        return self.update(
+            search_index=SearchVector('_normalized_labor_category'))
+
+    def order_by(self, *args, **kwargs):
+        edu_sort_sql = """
+            case
+                when education_level = 'HS' then 1
+                when education_level = 'AA' then 2
+                when education_level = 'BA' then 3
+                when education_level = 'MA' then 4
+                when education_level = 'PHD' then 5
+                else -1
+            end
+        """
+
+        edu_index = None
+
+        sort_params = list(args)
+
+        if 'education_level' in sort_params:
+            edu_index = sort_params.index('education_level')
+        elif '-education_level' in sort_params:
+            edu_index = sort_params.index('-education_level')
+
+        if edu_index is not None:
+            sort_params[edu_index] = 'edu_sort' if not args[
+                edu_index].startswith('-') else '-edu_sort'
+            queryset = super(ContractsQuerySet, self)\
+                .extra(select={'edu_sort': edu_sort_sql}, order_by=sort_params)
+        else:
+            queryset = super(ContractsQuerySet, self)\
+                .order_by(*args, **kwargs)
+
+        return queryset
+
     def multi_phrase_search(self, query, query_by=None, *args, **kwargs):
         """
         Given a query as string, runs it through clean_search to get a list of search terms,
@@ -165,55 +215,10 @@ class CurrentContractManager(models.Manager):
                     matches = matches | wmatches
         return matches
 
-    def search(self, *args, **kwargs):
-        return self.get_queryset().search(*args, **kwargs)
-
     def get_queryset(self):
         return ContractsQuerySet(self.model, using=self._db)\
             .filter(current_price__gt=0)\
             .exclude(current_price__isnull=True)
-
-
-class ContractsQuerySet(models.QuerySet):
-
-    def search(self, query):
-        return self.filter(search_index=query)
-
-    def update_search_index(self):
-        return self.update(
-            search_index=SearchVector('_normalized_labor_category'))
-
-    def order_by(self, *args, **kwargs):
-        edu_sort_sql = """
-            case
-                when education_level = 'HS' then 1
-                when education_level = 'AA' then 2
-                when education_level = 'BA' then 3
-                when education_level = 'MA' then 4
-                when education_level = 'PHD' then 5
-                else -1
-            end
-        """
-
-        edu_index = None
-
-        sort_params = list(args)
-
-        if 'education_level' in sort_params:
-            edu_index = sort_params.index('education_level')
-        elif '-education_level' in sort_params:
-            edu_index = sort_params.index('-education_level')
-
-        if edu_index is not None:
-            sort_params[edu_index] = 'edu_sort' if not args[
-                edu_index].startswith('-') else '-edu_sort'
-            queryset = super(ContractsQuerySet, self)\
-                .extra(select={'edu_sort': edu_sort_sql}, order_by=sort_params)
-        else:
-            queryset = super(ContractsQuerySet, self)\
-                .order_by(*args, **kwargs)
-
-        return queryset
 
 
 class BulkUploadContractSource(models.Model):

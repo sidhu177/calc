@@ -1,0 +1,19 @@
+{% extends 'data_capture/step.html' %}
+{% block body_class %}content--skinny{% endblock %}
+
+{% block main_class %}card--collapse-header{% endblock %}
+
+{% block step_heading %}
+  <h2>Upload price list</h2>
+  <p>Choose the price list you'd like to analyze.</p>
+  {% include 'data_capture/_upload_example.html' %}
+{% endblock %}
+{% block step_body %}
+  {% include 'data_capture/analyze_price_list/upload_form.html' %}
+{% endblock %}
+{% block card_footer %}
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="usa-button usa-button-link" name="cancel" data-a11y-dialog-show="cancel-dialog" formnovalidate>Cancel this upload</button>
+  </form>
+{% endblock %}

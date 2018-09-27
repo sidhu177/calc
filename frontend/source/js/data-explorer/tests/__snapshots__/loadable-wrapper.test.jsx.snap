@@ -21,10 +21,11 @@ exports[`<Loading> renders an alert if there is an error 1`] = `
 `;
 
 exports[`LoadableWrapper creates a react-loadable higher-order component 1`] = `
-<Component
+<Loading
   error={null}
   isLoading={true}
   pastDelay={false}
+  retry={[Function]}
   timedOut={false}
 />
 `;

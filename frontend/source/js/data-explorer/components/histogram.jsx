@@ -35,7 +35,7 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
 }
 
 .bars .bar rect {
-  fill: #0770b5;
+  fill: #cddc86;
 }
 
 .range-fill {
@@ -54,7 +54,7 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
 }
 
 .stddev-text {
-  fill: #436a79;
+  fill: #021014;
 }
 
 .axis .chart-label {
@@ -62,16 +62,27 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
   font-style: italic;
 }
 
-.axis line,
-.axis path {
-  fill: none;
-  stroke-width: 1;
-  stroke: #021014;
-  shape-rendering: crispEdges;
+.axis text {
+  fill: #436a79;
+  font-size: 13px;
 }
 
-.axis text {
-  font-size: 13px;
+.axis.x path {
+  stroke: none;
+}
+
+.axis.y path {
+  stroke-width: 2;
+  stroke: #c5d6de;
+}
+
+.contrast-stroke {
+  stroke: #61701c;
+  stroke-width: 2px;
+}
+
+.tick line {
+  stroke: none;
 }
 
 .stddev-text-label {
@@ -79,31 +90,32 @@ const INLINE_STYLES = `/* styles here for download graph compatibility */
   fill: #436a79;
 }
 
-.avg .value, .pp .value,
-.axis .tick.primary text {
+.avg .value,
+.pp .value {
   font-weight: bold;
-  -webkit-font-smoothing: antialiased;
 }
 
-.average, .proposed {
-  fill: #fff;
+.average {
+  fill: #021014;
 }
 
-rect {
-  fill: #547d8c;
-  stroke: #fff;
-  stroke-width: 1;
-  shape-rendering: crispEdges;
+.proposed {
+  fill: #436a79;
 }
 
 .avg-label-box, .pp-label-box {
-  fill: #021014;
+  fill: #fff;
   stroke: none;
 }
 
-.avg line, .pp line {
+.avg line {
   stroke-width: 1;
   stroke: #021014;
+}
+
+.pp line {
+  stroke-width: 1;
+  stroke: #436a79;
 }`;
 
 function updateHistogram(rootEl, data, proposedPrice, showTransition) {
@@ -114,6 +126,7 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
   const left = pad[3];
   const right = width - pad[1];
   const bottom = height - pad[2];
+  const barGap = 2;
   const svg = d3.select(rootEl)
     .attr('viewBox', [0, 0, width, height].join(' '))
     .attr('preserveAspectRatio', 'xMinYMid meet');
@@ -226,7 +239,7 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
 
   pp.select('line')
     .attr('y1', ppOffset)
-    .attr('y2', (bottom - top) + 8);
+    .attr('y2', (bottom - top));
   pp.select('.value')
     .text(`$${proposedPriceStr} proposed`);
 
@@ -244,11 +257,11 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
       .attr('class', 'avg');
 
     avg.append('rect')
-      .attr('y', avgOffset - 25)
+      .attr('y', avgOffset - 23)
       .attr('x', -55)
       .attr('class', 'avg-label-box')
       .attr('width', 116)
-      .attr('height', 26)
+      .attr('height', 23)
       .attr('rx', 4)
       .attr('ry', 4);
 
@@ -263,7 +276,7 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
 
   avg.select('line')
     .attr('y1', avgOffset)
-    .attr('y2', (bottom - top) + 8);
+    .attr('y2', (bottom - top));
   avg.select('.value')
     .text(`${formatDollars(data.average)} average`);
 
@@ -282,6 +295,11 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
     .attr('y', bottom)
     .attr('width', step)
     .attr('height', 0);
+  enter.append('line')
+    .attr('x1', left)
+    .attr('x2', (d, i) => left + (i * step))
+    .attr('y1', bottom)
+    .attr('y2', bottom);
 
   const title = templatize('{count} results from {min} to {max}');
   bars.select('title')
@@ -355,10 +373,24 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
       d.y = bottom - d.height;
     })
     .select('rect')
-    .attr('x', d => d.x)
-    .attr('y', d => d.y)
-    .attr('height', d => d.height)
-    .attr('width', d => d.width);
+      .attr('x', d => d.x) /* eslint-disable-line indent */
+      .attr('y', d => d.y) /* eslint-disable-line indent */
+      .attr('height', d => d.height) /* eslint-disable-line indent */
+      .attr('width', d => d.width - barGap); /* eslint-disable-line indent */
+
+  t.selectAll('.bar')
+    .each((d) => {
+      d.x = x(d.min);
+      d.width = x(d.max) - d.x;
+      d.height = heightScale(d.count);
+      d.y = bottom - d.height;
+    })
+    .select('line')
+      .attr('class', 'contrast-stroke') /* eslint-disable-line indent */
+      .attr('x1', d => d.x) /* eslint-disable-line indent */
+      .attr('x2', d => (d.x + step - barGap)) /* eslint-disable-line indent */
+      .attr('y1', d => (d.y)) /* eslint-disable-line indent */
+      .attr('y2', d => (d.y)); /* eslint-disable-line indent */
 
   const ticks = bins.map(d => d.min)
     .concat([data.maximum]);
@@ -373,7 +405,7 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
       return formatPrice(d);
     });
   xAxis.call(xa)
-    .attr('transform', `translate(${[0, bottom + 2]})`)
+    .attr('transform', `translate(${[0, bottom - 2]})`)
     .selectAll('.tick')
     .classed('primary', (d, i) => i === 0 || i === bins.length)
     .select('text')
@@ -396,10 +428,11 @@ function updateHistogram(rootEl, data, proposedPrice, showTransition) {
     .scale(d3.scaleLinear()
       .domain(yd)
       .range([bottom, top]))
-    .tickValues(yd);
+    .tickValues(yd)
+    .tickSizeOuter(0.5);
   ya.tickFormat(formatCommas);
   yAxis.call(ya)
-    .attr('transform', `translate(${[left - 2, 0]})`);
+    .attr('transform', `translate(${[left - 5, -1]})`);
 
   yAxis.append('text')
     .attr('class', 'chart-label')

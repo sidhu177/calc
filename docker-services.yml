@@ -10,11 +10,13 @@ services:
       # other non-Linux native code compiled on the Docker Host.
       - python-venv:/venv/
       - node-modules:/calc/node_modules/
+      - nltk-data:/usr/share/nltk_data
       - home:/home/
     environment:
       - DDM_VENV_DIR=/venv
-      - DDM_USER_OWNED_DIRS=/venv:/calc/node_modules
+      - DDM_USER_OWNED_DIRS=/venv:/calc/node_modules:/usr/share/nltk_data
       - DDM_HOST_USER=calc_user
+      - NLTK_DATA_DIR=/usr/share/nltk_data
       - NPM_CONFIG_ENGINE_STRICT=true
       - PYTHONUNBUFFERED=yup
       - DATABASE_URL=postgres://calc_user@db/calc

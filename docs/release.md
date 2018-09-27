@@ -3,11 +3,12 @@
 This documents the process for issuing and deploying a new
 release for CALC.
 
-It assumes you want to create release `0.0.4`.
-
-If this isn't the case, simply replace this value for your own. Or
-alternatively, run `docker-compose run app python manage.py releasehelp` to generate a
-customized version of these instructions just for you.
+These docs walk through the process of creating release `0.0.4`.
+You can simply replace this value for your own, or
+run `docker-compose run app python manage.py releasehelp` to generate a
+customized version of these instructions for the version number you're releasing.
+(CALC follows [semantic versioning][semver], and you can tell what version it's
+currently on by looking at the [CHANGELOG][changelog].)
 
 **Note:** When following these instructions, ensure that no one else is
 merging any PRs into `develop`; at the time of this writing, cloud.gov will
@@ -21,14 +22,15 @@ To release version 0.0.4 of CALC:
 
     ```
     git checkout -b v0.0.4-rc develop
-    git push -u https://github.com/18F/calc.git v0.0.4-rc
+    git push -u git@github.com:18F/calc.git v0.0.4-rc
     ```
 
-2.  Verify that the ["Unreleased" section of `CHANGELOG.md`][unreleased]
-    is up-to-date by comparing it against GitHub's commit list (you can
-    see that by clicking on the "Unreleased" section heading), and then
-    describe the changes in a human-meaningful form (see previous release
-    entries for the appropriate level of human-friendliness).
+2.  As you've worked on CALC through the last sprint, you should have updated the
+    ["Unreleased" section of `CHANGELOG.md`][unreleased] with major features,
+    bug fixes, and pull requests. Now, you'll want to verify that it is
+    up-to-date by comparing it against GitHub's [commit list][commitlist],
+    and then describing the changes in a human-meaningful form (see previous
+    release entries for the appropriate level of human-friendliness).
 
     Feel free to move more important, less technical entries to the top
     of the list. Remember, it will be read by both developers *and* users,
@@ -106,9 +108,11 @@ To release version 0.0.4 of CALC:
 
 Hooray, you're done!
 
+[semver]: https://semver.org/
+[changelog]: https://github.com/18F/calc/blob/develop/CHANGELOG.md
+[commitlist]: https://github.com/18F/calc/commits/develop
 [unreleased]: https://github.com/18F/calc/blob/develop/CHANGELOG.md#unreleased
-[pr]: https://github.com/18F/calc/compare/staging...v0.0.4-rc
-[pr2]: https://github.com/18F/calc/compare/master...staging
+[pr]: https://github.com/18F/calc/compare/master...v0.0.4-rc
 [production]: https://calc.gsa.gov
 [CircleCI]: https://circleci.com/gh/18F/calc
 [releases]: https://github.com/18F/calc/releases

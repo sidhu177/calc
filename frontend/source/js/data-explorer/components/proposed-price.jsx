@@ -72,25 +72,30 @@ export class ProposedPrice extends React.Component {
     const id = `${this.props.idPrefix}proposed-price`;
 
     return (
-      <div className="proposed-price">
-        <label htmlFor={id} className="usa-sr-only">
-Proposed price
-        </label>
-        <input
-          id={id}
-          type="text"
-          name="proposed-price"
-          className="form__inline"
-          placeholder="Proposed price"
-          value={this.state.typed}
-          onChange={this.handleChange}
-        />
-        <button
-          type="button"
-          className="button-primary go"
-        >
-Go
-        </button>
+      <div className="proposed-price-block">
+        <h5 className="proposed-price-title">
+          Proposed price
+        </h5>
+        <div className="proposed-price">
+          <label htmlFor={id} className="usa-sr-only">
+            Proposed price
+          </label>
+          <input
+            id={id}
+            type="text"
+            name="proposed-price"
+            className="form__inline"
+            placeholder="$"
+            value={this.state.typed}
+            onChange={this.handleChange}
+          />
+          <button
+            type="button"
+            className="button-primary go"
+          >
+            Go
+          </button>
+        </div>
       </div>
     );
   }
