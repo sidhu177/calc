@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<QueryType> matches snapshot 1`] = `
+<ul
+  aria-label="Labor category query type"
+  role="group"
+>
+  <li>
+    <input
+      checked={true}
+      id="zzz_match_exact"
+      name="query_type"
+      onChange={[Function]}
+      type="checkbox"
+      value="match_exact"
+    />
+    <label
+      htmlFor="zzz_match_exact"
+    >
+      Exact match
+    </label>
+  </li>
+</ul>
+`;

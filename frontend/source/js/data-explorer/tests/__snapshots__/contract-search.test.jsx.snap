@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ContractNum> matches snapshot 1`] = `
+<button
+  className=""
+  id="idv_piid"
+  name="idv_piid"
+  onClick={[Function]}
+  type="button"
+  value="idv_piid"
+>
+  <span />
+  Find a contract by number
+</button>
+`;

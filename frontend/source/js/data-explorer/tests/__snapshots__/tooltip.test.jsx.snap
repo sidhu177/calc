@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Tooltip> matches snapshot 1`] = `
+<Tooltip
+  show={false}
+  text="hi james"
+>
+  <span />
+</Tooltip>
+`;

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SearchCategory> matches snapshot 1`] = `
+<div
+  className="html-dropdown"
+>
+  <button
+    aria-controls="data-explorer__search-category"
+    aria-expanded={false}
+    className="html-dropdown__trigger"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    type="button"
+  />
+  <div
+    aria-hidden={true}
+    className="html-dropdown__choices"
+    id="data-explorer__search-category"
+    onClick={[Function]}
+    role="menu"
+  >
+    <h3>
+      Search vendors and contracts
+    </h3>
+    <Connect(Vendor) />
+    <Connect(ContractNum) />
+    <h3>
+      Search labor categories
+    </h3>
+    <Connect(Schedule) />
+  </div>
+</div>
+`;

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BusinessSize> matches snapshot 1`] = `
+<div
+  className="filter filter-business_size"
+>
+  <label
+    htmlFor="zzz_business_size"
+  >
+    Business size:
+  </label>
+  <select
+    className="filter_active"
+    id="zzz_business_size"
+    name="business_size"
+    onChange={[Function]}
+    value="contractor"
+  >
+    <option
+      value=""
+    >
+      (all)
+    </option>
+    <option
+      key="s"
+      value="s"
+    >
+      small business
+    </option>
+    <option
+      key="o"
+      value="o"
+    >
+      other than small
+    </option>
+  </select>
+</div>
+`;

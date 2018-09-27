@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Vendor> matches snapshot 1`] = `
+<button
+  className=""
+  id="vendor_name"
+  name="vendor_name"
+  onClick={[Function]}
+  type="button"
+  value="vendor_name"
+>
+  <span />
+  Find a vendor by name
+</button>
+`;
