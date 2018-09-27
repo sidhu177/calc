@@ -2,56 +2,80 @@
 
 exports[`<Highlights> matches snapshot 1`] = `
 <div
-  className="price-block"
+  className="highlights-container row"
 >
   <div
-    className="row"
+    className="price-block"
   >
     <div
-      className="standard-deviation-block"
+      className="row"
     >
-      <h5
-        className="standard-deviation-title"
+      <div
+        className="standard-deviation-block"
       >
-        Std deviation -1
-      </h5>
-      <h5
-        className="sd-highlight"
+        <h5
+          className="standard-deviation-title"
+        >
+          Std deviation -1
+        </h5>
+        <h5
+          className="sd-highlight"
+        >
+          $
+          1
+        </h5>
+      </div>
+      <div
+        className="avg-price-block"
       >
-        $
-        1
-      </h5>
+        <h5
+          className="avg-price-title"
+        >
+          Average
+        </h5>
+        <h5
+          className="avg-price-highlight"
+        >
+          $
+          2
+        </h5>
+      </div>
+      <div
+        className="standard-deviation-block"
+      >
+        <h5
+          className="standard-deviation-title"
+        >
+          Std deviation +1
+        </h5>
+        <h5
+          className="sd-highlight"
+        >
+          $
+          3
+        </h5>
+      </div>
     </div>
-    <div
-      className="avg-price-block"
+  </div>
+  <div
+    className="proposed-price-block"
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  >
+    <h5
+      className="proposed-price-title"
     >
-      <h5
-        className="avg-price-title"
-      >
-        Average price
-      </h5>
-      <h5
-        className="avg-price-highlight"
-      >
-        $
-        2
-      </h5>
-    </div>
-    <div
-      className="standard-deviation-block"
+      Proposed price
+    </h5>
+    <h5
+      className="proposed-price-highlight"
     >
-      <h5
-        className="standard-deviation-title"
-      >
-        Std deviation +1
-      </h5>
-      <h5
-        className="sd-highlight"
-      >
-        $
-        3
-      </h5>
-    </div>
+      $
+      5
+    </h5>
   </div>
 </div>
 `;

@@ -45,5 +45,3 @@ volumes:
   python-venv:
   home:
   pgdata:
-  # TODO: We might be able to just put the nltk-data in the home dir.
-  nltk-data:

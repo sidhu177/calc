@@ -2,7 +2,6 @@ import json
 
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
 from django.http import HttpResponseBadRequest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -70,20 +69,6 @@ def clear_gleaned_data_if_different_schedule(request):
     if gleaned_data and (registry.get_classname(gleaned_data) !=
                          new_schedule):
         del sess[SESSION_KEY]['gleaned_data']
-
-
-def tutorial(request):
-    from ..schedules.s70 import Schedule70PriceList
-
-    upload_example_info = render_to_string(
-        Schedule70PriceList.upload_example_template,
-        Schedule70PriceList.get_upload_example_context()
-    )
-
-    return render(request, 'data_capture/tutorial.html', {
-        'current_selected_tab': 'upload_price_data',
-        'upload_example_info': upload_example_info,
-    })
 
 
 @steps.step(label='Basic information')

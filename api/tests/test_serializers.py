@@ -34,5 +34,5 @@ class ContractListSerializerTests(TestCase):
         if not serializer.is_valid():
             raise AssertionError(serializer.errors)
         serializer.save()
-        results = Contract.objects.all().multi_phrase_search('engineer').all()
+        results = Contract.objects.multi_phrase_search('engineer').all()
         self.assertEqual([r.labor_category for r in results], ['Software Engineer'])

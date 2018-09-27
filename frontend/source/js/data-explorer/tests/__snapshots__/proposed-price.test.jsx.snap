@@ -2,37 +2,28 @@
 
 exports[`<ProposedPrice> matches snapshot 1`] = `
 <div
-  className="proposed-price-block"
+  className="proposed-price"
 >
-  <h5
-    className="proposed-price-title"
+  <label
+    className="usa-sr-only"
+    htmlFor="zzz_proposed-price"
   >
     Proposed price
-  </h5>
-  <div
-    className="proposed-price"
+  </label>
+  <input
+    className="form__inline"
+    id="zzz_proposed-price"
+    name="proposed-price"
+    onChange={[Function]}
+    placeholder="Proposed price"
+    type="text"
+    value={120.49}
+  />
+  <button
+    className="button-primary go"
+    type="button"
   >
-    <label
-      className="usa-sr-only"
-      htmlFor="zzz_proposed-price"
-    >
-      Proposed price
-    </label>
-    <input
-      className="form__inline"
-      id="zzz_proposed-price"
-      name="proposed-price"
-      onChange={[Function]}
-      placeholder="$"
-      type="text"
-      value={120.49}
-    />
-    <button
-      className="button-primary go"
-      type="button"
-    >
-      Go
-    </button>
-  </div>
+    Go
+  </button>
 </div>
 `;

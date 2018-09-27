@@ -343,9 +343,7 @@ ENABLE_SEO_INDEXING = 'ENABLE_SEO_INDEXING' in os.environ
 SECURITY_HEADERS_ON_ERROR_ONLY = 'SECURITY_HEADERS_ON_ERROR_ONLY' in os.environ
 
 DATA_CAPTURE_SCHEDULES = (
-    'data_capture.schedules.region_10.Region10PriceList',
     'data_capture.schedules.s70.Schedule70PriceList',
-    'data_capture.schedules.s03fac.Schedule03FACPriceList',
     'data_capture.schedules.s736.Schedule736PriceList',
 )  # type: Tuple[str, ...]
 
@@ -411,10 +409,6 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'data_capture.panels.ScheduledJobsPanel',
-]
-
-PRICE_LIST_ANALYSIS_FINDERS = [
-    'data_capture.analysis.finders.GteEduAndExpFinder',
 ]
 
 if DEBUG:
