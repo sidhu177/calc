@@ -11,7 +11,7 @@ CALC, which stands for Contracts Awarded Labor Category, is a tool to help contr
 
 The most readable version of the project's developer documentation
 can be found at
-[calc-dev.app.cloud.gov/docs/](https://calc-dev.app.cloud.gov/docs/).
+[calc.gsa.gov/docs/](https://calc.gsa.gov/docs/).
 
 However, if that doesn't work for some reason, the documentation is
 also available in this repository's [docs](docs/) directory.
